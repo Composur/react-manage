@@ -1,32 +1,41 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button} from 'antd';
+import { Form, Icon, Input, Button,message} from 'antd';
+import {Redirect} from 'react-router-dom'
+import {reqLogin} from '../../api'
+import store from '../../utils/storeUtils'
 import './login.less'
-
 class Login extends Component {
-  constructor(){
-    super()
-    this.state={
-      username:'',
-      password:''
-    }
-  }
   handleSubmit = e => {
     e.preventDefault();
-    this.props.form.validateFields((err, values) => { //可以对所有结果校验，并返回结果
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+    this.props.form.validateFields(
+      async (err, values) => { //可以对所有结果校验，并返回结果
+        if (!err) {
+          const res = await reqLogin(values)
+          if (res.status === 0) {
+            // message.success('登录成功！')
+            store.set('user_key', res.data) //全局存储
+            this.props.history.replace('/') // 登录成功，跳转页面,不需要回退，所以用replace不用push
+          } else {
+            message.error(res.msg)
+          }
+        }
+      });
   };
   // 自定义密码验证规则
   validatorPwd=(rule, value, callback)=>{
     // 无论验证成功与否callback()必须调用
-    if(value.length<4||value.length>12){
+    if(!value){
+      callback('请输入密码！')
+    }else if(value.length<4||value.length>12){
       callback('密码长度应大于4小于12位！') //验证不通过传入错误提示
     }
     callback()//验证成功无提示
   }
   render() {
+    // 如果检测到登录信息自动登录
+    if(store.user){
+      return <Redirect to='/'/>
+    }
     const { getFieldDecorator } = this.props.form;
     return (
       <div className='login'>
@@ -34,15 +43,16 @@ class Login extends Component {
         </div>
         <div className='content'>
           <section className='login-form'>
-          <div className='login-label'> <span >代购管理平台</span></div>
+          <div className='login-label'> <span >管理平台</span></div>
           <Form onSubmit={this.handleSubmit} className="">
           <Form.Item>
           {getFieldDecorator('username', {
             rules: [
-              { required: true,message: '请输入用户名！'},
+              { required: true,message: '请输入用户名！',min:4},
               { message: '用户名长度应大于4小于12位！',min:4,max:12},
               { message: '用户名只能含有数字、英文、下划线!',pattern:/^[a-zA-Z0-9_]+$/ },//+号可以匹配任意多个字符
             ],
+            initialValue: 'admin', // 初始值
           })(
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -53,9 +63,9 @@ class Login extends Component {
           <Form.Item>
           {getFieldDecorator('password', {
             rules: [
-              { required: true, message: '请输入密码!' },
               { validator:this.validatorPwd},//自定义校验规则
             ],
+            initialValue: 'admin', // 初始值
           })(
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}

@@ -13,7 +13,8 @@
     "react-app-rewired": "^2.1.3",
     "react-dom": "^16.10.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "store": "^2.0.12"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -35,5 +36,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "proxy": "http://localhost:8081"
 }
