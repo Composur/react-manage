@@ -18,7 +18,6 @@ export default class Admin extends Component {
     collapsed: false,
   };
   onCollapse = collapsed => {
-    console.log(collapsed);
     this.setState({ collapsed });
   };
   render() {
