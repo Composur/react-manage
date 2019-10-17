@@ -1,77 +1,117 @@
 import React, { Component } from 'react'
-import { Menu, Icon, Button } from 'antd';
-import {Link} from 'react-router-dom'
+import { Menu, Icon } from 'antd';
+import {Link,withRouter} from 'react-router-dom'
+import menuLists from '../../config/menuConfig'
 import './index.less'
 
 const { SubMenu } = Menu;
-export default class  extends Component {  
-  state = {
-    collapsed: false,
-  };
-
+class LeftNav extends Component {  
+  constructor(props){
+    super(props)
+    this.state = {
+      collapsed: false,
+      // getCurrentReqParentPath:''
+    };
+    this.getCurrentReqParentPath(menuLists,this.props.location.pathname )
+  }
+  getCurrentReqParentPath(arr,getCurrentReqPath){
+    arr.forEach(element => {
+      if(element.children){
+        element.children.find((cItem)=>{
+          if(getCurrentReqPath===cItem.key){
+            // 得到需要展开的key
+            this.state.getCurrentReqParentPath=element.key
+          }
+        })
+      }
+    });
+  }
   toggleCollapsed = () => {
     this.setState({
       collapsed: !this.state.collapsed,
     });
   };
-
+  // 根据导航json格式进行递归渲染
+  // 方式一：map
+  menuNav_map = (menuConfig) => {
+    return menuConfig.map(item => {
+      if(item.children){
+        return (
+          <SubMenu  key={item.key}   title={
+            <span>
+              <Icon type={item.icon} />
+              <span>{item.title}</span>
+            </span>
+          }
+        >
+        { this.menuNav_map(item.children)  }
+        </SubMenu>
+        )
+      }else{
+        return (
+          <Menu.Item key={item.key}>
+          <Link to={item.key}>
+            <Icon type={item.icon} />
+            <span>{item.title}</span>
+          </Link>
+        </Menu.Item>
+        )
+      }
+    })
+  }
+  // 方式二：reduce
+  menuNav_reduce=(arr)=>{
+    const getCurrentReqPath=this.props.location.pathname 
+    return arr.reduce((pre,item)=>{
+      if(item.children){
+        pre.push(
+          <SubMenu  key={item.key}   title={
+            <span>
+              <Icon type={item.icon} />
+              <span>{item.title}</span>
+            </span>
+          }
+        >
+        { this.menuNav_reduce(item.children)  }
+        </SubMenu>
+        )
+      }else{
+        pre.push(
+          <Menu.Item key={item.key}>
+          <Link to={item.key}>
+            <Icon type={item.icon} />
+            <span>{item.title}</span>
+          </Link>
+        </Menu.Item>
+        )
+      }  
+      return pre    
+    },[])
+  }
+ 
   render() {
+    //这样是获取不到的，因为不是路由组件没有经过router的包装
+    const getCurrentReqPath=this.props.location.pathname 
+    const getCurrentReqParentPath=this.state.getCurrentReqParentPath
     return (
-      <div className='left-nav'>
+      <div className='left-nav' >
+
         <Link to='/'>
           <header className='left-nav-header'>
           <h1 className='left-nav-header-content'>管理系统</h1>
           </header>
         </Link>
-        <div>
-        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
-          <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-        </Button>
-        <Menu
-          defaultSelectedKeys={['1']}
-          defaultOpenKeys={['sub1']}
-          mode="inline"
-          theme="dark"
-          inlineCollapsed={this.state.collapsed}
-        >
-          <Menu.Item key="1">
-            <Icon type="pie-chart" />
-            <span>首页</span>
-          </Menu.Item>
-          <SubMenu
-            key="sub1"
-            title={
-              <span>
-                <Icon type="mail" />
-                <span>商品</span>
-              </span>
-            }
-          >
-            <Menu.Item key="5">Option 5</Menu.Item>
-            <Menu.Item key="6">Option 6</Menu.Item>
-            <Menu.Item key="7">Option 7</Menu.Item>
-            <Menu.Item key="8">Option 8</Menu.Item>
-          </SubMenu>
-          <SubMenu
-            key="sub2"
-            title={
-              <span>
-                <Icon type="appstore" />
-                <span>Navigation Two</span>
-              </span>
-            }
-          >
-            <Menu.Item key="9">Option 9</Menu.Item>
-            <Menu.Item key="10">Option 10</Menu.Item>
-            <SubMenu key="sub3" title="Submenu">
-              <Menu.Item key="11">Option 11</Menu.Item>
-              <Menu.Item key="12">Option 12</Menu.Item>
-            </SubMenu>
-          </SubMenu>
+        
+        <Menu mode="inline" theme="dark" selectedKeys={[getCurrentReqPath]}
+         defaultOpenKeys={[getCurrentReqParentPath]}
+         >
+          {this.menuNav_reduce(menuLists)}
         </Menu>
-      </div>
-    );
+
       </div>
     );
   }
 }
+// 高阶组件
+// 新的组件向非路由组件传递history、match、location
+export default withRouter(LeftNav)

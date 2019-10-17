@@ -3,7 +3,7 @@
  */
 import store from 'store'
 export default {
-  user: {},
+  user:null,
   set(key, value){
     // localStorage.setItem(key, JSON.stringify(value))
     store.set(key,value)
