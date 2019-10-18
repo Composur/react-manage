@@ -10,17 +10,16 @@ class LeftNav extends Component {
     super(props)
     this.state = {
       collapsed: false,
-      // getCurrentReqParentPath:''
     };
     this.getCurrentReqParentPath(menuLists,this.props.location.pathname )
   }
   getCurrentReqParentPath(arr,getCurrentReqPath){
     arr.forEach(element => {
       if(element.children){
-        element.children.find((cItem)=>{
+        element.children.forEach((cItem)=>{
           if(getCurrentReqPath===cItem.key){
             // 得到需要展开的key
-            this.state.getCurrentReqParentPath=element.key
+            this.getCurrentReqParentPath=element.key
           }
         })
       }
@@ -61,7 +60,6 @@ class LeftNav extends Component {
   }
   // 方式二：reduce
   menuNav_reduce=(arr)=>{
-    const getCurrentReqPath=this.props.location.pathname 
     return arr.reduce((pre,item)=>{
       if(item.children){
         pre.push(
@@ -92,7 +90,7 @@ class LeftNav extends Component {
   render() {
     //这样是获取不到的，因为不是路由组件没有经过router的包装
     const getCurrentReqPath=this.props.location.pathname 
-    const getCurrentReqParentPath=this.state.getCurrentReqParentPath
+    const getCurrentReqParentPath=this.getCurrentReqParentPath
     return (
       <div className='left-nav' >
 

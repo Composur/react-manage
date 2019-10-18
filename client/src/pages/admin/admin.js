@@ -12,7 +12,7 @@ import Product from '../product/product'
 import Line from '../charts/line'
 import Pie from '../charts/pie'
 import Bar from '../charts/bar'
-const { Header, Footer, Sider, Content } = Layout;
+const {Footer, Sider, Content } = Layout;
 export default class Admin extends Component {
   state = {
     collapsed: false,
@@ -30,10 +30,8 @@ export default class Admin extends Component {
             <LeftNav/>
           </Sider>
           <Layout>
-            <Header>
               <HeaderSelf/>
-            </Header>
-            <Content style={{background:'#fff'}}>
+            <Content style={{margin:'14px',background:'#fff'}}>
               <Switch>
                 <Route path='/home' component={Home}/>
                 <Route path='/category' component={Category}/>
@@ -46,7 +44,7 @@ export default class Admin extends Component {
                 <Redirect to='/home' />
               </Switch>
             </Content>
-            <Footer style={{textAlign:'center'}}>Footer</Footer>
+            <Footer style={{textAlign:'center',margin:'0 14px 0',background:'#fff'}}>Footer</Footer>
           </Layout>
       </Layout>
     );
