@@ -10,16 +10,6 @@ export const reqLogin = data => request('/login', 'POST', data)
 export const reqAddUser = data => request('/manage/user/add', 'POST', data)
 export const reqWeather = () => {
   return new Promise((resolve, reject) => {
-    if ("geolocation" in navigator) {
-      /* 地理位置服务可用 */
-      navigator.geolocation.getCurrentPosition(function (position) {
-        const city = `${position.coords.longitude},${position.coords.latitude}`
-        getData(city)
-      })
-    } else {
-      /* 地理位置服务不可用 */
-      getData()
-    }
     const getData = (city = '深圳') => {
       const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
       jsonp(url, {}, (err, data) => {
@@ -30,6 +20,17 @@ export const reqWeather = () => {
         }
       })
     }
+    if ("geolocation" in navigator) {
+      /* 地理位置服务可用 */
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const city = `${position.coords.longitude},${position.coords.latitude}`
+        getData(city)
+      })
+    } else {
+      /* 地理位置服务不可用 */
+      getData()
+    }
+   
   })
 }
 

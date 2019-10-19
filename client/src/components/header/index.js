@@ -1,18 +1,45 @@
 import React, { Component } from 'react';
+import {Modal} from 'antd'
+import {withRouter,Redirect} from 'react-router-dom'
 import store from '../../utils/storeUtils'
 import {reqWeather} from '../../api'
 import {getCurrentDate} from '../../utils/common'
 import './index.less'
 
-export default class  extends Component {
+class HeaderSelf extends Component {
   state = { 
     weather:'',
     date:getCurrentDate(new Date()),
-    weatherText:''
+    weatherText:'',
    }
   exitConfirm=(e)=>{
     e.preventDefault();
-    alert('exit')
+    Modal.confirm({
+      title:'退出',
+      content: '确定退出？',
+      okText:'退出',
+      cancelText:'取消',
+      confirmLoading:true,
+      // onOk: () => {
+      //   // 删除保存的user数据
+      //   // 跳转到login
+      //   setTimeout(()=>{
+      //     store.remove('user_key')
+      //     store.user=null
+      //     this.props.history.replace('/')
+      //   },1000)
+      // }
+      onOk:()=> {
+        return new Promise((resolve, reject) => {
+          setTimeout(()=>{
+            store.remove('user_key')
+            store.user=null
+            resolve(null)
+            this.props.history.replace('/')
+          });
+        }).catch(() => console.log('Oops errors!'));
+      },
+    })
   }
   async getWeather(city){
     const {date,dayPictureUrl,weather} = await reqWeather(city)
@@ -31,6 +58,7 @@ export default class  extends Component {
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
+    clearInterval(this.timerExit);
   }
   clock(){
     this.setState({
@@ -55,3 +83,4 @@ export default class  extends Component {
     );
   }
 }
+export default withRouter(HeaderSelf)

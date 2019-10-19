@@ -30,7 +30,7 @@ export default class Admin extends Component {
             <LeftNav/>
           </Sider>
           <Layout>
-              <HeaderSelf/>
+            <HeaderSelf/>
             <Content style={{margin:'14px',background:'#fff'}}>
               <Switch>
                 <Route path='/home' component={Home}/>
