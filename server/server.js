@@ -11,7 +11,7 @@ const app = express() // 产生应用对象
 const server_port=require('./config/config.default').server_port
 const connectMongo=require('./db/connect')
 // 跨域
-// app.use(cors())
+app.use(cors())
 // 声明使用静态中间件
 app.use(express.static('public'))
 // 声明使用解析post请求的中间件

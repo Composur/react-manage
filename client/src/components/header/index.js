@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Modal} from 'antd'
-import {withRouter,Redirect} from 'react-router-dom'
+import {withRouter} from 'react-router-dom'
 import store from '../../utils/storeUtils'
 import {reqWeather} from '../../api'
 import {getCurrentDate} from '../../utils/common'
@@ -31,12 +31,12 @@ class HeaderSelf extends Component {
       // }
       onOk:()=> {
         return new Promise((resolve, reject) => {
-          setTimeout(()=>{
+          this.exitTimerID=setTimeout(()=>{
             store.remove('user_key')
             store.user=null
             resolve(null)
             this.props.history.replace('/')
-          });
+          },500);
         }).catch(() => console.log('Oops errors!'));
       },
     })
@@ -50,15 +50,14 @@ class HeaderSelf extends Component {
     })
   }
   componentDidMount(){
-    const city='北京' 
-    this.getWeather((city))
+    this.getWeather()
     this.timerID = setInterval(()=>{
       this.clock()
     },1000)
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
-    clearInterval(this.timerExit);
+    clearInterval(this.exitTimerID);
   }
   clock(){
     this.setState({
