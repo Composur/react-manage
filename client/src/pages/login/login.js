@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button,message} from 'antd';
 import {Redirect} from 'react-router-dom'
 import {reqLogin} from '../../api'
+import base64 from 'base64-js'
 import store from '../../utils/storeUtils'
 import './login.less'
 class Login extends Component {
@@ -10,6 +11,8 @@ class Login extends Component {
     this.props.form.validateFields(
       async (err, values) => { //可以对所有结果校验，并返回结果
         if (!err) {
+          values=Object.assign(values,{username:btoa(values.username),password:btoa(values.password)})
+          console.log(values)
           const res = await reqLogin(values)
           if (res.status === 0) {
             // message.success('登录成功！')

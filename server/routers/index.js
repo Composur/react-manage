@@ -3,7 +3,7 @@
  */
 const express = require('express')
 const md5 = require('blueimp-md5')
-
+const atob = require('atob');
 const UserModel = require('../models/UserModel')
 const CategoryModel = require('../models/CategoryModel')
 const ProductModel = require('../models/ProductModel')
@@ -20,7 +20,8 @@ const filter = {username: 1}
 
 // 登陆
 router.post('/login', (req, res) => {
-  const {username, password} = req.body
+  let {username, password} = req.body
+  username=atob(username);password=atob(password);
   // 根据username和password查询数据库users, 如果没有, 返回提示错误的信息, 如果有, 返回登陆成功信息(包含user)
   UserModel.findOne({username, password: md5(password)},filter)
     .then(user => {

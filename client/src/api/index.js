@@ -11,7 +11,7 @@ export const reqAddUser = data => request('/manage/user/add', 'POST', data)
 export const reqWeather = () => {
   return new Promise((resolve, reject) => {
     const getData = (city = '深圳') => {
-      const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
+      const url = `https://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
       jsonp(url, {}, (err, data) => {
         if (data && data.status === 'success') {
           resolve(data.results[0].weather_data[0])

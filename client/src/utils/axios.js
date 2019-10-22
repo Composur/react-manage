@@ -14,7 +14,6 @@ export default function (url, type = 'GET', data) {
     if (type === 'GET') {
       promise = axios.get(url)
     } else {
-      debugger
       promise = axios.post(url, data)
     }
     promise.then(res => {
