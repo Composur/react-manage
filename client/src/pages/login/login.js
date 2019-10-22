@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Form, Icon, Input, Button,message} from 'antd';
 import {Redirect} from 'react-router-dom'
 import {reqLogin} from '../../api'
-import base64 from 'base64-js'
 import store from '../../utils/storeUtils'
 import './login.less'
 class Login extends Component {
