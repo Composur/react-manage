@@ -7,6 +7,7 @@ const axios = require('axios')
 
 export default function (url, type = 'GET', data) {
   let promise;
+  url=config.serverAddress+url
   // 返回一个promise，统一处理错误
   return new Promise((resolve, reject) => {
     // 1.执行异步请求
