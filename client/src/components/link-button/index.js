@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button} from 'antd'
-export default function(){
+export default function(props){
   return (
-    <Button></Button>
+    <a href={props.href} target='_blank'>{props.content}</a>
   )
 }

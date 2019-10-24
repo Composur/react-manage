@@ -11,7 +11,6 @@ class Login extends Component {
       async (err, values) => { //可以对所有结果校验，并返回结果
         if (!err) {
           values=Object.assign(values,{username:btoa(values.username),password:btoa(values.password)})
-          console.log(values)
           const res = await reqLogin(values)
           if (res.status === 0) {
             // message.success('登录成功！')

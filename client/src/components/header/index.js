@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Modal} from 'antd'
 import {withRouter} from 'react-router-dom'
 import store from '../../utils/storeUtils'
-import {reqWeather} from '../../api'
+import {reqWeather,reqAddress} from '../../api'
 import {getCurrentDate} from '../../utils/common'
 import './index.less'
 
@@ -11,6 +11,7 @@ class HeaderSelf extends Component {
     weather:'',
     date:getCurrentDate(new Date()),
     weatherText:'',
+    address:''
    }
   exitConfirm=(e)=>{
     e.preventDefault();
@@ -20,15 +21,6 @@ class HeaderSelf extends Component {
       okText:'退出',
       cancelText:'取消',
       confirmLoading:true,
-      // onOk: () => {
-      //   // 删除保存的user数据
-      //   // 跳转到login
-      //   setTimeout(()=>{
-      //     store.remove('user_key')
-      //     store.user=null
-      //     this.props.history.replace('/')
-      //   },1000)
-      // }
       onOk:()=> {
         return new Promise((resolve, reject) => {
           this.exitTimerID=setTimeout(()=>{
@@ -49,8 +41,16 @@ class HeaderSelf extends Component {
       weatherText:weather
     })
   }
+  async getAddress(){
+    const {address,address_detail}= await reqAddress()
+    const {city}=address_detail
+    this.getWeather(city)
+    this.setState({
+      address
+    })
+  }
   componentDidMount(){
-    this.getWeather()
+    this.getAddress()
     this.timerID = setInterval(()=>{
       this.clock()
     },1000)
@@ -66,6 +66,7 @@ class HeaderSelf extends Component {
   }
   render() {
     const username=store.user.username
+    
     return (
       <div className='header'>
         <div className='header-top'>
@@ -73,10 +74,12 @@ class HeaderSelf extends Component {
           <a href='#' onClick={this.exitConfirm} className='header-exit-btn'>退出</a>
         </div>
         <div className='header-buttom'>
+          <span className='getSource'><a rel="noopener noreferrer"  href='https://github.com/Composur/react-manage' target='_blank'>获取前端+后台源码</a></span>
+          <span>{this.state.address}</span>
           <span>{this.state.weather}</span>
           <span>{this.state.date}</span>
           <span>{this.state.weatherText}</span>
-          <span className='header-buttom-weather-img'><img src={this.state.imgSrc}></img></span>
+          <span className='header-buttom-weather-img'><img src={this.state.imgSrc} alt=''></img></span>
         </div>
       </div>
     );
