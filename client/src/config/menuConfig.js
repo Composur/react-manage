@@ -62,6 +62,11 @@ const menuList = [
     key: '/order',
     icon: 'windows',
   },
+  {
+    title: 'GitHub',
+    key: '/github',
+    icon: 'github',
+  },
 ]
 
 export default menuList

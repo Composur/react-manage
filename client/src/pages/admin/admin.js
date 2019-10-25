@@ -12,6 +12,8 @@ import Product from '../product/product'
 import Line from '../charts/line'
 import Pie from '../charts/pie'
 import Bar from '../charts/bar'
+import GitHub from '../github'
+import Order from '../order/order'
 const {Footer, Sider, Content } = Layout;
 export default class Admin extends Component {
   state = {
@@ -41,6 +43,8 @@ export default class Admin extends Component {
                 <Route path='/charts/bar' component={Bar}/>
                 <Route path='/charts/line' component={Line}/>
                 <Route path='/charts/pie' component={Pie}/>
+                <Route path='/order' component={Order}/>
+                <Route path='/GitHub' component={GitHub}/>
                 <Redirect to='/home' />
               </Switch>
             </Content>

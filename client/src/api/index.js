@@ -42,7 +42,8 @@ export const reqAddress=()=>{
         if(data&&data.status===0){
           resolve(data.content)
         }else{
-          reject(data.status)
+          message.error('请求定位接口失败')
+          reject('请求定位接口失败')
         }
       })
     })

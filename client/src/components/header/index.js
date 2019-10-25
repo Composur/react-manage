@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import {Modal} from 'antd'
+import {Modal, Button} from 'antd'
 import {withRouter} from 'react-router-dom'
 import store from '../../utils/storeUtils'
 import {reqWeather,reqAddress} from '../../api'
 import {getCurrentDate} from '../../utils/common'
+import LinkA from '../../components/link-a'
 import './index.less'
 
 class HeaderSelf extends Component {
@@ -13,6 +14,15 @@ class HeaderSelf extends Component {
     weatherText:'',
     address:''
    }
+   params={
+    href:'https://github.com/Composur/react-manage',
+    target:'_black',
+    text:'获取（前端+后台）源码'
+  }
+  exitAhref={
+    href:'#',
+    text:'退出'
+  }
   exitConfirm=(e)=>{
     e.preventDefault();
     Modal.confirm({
@@ -42,12 +52,16 @@ class HeaderSelf extends Component {
     })
   }
   async getAddress(){
-    const {address,address_detail}= await reqAddress()
-    const {city}=address_detail
-    this.getWeather(city)
-    this.setState({
-      address
-    })
+    try {
+      const {address,address_detail}= await reqAddress()
+      const {city}=address_detail
+      this.getWeather(city)
+      this.setState({
+        address
+      })
+    } catch (error) {
+      this.getWeather()
+    }
   }
   componentDidMount(){
     this.getAddress()
@@ -71,10 +85,12 @@ class HeaderSelf extends Component {
       <div className='header'>
         <div className='header-top'>
           <span>欢迎您，{username}</span>
-          <a href='#' onClick={this.exitConfirm} className='header-exit-btn'>退出</a>
+          <Button type='link' onClick={this.exitConfirm}>退出</Button>
         </div>
         <div className='header-buttom'>
-          <span className='getSource'><a rel="noopener noreferrer"  href='https://github.com/Composur/react-manage' target='_blank'>获取前端+后台源码</a></span>
+          <span className='getSource'>
+          <LinkA params={this.params}/>
+          </span>
           <span>{this.state.address}</span>
           <span>{this.state.weather}</span>
           <span>{this.state.date}</span>
