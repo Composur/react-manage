@@ -56,7 +56,7 @@ const fs = require('fs')
 // 优化数据库连接
 const startServer=function(){
   app.listen(server_port, () => {
-    console.log('服务器启动成功, 请访问: http://localhost:'+server_port)
+    console.log('服务器启动成功, 监听端口:'+server_port)
   })
 }
 // 连接成功后启动server
