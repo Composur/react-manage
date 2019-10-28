@@ -38,7 +38,7 @@ export const reqWeather = (city) => {
 
 export const reqAddress=()=>{
     return new Promise((resolve,reject)=>{
-      jsonp('https://api.map.baidu.com/location/ip?ak=PFlNd9vKhGalbukR6ZIlFKzKvFsutPWV',{},(err,data)=>{
+      jsonp('https://api.map.baidu.com/location/ip?ak=PFlNd9vKhGalbukR6ZIlFKzKvFsutPWV',(err,data)=>{
         if(data&&data.status===0){
           resolve(data.content)
         }else{
@@ -48,3 +48,12 @@ export const reqAddress=()=>{
       })
     })
 }
+
+// 获取分类列表
+export const reqCatagoryList=(data)=>request('/manage/category/list','GET',data)
+
+// 添加分类
+export const reqAddCategory=(data)=>request('/manage/category/add','POST',data)
+
+// 更新分类
+export const reqUpdateCategory=(data)=>request('/manage/category/update','POST',data)
