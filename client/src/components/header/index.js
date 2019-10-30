@@ -53,13 +53,13 @@ class HeaderSelf extends Component {
   }
   async getAddress(){
     try {
-      const {address,address_detail,point}= await reqAddress()
+      const {address,address_detail}= await reqAddress()
       // 坐标取值不准确
       // let {x,y}=point
       // x=(x/100000).toFixed(4)-13
       // y=(y/100000).toFixed(4)-13
       let {city}=address_detail
-      city?city=city:city=`深圳`
+      if(!city){city='深圳'}
       this.getWeather(city)
       this.setState({
         address
