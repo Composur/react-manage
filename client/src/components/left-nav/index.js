@@ -17,7 +17,8 @@ class LeftNav extends Component {
     arr.forEach(element => {
       if(element.children){
         element.children.forEach((cItem)=>{
-          if(getCurrentReqPath===cItem.key){
+          // if(getCurrentReqPath===cItem.key){
+          if(getCurrentReqPath.includes(cItem.key)){
             // 得到需要展开的key
             this.getCurrentReqParentPath=element.key
           }
