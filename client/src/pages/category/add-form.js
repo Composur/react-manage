@@ -25,7 +25,7 @@ class addForm extends Component {
             placeholder="选择分类"
             onChange={this.handleSelectChange}
           >
-          <Option value={'0'} key={'124'}>{currentRowData.name}</Option>
+          <Option value={'0'} key={'124'}>分类名称</Option>
           {
             categoryList.map(item=><Option value={item._id} key={item._id}>{item.name}</Option> )
           }

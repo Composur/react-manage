@@ -14,7 +14,7 @@ class UpdateForm extends Component {
     const {name}=this.props.currentRowData
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form labelCol={{ span: 5 }} wrapperCol={{ span: 17 }} onSubmit={this.handleSubmit}>
+      <Form labelCol={{ span: 5 }} wrapperCol={{ span: 17 }}>
     
       <Form.Item label="分类名称">
         {getFieldDecorator('categoryName', {
@@ -27,5 +27,5 @@ class UpdateForm extends Component {
     );
   }
 }
-const WrappedApp = Form.create({ name: 'coordinated' })(UpdateForm);
+const WrappedApp = Form.create()(UpdateForm);
 export default (WrappedApp);

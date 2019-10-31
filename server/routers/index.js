@@ -157,11 +157,23 @@ router.post('/manage/category/add', (req, res) => {
       res.send({status: 1, msg: '添加分类异常, 请重新尝试'})
     })
 })
+// 删除分类
+router.post('/manage/category/delete', (req, res) => {
+  const {_id} = req.body
+  CategoryModel.deleteMany({$or: [{_id: _id}, {parentId: _id}]})
+    .then(category => {
+      res.send({status: 0, data: category})
+    })
+    .catch(error => {
+      console.error('删除分类异常', error)
+      res.send({status: 1, msg: '删除分类异常, 请重新尝试'})
+    })
+})
 
 // 获取分类列表
 router.get('/manage/category/list', (req, res) => {
   const parentId = req.query.parentId || '0'
-  CategoryModel.find({parentId})
+  CategoryModel.find({parentId}).sort({"_id": -1})
     .then(categorys => {
       res.send({status: 0, data: categorys})
     })
@@ -214,7 +226,7 @@ router.post('/manage/product/add', (req, res) => {
 // 获取产品分页列表
 router.get('/manage/product/list', (req, res) => {
   const {pageNum, pageSize} = req.query
-  ProductModel.find({})
+  ProductModel.find().sort({"_id": -1}).limit(Number(pageSize))
     .then(products => {
       res.send({status: 0, data: pageFilter(products, pageNum, pageSize)})
     })

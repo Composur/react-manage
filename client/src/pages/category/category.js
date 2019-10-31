@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Card ,Table,Button,Icon,Modal,Breadcrumb} from 'antd';
-import {reqCatagoryList,reqAddCategory,reqUpdateCategory} from '../../api'
+import {reqCatagoryList,reqAddCategory,reqUpdateCategory,reqDeleteCategory} from '../../api'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
+const { confirm } = Modal;
 export default class  extends Component {
     state = { 
       loading:false,
@@ -11,7 +12,7 @@ export default class  extends Component {
       parentId:'0',//初始获取一级列表
       subCategoryListNavName:'',
       showModal:0,//0:都不显示；1：显示添加一级分类；2：修改分类
-      currentRowData:{_id:'0',name:'一级分类'}, //默认一级
+      currentRowData:{}, //默认一级
       confirmLoading:false
    }
   constructor(props){
@@ -34,7 +35,10 @@ export default class  extends Component {
           <span>
           <Button type="link" onClick={()=>(
             this.updateCategory(record)
-          )}>修改分类</Button>
+          )}>修改</Button>
+          <Button type="link" onClick={()=>(
+            this.deleteCategory(record)
+          )}>删除</Button>
           {
             this.state.parentId==='0'? <Button type="link" onClick={()=>(
               this.getSubCategoryList(record)
@@ -44,6 +48,24 @@ export default class  extends Component {
         )
       },
     ];
+  }
+  deleteCategory= (record)=>{
+    confirm({
+      title: '确认删除该分类?',
+      content: record.name,
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk: async ()=> {
+        const res = await reqDeleteCategory({_id:record._id})
+        if(res.status===0){
+          this.getCategoryList()
+        }
+      },
+      onCancel() {
+        
+      },
+    })
   }
   updateCategory= (data)=>{
     this.setState({
@@ -149,13 +171,14 @@ export default class  extends Component {
   modalHandleCancel = e => {
     this.setState({
       showModal: 0,
+      currentRowData:{}
     });
     
     // 清除antd缓存的input数据，只要触发input就会缓存当前值,需要清除当前值
     this.form.resetFields()
     // 也可以动态改变input的值
     // this.form.setFieldsValue({
-    //   categoryName: this.state.currentRowData.name,
+    //   categoryId: this.state.currentRowData.name,
     // });
   };
   componentDidMount(){
