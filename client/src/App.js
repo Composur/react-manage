@@ -13,7 +13,7 @@ class App extends Component {
     return (
      <BrowserRouter>
       <Switch>{/* switch只匹配一个path */}
-        <Route path={'/login'} component={Login}></Route>
+        <Route path={'/login'} extra component={Login}></Route>
         <Route path={'/'} component={Admin}></Route>
       </Switch>
      </BrowserRouter>
