@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Card,Select,Button,Table,Input} from 'antd';
+import {withRouter} from 'react-router-dom'
+import { Card,Select,Button,Table,Input,message} from 'antd';
 import {reqProductList,reqSearchProduct} from '../../api'
 
 const { Option } = Select;
-
-export default class  extends Component {
+class Product extends Component {
   state = {
-    data: [],
     selectValue: '1',
     pageNum:0,
     pageSize:5,
@@ -44,27 +43,30 @@ export default class  extends Component {
         render:(record)=>(
           <span>
           <Button type="link" onClick={()=>(
-            this.updateCategory(record)
+            this.productDetail(record)
           )}>详情</Button>
           <Button type="link" onClick={()=>(
-            this.deleteCategory(record)
+            this.productUpdate(record)
           )}>修改</Button>
           <Button type="link" onClick={()=>(
-            this.getSubCategoryList(record)
+            this.productDelete(record)
             )}>删除</Button>
           </span>
         )
       },
     ];
   }
-  // handleSearch = value => {
-  //   if (value) {
-  //     // 异步请求
-  //     fetch(value, data => this.setState({ data }));
-  //   } else {
-  //     this.setState({ data: [] });
-  //   }
-  // };
+  // 商品详情
+  productDetail= async(data)=>{
+    const data1 = [
+      'Racing car sprays burning fuel into crowd.',
+      'Japanese princess to wed commoner.',
+      'Australian walks 100km after outback crash.',
+      'Man charged over missing wedding girl.',
+      'Los Angeles battles huge wildfires.',
+    ];
+    this.props.history.push({ pathname:'/product/detail',state:data1 })
+  }
   selectHandleChange = selectValue => {
     this.setState({ selectValue,
       inputPlaceholder:selectValue==='1'?'请输入名称':'请输入描述',
@@ -79,21 +81,38 @@ export default class  extends Component {
   // 搜索
   searchBtn= async (e)=>{
     e.stopPropagation();
-    const {selectValue,inputValue}=this.state
-    const params={}
+    const {selectValue,inputValue,pageNum,pageSize}=this.state
+    if( !inputValue || !inputValue.trim()){
+      this.setState({inputValue:null})
+      message.warning('不能为空')
+      return
+    }
+    this.setState({loading:true})
+    const params={
+      pageNum,pageSize
+    }
     selectValue==='1'?params.productName=inputValue:params.productDesc=inputValue
-    const {data} = await reqSearchProduct(params)
+    const res = await reqSearchProduct(params)
+    const {list,total}=res.data
+    if(!list[0]){message.warn('搜索结果为空！')}
+    this.setState({total,productListSource:list,loading:false})
   }
   // 添加商品
   addProductBtn=(e)=>{
     e.stopPropagation()
   }
+  // 商品列表
   getProductList= async(current,size)=>{
     this.setState({
       loading:true
     })
-    let {pageNum,pageSize}=this.state
-    const res= await reqProductList({pageNum,pageSize})
+    let {pageNum,pageSize,inputValue}=this.state
+    let res;
+    if(inputValue){ //搜索商品列表
+       res= await reqSearchProduct({pageNum,pageSize})
+    }else{ //全部商品列表
+       res= await reqProductList({pageNum,pageSize})
+    }
     const {total,list}=res.data
     if (res.status === 0 && list.length > 0) {
       this.setState({
@@ -123,35 +142,17 @@ export default class  extends Component {
         desc: '西湖区湖底公园1号',
       },
     ];
-    // const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
     const title=()=>{
       return (
        <div>
        <Select defaultValue="1" 
-       dropdownMatchSelectWidth={false}
+       style={{ width: '7rem' }}
        onChange={this.selectHandleChange}>
        <Option value="1">按名称搜索</Option>
-       <Option value="2">按描述</Option>
+       <Option value="2">按描述搜索</Option>
        </Select>
-      {
-      // 也可以用搜索
-      //   <Select
-      //   showSearch
-      //   value={this.state.value}
-      //   placeholder={'请输入关键字'}
-      //   style={{width:200,marginLeft:8,marginRight:6}}
-      //   defaultActiveFirstOption={false}
-      //   showArrow={false}
-      //   filterOption={false}
-      //   onSearch={this.handleSearch}
-      //   onChange={this.handleChange}
-      //   notFoundContent={null}
-      // >
-      // {options}
-      // </Select>
-      }
       <Input style={{width:200,marginLeft:6,marginRight:6}}  placeholder={inputPlaceholder} onChange={this.inputValue} value={inputValue} />
-      <Button type='primary' onClick={this.searchBtn}>搜索</Button>
+      <Button type='primary' style={{transform:'scale(1)'}} onClick={this.searchBtn} loading={loading}>搜索</Button>
        </div>
       )
     }
@@ -180,3 +181,4 @@ export default class  extends Component {
     ); 
   }
 }
+export default withRouter(Product)
