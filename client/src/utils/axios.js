@@ -2,12 +2,11 @@
  * @description 封装axios
  */
 import {message} from 'antd'
-// import config from '../config'
+import config from '../config'
 const axios = require('axios')
-
 export default function (url, type = 'GET', data) {
   let promise;
-  // url=config.serverAddress+url
+  url=config.baseURl+url
   // 返回一个promise，统一处理错误
   return new Promise((resolve, reject) => {
     // 1.执行异步请求

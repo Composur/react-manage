@@ -53,6 +53,24 @@ const fs = require('fs')
 //   .catch(error => {
 //     console.error('连接数据库失败', error)
 //   })
+
+
+
+
+
+/*
+ * 根据不同的功能划分模块(路由分块)
+ *
+ * */
+app.use('/api', require('./routers'));
+
+
+
+
+
+
+
+
 // 优化数据库连接
 const startServer=function(){
   app.listen(server_port, () => {
