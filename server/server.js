@@ -10,6 +10,9 @@ const cors = require('cors')
 const app = express() // 产生应用对象
 const server_port=require('./config/config.default').server_port
 const connectMongo=require('./db/connect')
+const fs = require('fs')
+const path=require('path')
+const jwt=require('jsonwebtoken')
 // 跨域
 // app.use(cors())
 // 声明使用静态中间件
@@ -24,7 +27,6 @@ app.use(cookieParser())
 const indexRouter = require('./routers')
 app.use('/', indexRouter)  //
 
-const fs = require('fs')
 
 // 必须在路由器中间之后声明使用
 /*app.use((req, res) => {
@@ -54,6 +56,68 @@ const fs = require('fs')
 //     console.error('连接数据库失败', error)
 //   })
 
+
+
+function verifyToken(token){
+  let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
+  try{
+      let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
+      let {exp = 0} = result,current = Math.floor(Date.now()/1000);
+      if(current <= exp){
+          res = result.data || {};
+      }
+  }catch(e){
+  
+  }
+  return res;
+  
+}
+
+// app.use(async(ctx, next) => {
+//   let {url = ''} = ctx;
+//   if(url.indexOf('/user/') > -1){//需要校验登录态
+//       let header = ctx.request.header;
+//       let {loginedtoken} = header;
+//       if (loginedtoken) {
+//           let result = verifyToken(loginedtoken);
+//           let {uid} = result;
+//           if(uid){
+//               ctx.state = {uid};
+//               await next();
+//           }else{
+//               return ctx.body = Tips[1005];
+//           }
+//       } else {
+//           return ctx.body = Tips[1005];
+//       }
+//   }else{
+//       await next();
+//   }
+// });
+
+
+app.use((req,res,next)=>{
+  // console.log(req.headers.authorization)
+  let token=req.headers.authorization
+  let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
+  try{
+      let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
+      // console.log(result)
+      // next()
+      let {exp = 0,data} = result,current = Math.floor(Date.now()/1000);
+      // console.log(data)
+      // console.log(req.body)
+      if(current <= exp){
+          // res = result.data || {};
+          next()
+      }else{
+        res.send({status: 1, msg: '登录信息失效，请重新登录'})
+      }
+  }catch(e){
+  
+  }
+  // return res;
+})
 
 
 

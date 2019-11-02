@@ -57,7 +57,7 @@ class Product extends Component {
     ];
   }
   // 商品详情
-  productDetail= async(data)=>{
+  productDetail = (data) => {
     const data1 = [
       'Racing car sprays burning fuel into crowd.',
       'Japanese princess to wed commoner.',
@@ -65,7 +65,10 @@ class Product extends Component {
       'Man charged over missing wedding girl.',
       'Los Angeles battles huge wildfires.',
     ];
-    this.props.history.push({ pathname:'/product/detail',state:data1 })
+    this.props.history.push({
+      pathname: '/product/detail',
+      state: data1
+    })
   }
   selectHandleChange = selectValue => {
     this.setState({ selectValue,

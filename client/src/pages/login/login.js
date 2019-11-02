@@ -15,6 +15,7 @@ class Login extends Component {
           if (res.status === 0) {
             // message.success('登录成功！')
             store.set('user_key', res.data) //全局存储
+            store.set('token', res.token) //全局存储
             store.user=res.data
             this.props.history.replace('/') // 登录成功，跳转页面,不需要回退，所以用replace不用push
           } else {

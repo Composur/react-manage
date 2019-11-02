@@ -2,8 +2,32 @@
  * @description 封装axios
  */
 import {message} from 'antd'
+import store from 'store'
 import config from '../config'
-const axios = require('axios')
+import axios from 'axios'
+
+// 把 Token 存在localStroage,每次请求在 Axios 请求头上进行携带
+axios.defaults.headers.common['Authorization'] = store.get('token')
+
+
+// instance.interceptors.response.use(
+//   response => {
+//     return response
+//   },
+//   error => {
+//     if (error.response) {
+//       switch (error.response.status) {
+//         case 401:
+//           // router.replace({
+//           //   path: 'login',
+//           //   query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+//           // })
+//       }
+//     }
+//     return Promise.reject(error.response)
+//   }
+// )
+
 export default function (url, type = 'GET', data) {
   let promise;
   url=config.baseURl+url

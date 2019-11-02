@@ -8,6 +8,22 @@ const UserModel = require('../models/UserModel')
 const CategoryModel = require('../models/CategoryModel')
 const ProductModel = require('../models/ProductModel')
 const RoleModel = require('../models/RoleModel')
+const fs=require('fs')
+const path = require('path');
+const jwt = require('jsonwebtoken');
+
+
+//生成token的方法
+function  generateToken(data){
+  let created = Math.floor(Date.now() / 1000);
+  let cert = fs.readFileSync(path.join(__dirname, '../config/rsa_private_key.pem'));//私钥
+  let token = jwt.sign({
+      data,
+      exp: created + 3600 * 24
+  },cert, {algorithm: 'RS256'});
+  return token;
+}
+
 
 
 // 得到路由器对象
@@ -28,17 +44,18 @@ router.post('/login', (req, res) => {
       if (user) { // 登陆成功
         // 生成一个cookie(userid: user._id), 并交给浏览器保存
         res.cookie('userid', user._id, {maxAge: 1000 * 60 * 60 * 24})
+        let token = generateToken({username});
         if (user.role_id) {
           RoleModel.findOne({_id: user.role_id})
             .then(role => {
               user._doc.role = role
               console.log('role user', user)
-              res.send({status: 0, data: user})
+              res.send({status: 0, data: user,token:token})
             })
         } else {
           user._doc.role = {menus: []}
           // 返回登陆成功信息(包含user)
-          res.send({status: 0, data: user})
+          res.send({status: 0, data: user,token:token})
         }
 
       } else {// 登陆失败
