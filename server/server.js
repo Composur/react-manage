@@ -99,10 +99,8 @@ function verifyToken(token){
 app.use((req,res,next)=>{
   let token=req.headers.authorization
   const cookie=req.cookies
-  console.log(cookie)
   const url=req.url
   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
-  console.log(url)
   if(url.indexOf('/api/login') !== 0){
       try{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
