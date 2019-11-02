@@ -97,26 +97,27 @@ function verifyToken(token){
 
 
 app.use((req,res,next)=>{
-  // console.log(req.headers.authorization)
   let token=req.headers.authorization
+  const cookie=req.cookies
+  console.log(cookie)
+  const url=req.url
   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
-  try{
-      let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
-      // console.log(result)
-      // next()
-      let {exp = 0,data} = result,current = Math.floor(Date.now()/1000);
-      // console.log(data)
-      // console.log(req.body)
-      if(current <= exp){
-          // res = result.data || {};
-          next()
-      }else{
-        res.send({status: 1, msg: '登录信息失效，请重新登录'})
-      }
-  }catch(e){
-  
+  console.log(url)
+  if(url.indexOf('/api/login') !== 0){
+      try{
+        let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
+        let {exp = 0} = result,current = Math.floor(Date.now()/1000);
+        console.log(cookie)
+        if(current <= exp){
+            // res = result.data || {};
+            next()
+        }
+    }catch(e){
+      res.send({status: 1, msg: '登录信息失效，请重新登录'})
+    }
+  }else{
+    next()
   }
-  // return res;
 })
 
 
