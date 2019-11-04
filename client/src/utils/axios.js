@@ -1,32 +1,36 @@
 /**
  * @description 封装axios
  */
+import React from 'react';
 import {message} from 'antd'
 import store from 'store'
 import config from '../config'
 import axios from 'axios'
+import {Redirect} from 'react-router-dom'
 
 // 把 Token 存在localStroage,每次请求在 Axios 请求头上进行携带
 axios.defaults.headers.common['Authorization'] = store.get('token')
 
+function redirect(){
+  window.location='/login'
+  // return  (<Redirect to={'/login'}></Redirect>)
+}
 
-// instance.interceptors.response.use(
-//   response => {
-//     return response
-//   },
-//   error => {
-//     if (error.response) {
-//       switch (error.response.status) {
-//         case 401:
-//           // router.replace({
-//           //   path: 'login',
-//           //   query: { redirect: router.currentRoute.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
-//           // })
-//       }
-//     }
-//     return Promise.reject(error.response)
-//   }
-// )
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  error => {
+    if (error.response) {
+      switch (error.response.status) {
+        case 401:
+        // redirect()
+        break;
+      }
+    }
+    return Promise.reject(error.response)
+  }
+)
 
 export default function (url, type = 'GET', data) {
   let promise;
@@ -54,6 +58,11 @@ export default function (url, type = 'GET', data) {
         message.error(res.data.msg)
       }
     }).catch(err => {
+      const {data}= err
+      if(data&&data.msg){
+        message.error('请求出错'+data.msg)
+        return 
+      }
       // 3.失败调用reject，但是不能调用，调用就进入外层catch里了，为了不在外层用try...catch这里显式的返回error
       message.error('请求出错'+err.message)
     })

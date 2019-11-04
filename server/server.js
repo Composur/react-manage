@@ -105,12 +105,12 @@ app.use((req,res,next)=>{
       try{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
-        console.log(cookie)
+        // console.log(cookie)
         if(current <= exp){
-            // res = result.data || {};
             next()
         }
     }catch(e){
+      res.status(401)
       res.send({status: 1, msg: '登录信息失效，请重新登录'})
     }
   }else{

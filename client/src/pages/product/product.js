@@ -64,6 +64,7 @@ class Product extends Component {
       'Australian walks 100km after outback crash.',
       'Man charged over missing wedding girl.',
       'Los Angeles battles huge wildfires.',
+      'Los Angeles battles huge wildfires.',
     ];
     this.props.history.push({
       pathname: '/product/detail',
@@ -103,6 +104,7 @@ class Product extends Component {
   // 添加商品
   addProductBtn=(e)=>{
     e.stopPropagation()
+    this.props.history.push('/product/add')
   }
   // 商品列表
   getProductList= async(current,size)=>{

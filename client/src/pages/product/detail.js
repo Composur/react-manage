@@ -14,9 +14,10 @@ class ProductDetail extends Component {
     this.props.history.goBack()
   }
   render() {
-    const data=this.props.location.state
+    const data=this.props.location.state //路由传进来的数据
+    const {} = data
     const listTitle=[
-      1,2,3,4,5,6
+      '商品名称','商品描述','商品价格','所属分类','商品图片','商品详情'
     ]
     return (
       <Card title={this.title} extra={<a href="#"></a>}>
@@ -27,7 +28,7 @@ class ProductDetail extends Component {
         dataSource={data}
         renderItem={(item,index) => (
           <List.Item>
-            <Text strong style={{fontSize:18}}>{listTitle[index]}:</Text>{item}
+            <Text  style={{fontSize:15,marginRight:'1rem'}}>{listTitle[index]}:</Text>{item}
           </List.Item>
           )}
         />
