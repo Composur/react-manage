@@ -34,7 +34,8 @@ class HeaderSelf extends Component {
       onOk:()=> {
         return new Promise((resolve, reject) => {
           this.exitTimerID=setTimeout(()=>{
-            store.remove('user_key')
+            store.clearAll()
+            // store.remove('user_key')
             store.user=null
             resolve(null)
             this.props.history.replace('/')

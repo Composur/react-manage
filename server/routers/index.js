@@ -241,10 +241,24 @@ router.post('/manage/product/add', (req, res) => {
     })
 })
 
+// 添加产品
+router.post('/manage/product/delete', (req, res) => {
+  const {_id} = req.body
+  ProductModel.deleteOne({_id})
+    .then(product => {
+      res.send({status: 0, data: product})
+    })
+    .catch(error => {
+      console.error('删除产品异常', error)
+      res.send({status: 1, msg: '删除产品异常, 请重新尝试'})
+    })
+})
+
 // 获取产品分页列表
 router.get('/manage/product/list', (req, res) => {
   const {pageNum, pageSize} = req.query
-  ProductModel.find().sort({"_id": -1}).limit(Number(pageSize))
+  // ProductModel.find().sort({"_id": -1}).limit(Number(pageSize))
+  ProductModel.find().sort({"_id": -1})
     .then(products => {
       res.send({status: 0, data: pageFilter(products, pageNum, pageSize)})
     })

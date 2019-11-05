@@ -64,6 +64,15 @@ export const reqUpdateCategory=(data)=>request('/manage/category/update','POST',
 // 获取分类名称
 export const reqCategoryName=(data)=>request('/manage/category/info','GET',data)
 
+// 添加产品
+export const reqAddProduct=(data)=>request('/manage/product/add','POST',data)
+
+// 产品上架/下架
+export const reqProductStatus=(data)=>request('/manage/product/updateStatus','POST',data)
+
+// 删除产品
+export const reqDeleteProduct=(data)=>request('/manage/product/delete','POST',data)
+
 // 获取产品列表
 export const reqProductList=(data)=>request('/manage/product/list','GET',data)
 
