@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card,Icon,Form,Input,Cascader,Button,message} from 'antd'
 import {withRouter} from 'react-router-dom'
-import {reqCatagoryList,reqAddProduct} from '../../api'
+import {reqCatagoryList,reqAddProduct,reqProductUpdate} from '../../api'
 const { TextArea } = Input;
 function formatNumber(value) {
   value += '';
@@ -21,30 +21,24 @@ function formatNumber(value) {
 class ProductAdd extends Component {
   state = { 
     loading:false,
-    productClassList:[]
+    productClassList:[],
+    cardTitle:'添加商品'
    }
-  constructor(){
-    super()
+  constructor(props){
+    super(props)
+    const {state} = this.props.location
     this.title=(
-      <Icon type="arrow-left" onClick={()=>{this.props.history.goBack()}} style={{fontSize:20}}/>
+      <span><Icon type="arrow-left" onClick={()=>{this.props.history.goBack()}} style={{fontSize:20,marginRight:4}}/>
+       {state?'修改商品':'添加商品'}
+      </span>
     )
   }
-  // 提交添加的商品数据
+  // 提交添加、更新的商品数据
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         this.setState({loading:true})
-        const { keys, names } = values;
-        console.log('Received values of form: ', values);
-        // categoryId: {type: String, required: true}, // 所属分类的id
-        // pCategoryId: {type: String, required: true}, // 所属分类的父分类id
-        // name: {type: String, required: true}, // 名称
-        // price: {type: Number, required: true}, // 价格
-        // desc: {type: String},
-        // status: {type: Number, default: 1}, // 商品状态: 1:在售, 2: 下架了
-        // imgs: {type: Array, default: []}, // n个图片文件名的json字符串
-        // detail: {type: String}
         const params={
           categoryId:values.prdCategory[1]?values.prdCategory[1]:values.prdCategory[0],
           pCategoryId:values.prdCategory[0],
@@ -55,14 +49,12 @@ class ProductAdd extends Component {
           imgs:'',
           detail:values.prdDetail
         }
-        // prdCategory: (2) ["5dbb9954775a7731d69f214a", "5dbfde8f108734832aaffd0c"]
-        // prdDesc: "2"
-        // prdName: "1"
-        // prdPrice: "3"
-        const res= await reqAddProduct(params)
+        const res= await (this.isUpdate?reqProductUpdate({...params,_id:this.oldData._id}):reqAddProduct(params))
+        debugger
         if(res.status===0){
           this.setState({loading:false})
           message.success('添加成功！')
+          this.props.location.state=null
           this.props.form.resetFields()
         }
       }
@@ -99,7 +91,7 @@ class ProductAdd extends Component {
       productClassList: [...this.state.productClassList]
     })
   }
-  initSelectOptions(data){
+  initSelectOptions= async (data)=>{
     const productClassList= data.map(element => {
       return {
         value:element._id,
@@ -107,7 +99,23 @@ class ProductAdd extends Component {
         isLeaf:false
       }
     });
-
+    // 修改的时候回显二级分类
+    const {categoryId,pCategoryId} =this.oldData
+    if (categoryId) { //存在二级分类id就去请求二级分类列表
+      const subProductClass= await this.getProductClass(pCategoryId)
+      // 生成匹配的options
+      const childOptions=subProductClass.map(element=>{
+        return{
+          value:element._id,
+          label:element.name,
+          isLeaf:false
+        }
+      })
+      // 获取当前分类对应的一级分类
+      const targetOption=productClassList.find(item=>item.value===pCategoryId)
+      // 关联对应的一级分类
+      targetOption.children=childOptions
+    }
     this.setState({
       productClassList,
     })
@@ -123,6 +131,17 @@ class ProductAdd extends Component {
     this.getProductClass('0')
   }
   render() {
+    let prdCategory=[]
+    const oldData = this.props.location.state || {}
+    this.oldData=oldData
+    const {categoryId,pCategoryId} = oldData
+    this.isUpdate=!!pCategoryId
+     // 存在categoryId说明有二级分类否则无二级分类
+    if(pCategoryId&&categoryId){
+      prdCategory.push(pCategoryId,categoryId)
+    }else{
+      prdCategory.push(pCategoryId)
+    }
     const {productClassList,loading} = this.state
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -141,6 +160,7 @@ class ProductAdd extends Component {
         <Form.Item label="商品名称">
           {getFieldDecorator('prdName', {
             rules: [{ required: true, message: '请输入名称!' }],
+            initialValue:oldData.name
           })(
             <Input
               placeholder="商品名称"
@@ -149,10 +169,10 @@ class ProductAdd extends Component {
         </Form.Item>
         <Form.Item label='商品描述'>
           {getFieldDecorator('prdDesc', {
-            rules: [{ required: true, message: '请输入描述!' }],
+            rules: [{ required: true, message: '请输入描述!' }], initialValue:oldData.desc
           })(
             <TextArea
-              placeholder="商品描述"
+              placeholder="商品描述" 
               autosize
             />,
           )}
@@ -161,7 +181,8 @@ class ProductAdd extends Component {
           {getFieldDecorator('prdPrice', {
             rules:[{required: true, message:'请输入价格！'},
                     {validator:this.priceValidator}
-                  ]
+                  ],
+            initialValue:oldData.price
           })(
             <Input
               prefix='￥'
@@ -172,7 +193,7 @@ class ProductAdd extends Component {
         </Form.Item>
         <Form.Item label="商品分类">
           {getFieldDecorator('prdCategory', {
-            // initialValue: ['zhejiang', 'hangzhou', 'xihu'],
+            initialValue: prdCategory,
             rules: [
               { type: 'array', required: true, message: '请输入选择分类!' },
             ],
@@ -183,6 +204,7 @@ class ProductAdd extends Component {
             rules: [
               {required: true, message: '请输入商品详情!' },
             ],
+            initialValue:oldData.detail
           })(
             <TextArea
               placeholder="商品详情"

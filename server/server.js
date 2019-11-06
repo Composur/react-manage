@@ -13,6 +13,16 @@ const connectMongo=require('./db/connect')
 const fs = require('fs')
 const path=require('path')
 const jwt=require('jsonwebtoken')
+const morgan=require('morgan')
+
+// 日志中间件
+// 自定义token
+// 自定义format
+// 使用自定义的format
+// morgan.format('logs', '[logs] :method :url :status :res[content-length] - :response-time ms');
+// const accessLogStream = fs.createWriteStream(path.join(__dirname, './logs/access.log'), {flags: 'a'});
+// app.use(morgan('short', {stream: accessLogStream}));
+
 // 跨域
 // app.use(cors())
 // 声明使用静态中间件
@@ -42,21 +52,6 @@ app.use('/', indexRouter)  //
     }
   })
 })*/
-
-// 通过mongoose连接数据库
-// mongoose.connect('mongodb://localhost/server_db2', {useNewUrlParser: true})
-//   .then(() => {
-//     console.log('连接数据库成功!!!')
-//     // 只有当连接上数据库后才去启动服务器
-//     app.listen('5000', () => {
-//       console.log('服务器启动成功, 请访问: http://localhost:5000')
-//     })
-//   })
-//   .catch(error => {
-//     console.error('连接数据库失败', error)
-//   })
-
-
 
 function verifyToken(token){
   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
@@ -101,24 +96,24 @@ app.use((req,res,next)=>{
   const cookie=req.cookies
   const url=req.url
   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
+  
   if(url.indexOf('/api/login') !== 0){
       try{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
-        // console.log(cookie)
         if(current <= exp){
             next()
         }
     }catch(e){
+      console.log(e)
       res.status(401)
       res.send({status: 1, msg: '登录信息失效，请重新登录'})
     }
+        
   }else{
     next()
   }
 })
-
-
 
 
 /*

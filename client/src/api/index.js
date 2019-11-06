@@ -70,6 +70,9 @@ export const reqAddProduct=(data)=>request('/manage/product/add','POST',data)
 // 产品上架/下架
 export const reqProductStatus=(data)=>request('/manage/product/updateStatus','POST',data)
 
+// 产品上架/下架
+export const reqProductUpdate=(data)=>request('/manage/product/update','POST',data)
+
 // 删除产品
 export const reqDeleteProduct=(data)=>request('/manage/product/delete','POST',data)
 

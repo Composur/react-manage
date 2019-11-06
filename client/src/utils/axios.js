@@ -9,11 +9,9 @@ import axios from 'axios'
 import {Redirect} from 'react-router-dom'
 
 // 把 Token 存在localStroage,每次请求在 Axios 请求头上进行携带
-axios.defaults.headers.common['Authorization'] = store.get('token')
-
 function redirect(){
   window.location='/login'
-  // return  (<Redirect to={'/login'}></Redirect>)
+  return  (<Redirect to={'/login'}></Redirect>)
 }
 
 axios.interceptors.response.use(
@@ -24,7 +22,8 @@ axios.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 401:
-        // redirect()
+        // store.clearAll();
+        redirect();
         break;
       }
     }
@@ -33,6 +32,7 @@ axios.interceptors.response.use(
 )
 
 export default function (url, type = 'GET', data) {
+  axios.defaults.headers.common['Authorization'] = store.get('token')
   let promise;
   url=config.baseURl+url
   // 返回一个promise，统一处理错误
@@ -46,7 +46,7 @@ export default function (url, type = 'GET', data) {
       if(paramStr) {
           paramStr = paramStr.substring(0, paramStr.length-1)
         }
-      promise = axios.get(url+'?'+paramStr)
+      promise = axios.get(url+'?'+paramStr+'&t='+new Date())
     } else {
       promise = axios.post(url, data)
     }

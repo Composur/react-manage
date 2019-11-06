@@ -13,11 +13,20 @@ class LeftNav extends Component {
     };
     this.getCurrentReqParentPath(menuLists,this.props.location.pathname )
   }
+  // 保持选中状态
   getCurrentReqParentPath(arr,getCurrentReqPath){
+    // const PATH='/product'
+    // if(getCurrentReqPath.indexOf(PATH)===0){
+    //   debugger
+    //   //得到需要选中的item
+    //   // getCurrentReqPath=PATH
+    //   this.currentReqPath=PATH
+    // }else{
+    //   this.currentReqPath=getCurrentReqPath
+    // }
     arr.forEach(element => {
       if(element.children){
         element.children.forEach((cItem)=>{
-          // if(getCurrentReqPath===cItem.key){
           if(getCurrentReqPath.includes(cItem.key)){
             // 得到需要展开的key
             this.getCurrentReqParentPath=element.key
@@ -90,7 +99,8 @@ class LeftNav extends Component {
  
   render() {
     //这样是获取不到的，因为不是路由组件没有经过router的包装
-    const getCurrentReqPath=this.props.location.pathname 
+    let getCurrentReqPath=this.props.location.pathname 
+    if(getCurrentReqPath.includes('/product')){getCurrentReqPath='/product'}
     const getCurrentReqParentPath=this.getCurrentReqParentPath
     return (
       <div className='left-nav' >

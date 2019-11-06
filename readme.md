@@ -2,7 +2,7 @@
 >项目运行之前，请确保系统已经安装以下应用
 1. node (6.0 及以上版本)
 2. mongodb (开启状态)
-3. 全局安装nodemon
+3. 全局安装nodemon(为了node服务热启动)
 4. [可以参考这里安装](https://blog.csdn.net/composurext/article/details/79543271)
 ## 运行启动
 ```
@@ -42,6 +42,16 @@
 | utils  |工具模块  |
 | App.js | 应用根模块  |
 | index.js| 应用入口  |
+### server/src
+|文件目录 |含义 |
+| ----- | ------  |
+| config | 配置参数  |
+| db | 数据库连接  |
+| logs | 日志文件  |
+| modals | 数据库表结构  |
+| public | 可以放前端静态资源  |
+| router  | 路由  |
+| server.js| 应用入口  |
 
 
 ## 功能
@@ -73,8 +83,11 @@
 
 
 ### 预览
-![登录](./doc/img/1572077222666.jpg)
+![登录](./doc/img/1572077222666.gif)
 ### 主页
 ![主页](./doc/img/1572077173164.jpg)
 ### 品类管理
-![管理](./doc/img/1572508162034.jpg)
+![管理](./doc/img/1572508162034.gif)
+### 商品管理
+![管理](./doc/img/1573007074794.gif)
+![添加](./doc/img/test.gif)

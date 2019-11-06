@@ -15,12 +15,13 @@ const jwt = require('jsonwebtoken');
 
 //生成token的方法
 function  generateToken(data){
-  let created = Math.floor(Date.now() / 1000);
+  let created = Math.floor(Date.now()/1000);
+  console.log('created',created)
   let cert = fs.readFileSync(path.join(__dirname, '../config/rsa_private_key.pem'));//私钥
   let token = jwt.sign({
       data,
       exp: created + 3600 * 24 
-      // exp: created + 10
+      // exp: created + 5
   },cert, {algorithm: 'RS256'});
   return token;
 }
@@ -42,6 +43,7 @@ router.post('/login', (req, res) => {
   // 根据username和password查询数据库users, 如果没有, 返回提示错误的信息, 如果有, 返回登陆成功信息(包含user)
   UserModel.findOne({username, password: md5(password)},filter)
     .then(user => {
+      res.setHeader('Cache-Control', 'no-store')
       if (user) { // 登陆成功
         // 生成一个cookie(userid: user._id), 并交给浏览器保存
         res.cookie('userid', user._id, {maxAge: 1000 * 60 * 60 * 24})

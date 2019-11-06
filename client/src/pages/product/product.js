@@ -5,7 +5,7 @@ import {reqProductList,reqSearchProduct,reqDeleteProduct,reqProductStatus} from 
 
 const { Option } = Select;
 const { Text } = Typography;
-const PAGE_SIZE = 5
+const PAGE_SIZE = 2
 const btnStyle={
   marginLeft:'0.5rem'
 }
@@ -84,11 +84,11 @@ class Product extends Component {
     if(res.status===0){
       this.setState({loading:false})
       message.success('更新成功！')
-      this.getProductList(1)
+      this.getProductList(this.pageNum)
     }
   }
   productUpdate= async (record)=>{
-    this.props.history.push('/product/update',record)
+    this.props.history.push('/product/add',record)
   }
   productDelete = async (record) =>{
     const res = await reqDeleteProduct({_id:record._id}) 
@@ -150,7 +150,7 @@ class Product extends Component {
   // 商品列表
   getProductList= async(pageNum)=>{
     const {inputValue} = this.state
-    this.pageNum=pageNum
+    this.pageNum=pageNum //保存全局，状态更新的时候能够定位到当前页
     this.setState({
       tableLoading:true,
     })
