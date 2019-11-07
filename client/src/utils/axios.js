@@ -26,7 +26,7 @@ axios.interceptors.response.use(
       switch (error.response.status) {
         case 401:
         // store.clearAll();
-        redirect();
+        // redirect();
         break;
       }
     }
