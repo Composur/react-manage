@@ -10,10 +10,13 @@ import {Redirect} from 'react-router-dom'
 
 // 把 Token 存在localStroage,每次请求在 Axios 请求头上进行携带
 function redirect(){
-  window.location='/login'
   return  (<Redirect to={'/login'}></Redirect>)
 }
 
+// 请求拦截
+axios.interceptors.request.use()
+
+// 响应拦截
 axios.interceptors.response.use(
   response => {
     return response
