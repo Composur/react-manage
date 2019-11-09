@@ -30,18 +30,18 @@ class Product extends Component {
         dataIndex: 'name',
       },
       {
-        title: '商品描述',
-        dataIndex: 'desc',
-      },
-      {
         title: '价格',
         dataIndex: 'price',
         render:(record)=>(`￥${record}`)
       },
       {
-        title: '详情',
-        dataIndex: 'detail',
+        title: '商品描述',
+        dataIndex: 'desc',
       },
+      // {
+      //   title: '详情',
+      //   dataIndex: 'detail',
+      // },
       {
         title: '状态',
         render:(record)=>(<span><Text type={record.status?'success':'danger'} >{record.status?'在售':'下架'}</Text><Button size='small' style={btnStyle} loading={loading}

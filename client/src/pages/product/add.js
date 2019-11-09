@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Card,Icon,Form,Input,Cascader,Button,message} from 'antd'
+import UploadImg from './upload'
 import {withRouter} from 'react-router-dom'
 import {reqCatagoryList,reqAddProduct,reqProductUpdate} from '../../api'
 const { TextArea } = Input;
@@ -134,12 +135,12 @@ class ProductAdd extends Component {
     let prdCategory=[]
     const oldData = this.props.location.state || {}
     this.oldData=oldData
-    const {categoryId,pCategoryId} = oldData
+    const {categoryId,pCategoryId,imgs} = oldData
     this.isUpdate=!!pCategoryId
      // 存在categoryId说明有二级分类否则无二级分类
-    if(pCategoryId&&categoryId){
+    if(categoryId){
       prdCategory.push(pCategoryId,categoryId)
-    }else{
+    }else if(pCategoryId){
       prdCategory.push(pCategoryId)
     }
     const {productClassList,loading} = this.state
@@ -156,7 +157,7 @@ class ProductAdd extends Component {
     };
     return (
       <Card title={this.title} extra={<a href="#">More</a>}>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}  style={{width:400}}>
+        <Form {...formItemLayout} onSubmit={this.handleSubmit}  style={{width:600}}>
         <Form.Item label="商品名称">
           {getFieldDecorator('prdName', {
             rules: [{ required: true, message: '请输入名称!' }],
@@ -199,7 +200,11 @@ class ProductAdd extends Component {
             ],
           })(<Cascader placeholder='请选择商品分类' options={productClassList} loadData={this.productLoadData} />)}
         </Form.Item>
+        <Form.Item label="商品图片">
+          <UploadImg imgSrc={imgs}/>
+        </Form.Item>
         <Form.Item label="商品详情">
+
           {getFieldDecorator('prdDetail', {
             rules: [
               {required: true, message: '请输入商品详情!' },
@@ -221,7 +226,8 @@ class ProductAdd extends Component {
             增加
           </Button>
         </Form.Item>
-       </Form>
+     
+        </Form>
       </Card>
     ); 
   }

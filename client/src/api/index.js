@@ -67,6 +67,15 @@ export const reqCategoryName=(data)=>request('/manage/category/info','GET',data)
 // 添加产品
 export const reqAddProduct=(data)=>request('/manage/product/add','POST',data)
 
+// 上传图片
+export const reqUploadImg=(data)=>request('/manage/img/upload','POST',data)
+
+// 删除上传图片
+export const reqDelUploadImg=(data)=>request('/manage/img/delete','POST',data)
+
+
+
+
 // 产品上架/下架
 export const reqProductStatus=(data)=>request('/manage/product/updateStatus','POST',data)
 
