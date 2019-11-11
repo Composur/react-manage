@@ -1,6 +1,7 @@
 import React from 'react';
 import { Upload, Icon, Modal,message } from 'antd';
 import {reqUploadImg,reqDelUploadImg} from '../../api'
+import {imgUrl} from '../../config'
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -22,34 +23,77 @@ export default class PicturesWall extends React.Component {
         status: 'done',
         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
       },
-      {
-        uid: '-2',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
     ],
   };
+  constructor(props){
+    super(props)
+    const {imgSrc=[]} = this.props
+    if(imgSrc.length){
+     const fileList = imgSrc.map((img,index)=>{
+        return {
+          uid: -index,
+          name: img,
+          status: 'done',
+          url: imgUrl+img,
+        }
+      })
+      this.state={
+        fileList
+      }
+    }
+  }
 
   handleCancel = () => this.setState({ previewVisible: false });
 
   handlePreview = async file => {
-    debugger
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
 
     this.setState({
       previewImage: file.url || file.preview,
+      previewImage:  file.preview,
       previewVisible: true,
     });
   };
-
-  handleChange = ({ fileList }) => this.setState({ fileList });
+  fileList=(arr)=>{
+    arr.map(item=>{
+      return{
+        uid: '-1',
+        name: item,
+        status: 'done',
+        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      }
+    })
+  }
+  getImgs=()=>{
+    return this.state.fileList.map(file=>file.name)
+  }
+  /**
+   * @param file 当前操作的文件对象。file.response为当前请求的返回
+   * @param fileList  当前的文件列表。
+   * @param event  上传中的服务端响应内容，包含了上传进度等信息，高级浏览器支持。
+   */
+  handleChange = async ({ file,fileList,event }) => { //上传中、完成、失败都会调用这个函数。
+    const {response,status} =  file
+    // 上传成功
+    if (status === 'done') { 
+      const {data} = response 
+      const {name,url}=data
+      const currentFile = fileList[fileList.length - 1]
+      currentFile.name = name
+      currentFile.url = url
+    } else if (status === 'removed') {
+      const res = await reqDelUploadImg({name:file.name})
+      if(res.status===0){
+        message.success('删除成功！')
+      }
+    }
+    this.setState({ fileList })
+  };
   render() {
-    const {imgSrc} = this.props
-    console.log(imgSrc)
     const { previewVisible, previewImage, fileList } = this.state;
+
     const uploadButton = (
       <div>
         <Icon type="plus" />

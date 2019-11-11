@@ -27,6 +27,7 @@ class ProductAdd extends Component {
    }
   constructor(props){
     super(props)
+    this.myRef = React.createRef();
     const {state} = this.props.location
     this.title=(
       <span><Icon type="arrow-left" onClick={()=>{this.props.history.goBack()}} style={{fontSize:20,marginRight:4}}/>
@@ -37,9 +38,11 @@ class ProductAdd extends Component {
   // 提交添加、更新的商品数据
   handleSubmit = e => {
     e.preventDefault();
+    const imgs = this.myRef.current.getImgs();//调用子组件的方法得到上传的图片名称
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         this.setState({loading:true})
+       
         const params={
           categoryId:values.prdCategory[1]?values.prdCategory[1]:values.prdCategory[0],
           pCategoryId:values.prdCategory[0],
@@ -47,11 +50,10 @@ class ProductAdd extends Component {
           price:values.prdPrice,
           desc:values.prdDesc,
           status:'',
-          imgs:'',
+          imgs:imgs,
           detail:values.prdDetail
         }
         const res= await (this.isUpdate?reqProductUpdate({...params,_id:this.oldData._id}):reqAddProduct(params))
-        debugger
         if(res.status===0){
           this.setState({loading:false})
           message.success('添加成功！')
@@ -201,7 +203,7 @@ class ProductAdd extends Component {
           })(<Cascader placeholder='请选择商品分类' options={productClassList} loadData={this.productLoadData} />)}
         </Form.Item>
         <Form.Item label="商品图片">
-          <UploadImg imgSrc={imgs}/>
+          <UploadImg imgSrc={imgs} ref={this.myRef} />
         </Form.Item>
         <Form.Item label="商品详情">
 

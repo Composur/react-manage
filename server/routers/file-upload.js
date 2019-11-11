@@ -6,7 +6,6 @@ const path = require('path')
 const fs = require('fs')
 
 const dirPath = path.join(__dirname, '..', 'public/upload')
-
 const storage = multer.diskStorage({
   // destination: 'upload', //string时,服务启动将会自动创建文件夹
   destination: function (req, file, cb) { //函数需手动创建文件夹
@@ -48,7 +47,7 @@ module.exports = function fileUpload(router) {
         status: 0,
         data: {
           name: file.filename,
-          url: 'http://localhost:5000/upload/' + file.filename
+          url: 'https://localhost:8081/upload/' + file.filename
         }
       })
 
