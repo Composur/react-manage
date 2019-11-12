@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Card,Icon,Form,Input,Cascader,Button,message} from 'antd'
 import UploadImg from './upload'
+import RichEditText from './richTextEdit'
 import {withRouter} from 'react-router-dom'
 import {reqCatagoryList,reqAddProduct,reqProductUpdate} from '../../api'
 const { TextArea } = Input;
@@ -28,6 +29,7 @@ class ProductAdd extends Component {
   constructor(props){
     super(props)
     this.myRef = React.createRef();
+    this.richEditTextRef= React.createRef();
     const {state} = this.props.location
     this.title=(
       <span><Icon type="arrow-left" onClick={()=>{this.props.history.goBack()}} style={{fontSize:20,marginRight:4}}/>
@@ -39,6 +41,7 @@ class ProductAdd extends Component {
   handleSubmit = e => {
     e.preventDefault();
     const imgs = this.myRef.current.getImgs();//调用子组件的方法得到上传的图片名称
+    const getInputData = this.richEditTextRef.current.getInputData();
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         this.setState({loading:true})
@@ -51,7 +54,7 @@ class ProductAdd extends Component {
           desc:values.prdDesc,
           status:'',
           imgs:imgs,
-          detail:values.prdDetail
+          detail:getInputData
         }
         const res= await (this.isUpdate?reqProductUpdate({...params,_id:this.oldData._id}):reqAddProduct(params))
         if(res.status===0){
@@ -137,7 +140,7 @@ class ProductAdd extends Component {
     let prdCategory=[]
     const oldData = this.props.location.state || {}
     this.oldData=oldData
-    const {categoryId,pCategoryId,imgs} = oldData
+    const {categoryId,pCategoryId,imgs,detail} = oldData
     this.isUpdate=!!pCategoryId
      // 存在categoryId说明有二级分类否则无二级分类
     if(categoryId){
@@ -150,7 +153,7 @@ class ProductAdd extends Component {
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 },
+        sm: { span: 2 },
       },
       wrapperCol: {
         xs: { span: 24 },
@@ -159,7 +162,7 @@ class ProductAdd extends Component {
     };
     return (
       <Card title={this.title} extra={<a href="#">More</a>}>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}  style={{width:600}}>
+        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
         <Form.Item label="商品名称">
           {getFieldDecorator('prdName', {
             rules: [{ required: true, message: '请输入名称!' }],
@@ -205,23 +208,14 @@ class ProductAdd extends Component {
         <Form.Item label="商品图片">
           <UploadImg imgSrc={imgs} ref={this.myRef} />
         </Form.Item>
-        <Form.Item label="商品详情">
-
-          {getFieldDecorator('prdDetail', {
-            rules: [
-              {required: true, message: '请输入商品详情!' },
-            ],
-            initialValue:oldData.detail
-          })(
-            <TextArea
-              placeholder="商品详情"
-            />,
-          )}
+        <Form.Item
+          label="商品详情">
+          <RichEditText preDetail={detail} ref={this.richEditTextRef}/>
         </Form.Item>
+       
         <Form.Item 
           wrapperCol={{
-            xs: { span: 24, offset: 0 },
-            sm: { span: 16, offset: 6 },
+            sm: { span: 10, offset: 10 },
           }}
         >
           <Button type="primary" htmlType="submit" loading={loading}>

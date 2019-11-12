@@ -1,6 +1,6 @@
 import React from 'react';
 import { Upload, Icon, Modal,message } from 'antd';
-import {reqUploadImg,reqDelUploadImg} from '../../api'
+import {reqDelUploadImg} from '../../api'
 import {imgUrl} from '../../config'
 
 function getBase64(file) {
@@ -17,12 +17,12 @@ export default class PicturesWall extends React.Component {
     previewVisible: false,
     previewImage: '',
     fileList: [
-      {
-        uid: '-1',
-        name: 'image.png',
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      },
+      // {
+      //   uid: '-1',
+      //   name: 'image.png',
+      //   status: 'done',
+      //   url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+      // },
     ],
   };
   constructor(props){
@@ -49,23 +49,11 @@ export default class PicturesWall extends React.Component {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
-
     this.setState({
       previewImage: file.url || file.preview,
-      previewImage:  file.preview,
       previewVisible: true,
     });
   };
-  fileList=(arr)=>{
-    arr.map(item=>{
-      return{
-        uid: '-1',
-        name: item,
-        status: 'done',
-        url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      }
-    })
-  }
   getImgs=()=>{
     return this.state.fileList.map(file=>file.name)
   }
@@ -93,7 +81,6 @@ export default class PicturesWall extends React.Component {
   };
   render() {
     const { previewVisible, previewImage, fileList } = this.state;
-
     const uploadButton = (
       <div>
         <Icon type="plus" />
