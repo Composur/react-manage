@@ -243,7 +243,7 @@ router.post('/manage/product/add', (req, res) => {
     })
 })
 
-// 添加产品
+// 删除产品
 router.post('/manage/product/delete', (req, res) => {
   const {_id} = req.body
   ProductModel.deleteOne({_id})
@@ -324,7 +324,6 @@ router.post('/manage/role/add', (req, res) => {
       res.send({status: 0, data: role})
     })
     .catch(error => {
-      console.error('添加角色异常', error)
       res.send({status: 1, msg: '添加角色异常, 请重新尝试'})
     })
 })

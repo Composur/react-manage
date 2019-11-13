@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom'
 import { Card,Select,Button,Table,Input,message,Typography} from 'antd';
 import {reqProductList,reqSearchProduct,reqDeleteProduct,reqProductStatus} from '../../api'
-
+import {formatNumber} from '../../utils/common'
 const { Option } = Select;
 const { Text } = Typography;
 const PAGE_SIZE = 2
@@ -98,14 +98,6 @@ class Product extends Component {
   }
   // 商品详情
   productDetail = (data) => {
-    const data1 = [
-      'Racing car sprays burning fuel into crowd.',
-      'Japanese princess to wed commoner.',
-      'Australian walks 100km after outback crash.',
-      'Man charged over missing wedding girl.',
-      'Los Angeles battles huge wildfires.',
-      'Los Angeles battles huge wildfires.',
-    ];
     this.props.history.push({
       pathname: '/product/detail',
       state: data
@@ -165,6 +157,10 @@ class Product extends Component {
     }
     const {total,list}=res.data
     if (res.status === 0 && list.length > 0) {
+      // 格式化金额
+      list.forEach(item=>{
+        item.price=formatNumber(item.price)
+      })
       this.setState({
         total,
         productListSource:list,

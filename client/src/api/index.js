@@ -90,3 +90,8 @@ export const reqProductList=(data)=>request('/manage/product/list','GET',data)
 
 // 搜索产品
 export const reqSearchProduct=(data)=>request('/manage/product/search','GET',data)
+
+
+
+// 创建用户
+export const reqCreateUser=(data)=>request('/manage/user/add','POST',data)
