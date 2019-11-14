@@ -4,12 +4,21 @@
 import request from '../utils/axios'
 import jsonp from 'jsonp'
 // import md5 from 'md5'
-import {
-  message
-} from 'antd'
+import { message} from 'antd'
+
+// 登录
 export const reqLogin = data => request('/login', 'POST', data)
+
+// 新增用户
 export const reqAddUser = data => request('/manage/user/add', 'POST', data)
 
+// 删除用户
+export const reqDeleteUser = data => request('/manage/user/delete', 'POST', data)
+
+// 用户列表
+export const reqUserList = data => request('/manage/user/list', 'GET', data)
+
+// 获取天气-百度api
 export const reqWeather = (city) => {
   return new Promise((resolve, reject) => {
     const getData = (city) => {
@@ -36,6 +45,7 @@ export const reqWeather = (city) => {
   })
 }
 
+// 定位
 export const reqAddress=()=>{
     return new Promise((resolve,reject)=>{
       // jsonp('https://api.map.baidu.com/location/ip?ak=PFlNd9vKhGalbukR6ZIlFKzKvFsutPWV',(err,data)=>{
@@ -92,6 +102,3 @@ export const reqProductList=(data)=>request('/manage/product/list','GET',data)
 export const reqSearchProduct=(data)=>request('/manage/product/search','GET',data)
 
 
-
-// 创建用户
-export const reqCreateUser=(data)=>request('/manage/user/add','POST',data)

@@ -100,7 +100,6 @@ router.post('/manage/user/add', (req, res) => {
     })
 })
 
-
 // 更新用户
 router.post('/manage/user/update', (req, res) => {
   const user = req.body
@@ -118,10 +117,10 @@ router.post('/manage/user/update', (req, res) => {
 
 // 删除用户
 router.post('/manage/user/delete', (req, res) => {
-  const {userId} = req.body
-  UserModel.deleteOne({_id: userId})
+  const {_id} = req.body
+  UserModel.deleteOne({_id})
     .then((doc) => {
-      res.send({status: 0})
+      res.send({status: 0,data:doc})
     })
 })
 
@@ -152,7 +151,7 @@ router.post('/manage/user/delete', (req, res) => {
 
 // 获取所有用户列表
 router.get('/manage/user/list', (req, res) => {
-  UserModel.find({username: {'$ne': 'admin'}})
+  UserModel.find({username: {'$ne': 'admin'}},{password:0,__v:0}).sort({"_id": -1})
     .then(users => {
       RoleModel.find().then(roles => {
         res.send({status: 0, data: {users, roles}})

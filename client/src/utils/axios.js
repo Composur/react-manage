@@ -34,7 +34,7 @@ axios.interceptors.response.use(
   }
 )
 
-export default function (url, type = 'GET', data) {
+export default function (url, type = 'GET', data={}) {
   axios.defaults.headers.common['Authorization'] = store.get('token')
   let promise;
   url=config.baseURl+url
