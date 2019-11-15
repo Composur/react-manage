@@ -134,7 +134,7 @@ class User extends Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { visible, confirmLoading,loading,tableData ,roles,role} = this.state;
+    const { visible, confirmLoading,loading,tableData,role} = this.state;
     const cardTitle=(
       <span><Button type="primary" onClick={this.showModal}>创建角色</Button>
       <Button type="primary" onClick={this.roleModal} disabled={!role['_id']} style={{marginLeft:'1rem'}}>设置权限</Button></span>

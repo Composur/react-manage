@@ -16,19 +16,22 @@ export default class Auth extends Component {
        visible:true
      })
    }
+   getCurrentMenus=()=>{
+     return this.state.menus
+   }
   //  设置权限
    handelAddUser= async ()=>{
     this.setState({
       confirmLoading:true
     })
     const {role}= this.props
-    role.menus=this.state.menus
+    role.menus=this.state.menus  //自动更新了父组件的状态，改变了props的状态
     const res = await reqSettingRole(role)
     if(res){
       message.success('更新成功！')
       this.setState({
         confirmLoading:false,
-        visible:false
+        visible:false,
       })
     }
    }
@@ -38,9 +41,6 @@ export default class Auth extends Component {
       confirmLoading:false,
     })
    }
-  // onSelect = (selectedKeys, info) => {
-  //   console.log('selected', selectedKeys, info);
-  // };
 
   /**
    * @description menus 得到checkbox选中的集合
@@ -62,9 +62,19 @@ export default class Auth extends Component {
   componentDidMount() {
     this.treeNodes=this.treeNodeRender(menuList)
   }
+  componentWillReceiveProps(next){
+    console.log(next)
+    debugger
+    this.setState({
+      menus:next.role.menus
+    })
+  }
   render() {
+    // 每次需要拿到最新的role
     const {role} = this.props 
-    const {visible,confirmLoading} = this.state
+    const {visible,confirmLoading,menus} = this.state
+    // console.log(role)
+    // console.log(menus)
     return (
       <Modal
         title="设置权限"
@@ -84,9 +94,7 @@ export default class Auth extends Component {
           checkable
           // defaultExpandAll
           defaultExpandedKeys={['all']}
-          // defaultSelectedKeys={['0-0-0', '0-0-1']}
-          defaultCheckedKeys={role.menus}
-          onSelect={this.onSelect}
+          checkedKeys={menus}
           onCheck={this.onCheck}
         >
           <TreeNode title="权限管理" key="all">
@@ -98,5 +106,6 @@ export default class Auth extends Component {
   }
 }
 Auth.propTypes={
-  role:PropTypes.object.isRequired
+  role:PropTypes.object.isRequired,
+  updateRolesList:PropTypes.func.isRequired
 }
