@@ -102,3 +102,14 @@ export const reqProductList=(data)=>request('/manage/product/list','GET',data)
 export const reqSearchProduct=(data)=>request('/manage/product/search','GET',data)
 
 
+// 添加角色
+export const reqAddRole=(data)=>request('/manage/role/add','POST',data)
+
+// 删除角色
+export const reqDeleteRole=(data)=>request('/manage/role/delete','POST',data)
+
+// 角色列表
+export const reqRoleList=(data)=>request('/manage/role/list','GET',data)
+
+// 设置权限
+export const reqSettingRole=(data)=>request('/manage/role/update','POST',data)

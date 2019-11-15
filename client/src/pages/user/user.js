@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Card,Button,Modal,Form, Icon,Input,message,Table} from 'antd'
-import moment, { locale } from 'moment'
+import moment from 'moment'
 import {reqAddUser,reqUserList,reqDeleteUser} from '../../api'
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 class User extends Component {
@@ -24,8 +24,8 @@ class User extends Component {
       {
         title: '手机',
         dataIndex: 'phone',
-        sorter: (a, b) => a.phone - b.phone,
-        sortDirections: ['descend', 'ascend'],
+        // sorter: (a, b) => a.phone - b.phone,
+        // sortDirections: ['descend', 'ascend'],
       },
       {
         title: '邮箱',
@@ -38,7 +38,9 @@ class User extends Component {
       {
         title: '创建时间',
         dataIndex: 'create_time',
-        render:(create_time)=>(moment(create_time).format('YYYY-MM-DD hh:mm:ss'))
+        sorter: (a, b) => a.create_time - b.create_time,
+        sortDirections: ['descend', 'ascend'],
+        render:(create_time)=>(moment(create_time).format('YYYY-MM-DD HH:mm:ss'))
       },
       {
         title: '操作',

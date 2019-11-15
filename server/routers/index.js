@@ -87,7 +87,7 @@ router.post('/manage/user/add', (req, res) => {
         })
       } else { // 没值(不存在)
         // 保存
-        return UserModel.create({...req.body, password: md5(password || 'atguigu')})
+        return UserModel.create({...req.body, password: md5(password || '123456')})
       }
     })
     .then(user => {
@@ -327,6 +327,18 @@ router.post('/manage/role/add', (req, res) => {
     })
 })
 
+// 删除角色
+router.post('/manage/role/delete', (req, res) => {
+  const {_id} = req.body
+  RoleModel.deleteOne({_id})
+    .then(data => {
+      res.send({status: 0, data})
+    })
+    .catch(error => {
+      res.send({status: 1, msg: '添加角色异常, 请重新尝试'})
+    })
+})
+
 // 获取角色列表
 router.get('/manage/role/list', (req, res) => {
   RoleModel.find()
@@ -339,7 +351,7 @@ router.get('/manage/role/list', (req, res) => {
     })
 })
 
-// 更新角色(设置权限)
+// 设置权限
 router.post('/manage/role/update', (req, res) => {
   const role = req.body
   role.auth_time = Date.now()
