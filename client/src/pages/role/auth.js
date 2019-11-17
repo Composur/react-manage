@@ -9,7 +9,8 @@ export default class Auth extends Component {
   state = { 
     visible:false,
     confirmLoading:false,
-    menus:[]//路由权限
+    newMenus:[],
+    menus:[]//路由权限,
    }
    showModal=()=>{
      this.setState({
@@ -62,19 +63,26 @@ export default class Auth extends Component {
   componentDidMount() {
     this.treeNodes=this.treeNodeRender(menuList)
   }
-  componentWillReceiveProps(next){
-    console.log(next)
-    debugger
-    this.setState({
-      menus:next.role.menus
-    })
+  // 这个方法已经不建议使用
+  // componentWillReceiveProps(next){
+  //   this.setState({
+  //     menus:next.role.menus
+  //   })
+  // }
+  static getDerivedStateFromProps(nextProps, prevState){
+    if (nextProps.role.menus !== prevState.menus) {
+      // 额外写一个state来记录上一个props，在组件渲染的时候传入这个额外额state
+      return {
+        newMenus:nextProps.role.menus
+      };
+    } 
+    // 不更新state
+    return null
   }
   render() {
     // 每次需要拿到最新的role
     const {role} = this.props 
-    const {visible,confirmLoading,menus} = this.state
-    // console.log(role)
-    // console.log(menus)
+    const {visible,confirmLoading,newMenus} = this.state
     return (
       <Modal
         title="设置权限"
@@ -94,7 +102,7 @@ export default class Auth extends Component {
           checkable
           // defaultExpandAll
           defaultExpandedKeys={['all']}
-          checkedKeys={menus}
+          checkedKeys={newMenus}
           onCheck={this.onCheck}
         >
           <TreeNode title="权限管理" key="all">
@@ -107,5 +115,4 @@ export default class Auth extends Component {
 }
 Auth.propTypes={
   role:PropTypes.object.isRequired,
-  updateRolesList:PropTypes.func.isRequired
 }
