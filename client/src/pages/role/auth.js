@@ -45,7 +45,7 @@ export default class Auth extends Component {
    */
   // 更新了menus
   onCheck = (menus, info) => {
-    // this.props.role.menus=menus
+    this.props.role.menus=menus
     this.setState({menus})
   };
   // 权限控件渲染
