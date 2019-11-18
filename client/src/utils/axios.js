@@ -1,17 +1,17 @@
 /**
  * @description 封装axios
  */
-import React from 'react';
+// import React from 'react';
 import {message} from 'antd'
 import store from 'store'
 import config from '../config'
 import axios from 'axios'
-import {Redirect} from 'react-router-dom'
+// import {Redirect} from 'react-router-dom'
 
 // 把 Token 存在localStroage,每次请求在 Axios 请求头上进行携带
-function redirect(){
-  return  (<Redirect to={'/login'}></Redirect>)
-}
+// function redirect(){
+//   return  (<Redirect to={'/login'}></Redirect>)
+// }
 
 // 请求拦截
 axios.interceptors.request.use()
@@ -28,6 +28,8 @@ axios.interceptors.response.use(
         // store.clearAll();
         // redirect();
         break;
+        default:
+        return
       }
     }
     return Promise.reject(error.response)

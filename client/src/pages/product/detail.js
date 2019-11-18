@@ -20,7 +20,7 @@ class ProductDetail extends Component {
       '商品名称','商品描述','商品价格','所属分类','商品图片','商品详情'
     ]
     return (
-      <Card title={this.title} extra={<a href="#"></a>}>
+      <Card title={this.title}>
       <List
         header={<div>商品详情</div>}
         bordered

@@ -11,7 +11,9 @@ class User extends Component {
     confirmLoading: false,
     loading:false,
     tableData:[],
-    role:{},//选中的当前角色
+    role:{
+      menus:[]
+    },//选中的当前角色
     roles:[],//角色的路由权限
   }
   constructor(){
@@ -132,6 +134,11 @@ class User extends Component {
       }, 
     };
   }
+  updateMeuns=(role)=>{
+    this.setState({
+      role
+    })
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const { visible, confirmLoading,loading,tableData,role} = this.state;
@@ -140,7 +147,7 @@ class User extends Component {
       <Button type="primary" onClick={this.roleModal} disabled={!role['_id']} style={{marginLeft:'1rem'}}>设置权限</Button></span>
      )
     return (
-      <Card title={cardTitle} extra={<a href="#">More</a>}>
+      <Card title={cardTitle}>
         <Modal
           title="创建角色"
           visible={visible}
@@ -158,7 +165,7 @@ class User extends Component {
               <Input
                 prefix={<Icon type="user" style={iconStyle} />}
                 placeholder="角色名称"
-              />,
+              />
             )}
           </Form.Item>
       </Form>

@@ -2,9 +2,9 @@
  * @param 应用接口
  */
 import request from '../utils/axios'
-import jsonp from 'jsonp'
+// import jsonp from 'jsonp'
 // import md5 from 'md5'
-import { message} from 'antd'
+// import { message} from 'antd'
 
 // 登录
 export const reqLogin = data => request('/login', 'POST', data)
@@ -21,16 +21,16 @@ export const reqUserList = data => request('/manage/user/list', 'GET', data)
 // 获取天气-百度api
 export const reqWeather = (city) => {
   return new Promise((resolve, reject) => {
-    const getData = (city) => {
-      const url = `https://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
-      jsonp(url, {}, (err, data) => {
-        if (data && data.status === 'success') {
-          resolve(data.results[0].weather_data[0])
-        } else {
-          message.error(data.status)
-        }
-      })
-    }
+    // const getData = (city) => {
+    //   const url = `https://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=3p49MVra6urFRGOT9s8UBWr2`
+    //   jsonp(url, {}, (err, data) => {
+    //     if (data && data.status === 'success') {
+    //       resolve(data.results[0].weather_data[0])
+    //     } else {
+    //       message.error(data.status)
+    //     }
+    //   })
+    // }
     // getData(city)
     // if ("geolocation" in navigator) {
     //   getData()

@@ -9,16 +9,12 @@ export default class Auth extends Component {
   state = { 
     visible:false,
     confirmLoading:false,
-    newMenus:[],
-    menus:[]//路由权限,
+    menus:this.props.role.menus//路由权限,
    }
    showModal=()=>{
      this.setState({
        visible:true
      })
-   }
-   getCurrentMenus=()=>{
-     return this.state.menus
    }
   //  设置权限
    handelAddUser= async ()=>{
@@ -47,7 +43,9 @@ export default class Auth extends Component {
    * @description menus 得到checkbox选中的集合
    * @description info 点击事件
    */
+  // 更新了menus
   onCheck = (menus, info) => {
+    // this.props.role.menus=menus
     this.setState({menus})
   };
   // 权限控件渲染
@@ -65,24 +63,23 @@ export default class Auth extends Component {
   }
   // 这个方法已经不建议使用
   // componentWillReceiveProps(next){
+  //   console.log(next)
   //   this.setState({
   //     menus:next.role.menus
   //   })
   // }
-  static getDerivedStateFromProps(nextProps, prevState){
-    if (nextProps.role.menus !== prevState.menus) {
-      // 额外写一个state来记录上一个props，在组件渲染的时候传入这个额外额state
+  static getDerivedStateFromProps(props, state){
+    if (props.role.menus !== state.menus) {
       return {
-        newMenus:nextProps.role.menus
+        menus:props.role.menus
       };
     } 
-    // 不更新state
     return null
   }
   render() {
     // 每次需要拿到最新的role
     const {role} = this.props 
-    const {visible,confirmLoading,newMenus} = this.state
+    const {visible,confirmLoading,menus} = this.state
     return (
       <Modal
         title="设置权限"
@@ -102,7 +99,7 @@ export default class Auth extends Component {
           checkable
           // defaultExpandAll
           defaultExpandedKeys={['all']}
-          checkedKeys={newMenus}
+          checkedKeys={menus}
           onCheck={this.onCheck}
         >
           <TreeNode title="权限管理" key="all">

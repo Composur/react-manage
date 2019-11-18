@@ -147,7 +147,7 @@ class ProductAdd extends Component {
       },
     };
     return (
-      <Card title={this.title} extra={<a href="#">More</a>}>
+      <Card title={this.title} >
         <Form {...formItemLayout} onSubmit={this.handleSubmit}>
         <Form.Item label="商品名称">
           {getFieldDecorator('prdName', {

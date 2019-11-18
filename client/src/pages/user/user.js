@@ -62,6 +62,7 @@ class User extends Component {
           confirmLoading: true,
         });
         const res = await reqAddUser(values)
+        if(res)
         message.success('添加成功！')
         this.setState({
           visible: false,
@@ -112,7 +113,7 @@ class User extends Component {
     const { getFieldDecorator } = this.props.form;
     const { visible, confirmLoading,loading,tableData } = this.state;
     return (
-      <Card title={this.cardTitle} extra={<a href="#">More</a>}>
+      <Card title={this.cardTitle}>
         <Modal
           title="创建用户"
           visible={visible}
