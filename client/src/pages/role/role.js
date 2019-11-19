@@ -32,6 +32,9 @@ class User extends Component {
       {
         title: '授权时间',
         dataIndex: 'auth_time',
+        sorter: (a, b) => a.create_time - b.create_time,
+        sortDirections: ['descend', 'ascend'],
+        render:(auth_time)=>(moment(auth_time).format('YYYY-MM-DD'))
       },
       {
         title: '创建时间',
@@ -94,6 +97,7 @@ class User extends Component {
       this.getUserList()
     }
   }
+  
   handleCancel = () => {
     // 取消的时候重置表单
     this.props.form.resetFields()
@@ -170,16 +174,16 @@ class User extends Component {
           </Form.Item>
       </Form>
       </Modal>
-      <AuthModal ref={this.roleRef} role={role}/>
-      <Table dataSource={tableData} columns={this.columns} bordered loading={loading} rowKey={'_id'} size={'small'} 
-          rowSelection={this.rowSelection()} 
-          onRow={this.tableOnRow}
-          pagination={{
-              defaultCurrent:1,
-              pageSize:PAGE_SIZE,
-              total:tableData.length
-            }}
-      />
+          <AuthModal ref={this.roleRef} role={role} getUserList={()=>this.getUserList()}/>
+          <Table dataSource={tableData} columns={this.columns} bordered loading={loading} rowKey={'_id'} size={'small'} 
+              rowSelection={this.rowSelection()} 
+              onRow={this.tableOnRow}
+              pagination={{
+                  defaultCurrent:1,
+                  pageSize:PAGE_SIZE,
+                  total:tableData.length
+                }}
+          />
       </Card>
     )
   }

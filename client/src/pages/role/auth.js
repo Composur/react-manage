@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component,PureComponent} from 'react';
 import PropTypes from 'prop-types'
 import {Modal,Tree,Input,Form,Icon,message} from 'antd'
+import store from 'store'
 import {reqSettingRole} from '../../api'
 import menuList from '../../config/menuConfig'
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
@@ -9,7 +10,7 @@ export default class Auth extends Component {
   state = { 
     visible:false,
     confirmLoading:false,
-    menus:this.props.role.menus//路由权限,
+    menus:[],//路由权限
    }
    showModal=()=>{
      this.setState({
@@ -23,6 +24,7 @@ export default class Auth extends Component {
     })
     const {role}= this.props
     role.menus=this.state.menus  //自动更新了父组件的状态，改变了props的状态
+    role.auth_name = store.get('user_key').username
     const res = await reqSettingRole(role)
     if(res){
       message.success('更新成功！')
@@ -30,12 +32,14 @@ export default class Auth extends Component {
         confirmLoading:false,
         visible:false,
       })
+      this.props.getUserList()
     }
    }
    handleCancel=()=>{
     this.setState({
       visible:false,
       confirmLoading:false,
+      menus:this.props.role.menus
     })
    }
 
@@ -45,7 +49,6 @@ export default class Auth extends Component {
    */
   // 更新了menus
   onCheck = (menus, info) => {
-    this.props.role.menus=menus
     this.setState({menus})
   };
   // 权限控件渲染
@@ -62,22 +65,21 @@ export default class Auth extends Component {
     this.treeNodes=this.treeNodeRender(menuList)
   }
   // 这个方法已经不建议使用
-  // componentWillReceiveProps(next){
-  //   console.log(next)
-  //   this.setState({
-  //     menus:next.role.menus
-  //   })
-  // }
-  static getDerivedStateFromProps(props, state){
-    if (props.role.menus !== state.menus) {
-      return {
-        menus:props.role.menus
-      };
-    } 
-    return null
+  UNSAFE_componentWillReceiveProps(next){
+    this.setState({
+      menus:next.role.menus
+    })
   }
+  // shouldComponentUpdate(nextProps,nextState){
+  //   // 比较新旧props和state的数据
+  //   // if( this.props.role===nextProps.role || this.state.menus===nextState.menus){
+  //   //   return false
+  //   // }
+  //   return true
+  // }
   render() {
     // 每次需要拿到最新的role
+    console.log('render')
     const {role} = this.props 
     const {visible,confirmLoading,menus} = this.state
     return (

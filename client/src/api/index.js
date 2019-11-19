@@ -15,6 +15,9 @@ export const reqAddUser = data => request('/manage/user/add', 'POST', data)
 // 删除用户
 export const reqDeleteUser = data => request('/manage/user/delete', 'POST', data)
 
+// 更新用户
+export const reqUpdateUser = data => request('/manage/user/update', 'POST', data)
+
 // 用户列表
 export const reqUserList = data => request('/manage/user/list', 'GET', data)
 

@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
-import {Card,Button,Modal,Form, Icon,Input,message,Table} from 'antd'
+import {Card,Button,Modal,Form, Icon,Input,message,Table,Popconfirm} from 'antd'
 import moment from 'moment'
-import {reqAddUser,reqUserList,reqDeleteUser} from '../../api'
+import {reqAddUser,reqUserList,reqDeleteUser,reqUpdateUser} from '../../api'
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 class User extends Component {
   state = { 
     visible: false,
     confirmLoading: false,
     loading:false,
+    record:{},
+    isUpdate:false,
     tableData:[],
   }
   constructor(){
     super()
-    const {loading}= this.state
     this.cardTitle=(
-      <Button type="primary" onClick={this.showModal}>创建用户</Button>
+      <Button type="primary" onClick={(e)=>(e.stopPropagation(),this.showModal(false))}>创建用户</Button>
     )
     this.columns = [
       {
@@ -44,16 +45,28 @@ class User extends Component {
       },
       {
         title: '操作',
-        render:(record)=>(<Button loading={loading} type='link' onClick={()=> (this.deleteUser(record))}>删除</Button>)
+        render:(record)=>(
+          <Popconfirm
+            title="确认删除?"
+            onConfirm={(e)=>(e.stopPropagation(),this.deleteUser(record))}
+            okText="确定"
+            cancelText="取消"
+          >
+          <Button type='link'>删除</Button>
+          <Button type='link' onClick={(e)=>(e.stopPropagation(),this.showModal(record))}>更新</Button>
+          </Popconfirm>
+          )
       },
     ];
   }  
-  showModal = () => {
+  showModal = (record) => {
     this.setState({
       visible: true,
+      isUpdate:record?true:false,
+      record
     });
   };
-  // 创建用户
+  // 创建/更新用户
   handelAddUser = (e) => {
     e.preventDefault();
     this.props.form.validateFields( async (err, values) => {
@@ -61,15 +74,24 @@ class User extends Component {
         this.setState({
           confirmLoading: true,
         });
-        const res = await reqAddUser(values)
-        if(res)
-        message.success('添加成功！')
-        this.setState({
-          visible: false,
-          confirmLoading: false,
-        });
-        // 更新列表
-        this.getUserList()
+        const {isUpdate,record} = this.state
+        let res={}
+        if(isUpdate){
+          values={...values,_id:record._id}
+          res =  await reqUpdateUser(values)
+        }else{
+          res =  await reqAddUser(values)
+        }
+        if(res.status===0){
+          message.success('添加成功！')
+          this.setState({
+            visible: false,
+            confirmLoading: false,
+          });
+          this.props.form.resetFields()
+          // 更新列表
+          this.getUserList()
+        }
       }else{
         return
       }
@@ -86,6 +108,7 @@ class User extends Component {
       this.getUserList()
     }
   }
+  // 关闭模态框
   handleCancel = () => {
     // 取消的时候重置表单
     this.props.form.resetFields()
@@ -111,11 +134,11 @@ class User extends Component {
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { visible, confirmLoading,loading,tableData } = this.state;
+    const { visible, confirmLoading,loading,tableData,record ,isUpdate} = this.state;
     return (
       <Card title={this.cardTitle}>
         <Modal
-          title="创建用户"
+          title={isUpdate?"更新用户":"创建用户"} 
           visible={visible}
           onOk={this.handelAddUser}
           confirmLoading={confirmLoading}
@@ -127,14 +150,17 @@ class User extends Component {
           <Form.Item>
             {getFieldDecorator('username', {
               rules: [{ required: true, message: '请输入用户名!' }],
-            })(
+              initialValue:record.username
+            }
+            )(
               <Input
                 prefix={<Icon type="user" style={iconStyle} />}
                 placeholder="Username"
               />,
             )}
           </Form.Item>
-          <Form.Item>
+          {
+            isUpdate?null:<Form.Item>
             {getFieldDecorator('password', {
               rules: [{ required: true, message: '请输入密码!' }],
             })(
@@ -145,9 +171,11 @@ class User extends Component {
               />,
             )}
           </Form.Item>
+          }
           <Form.Item>
             {getFieldDecorator('phone', {
               // rules: [{ required: true, pattern:/^1[3456789]\d{9}$/, message: '请输入正确的手机号!' }],
+              initialValue:record.phone
             })(
               <Input
                 prefix={<Icon type="phone" style={iconStyle} />}
@@ -159,6 +187,7 @@ class User extends Component {
           <Form.Item>
             {getFieldDecorator('email', {
               // rules: [{ required: true, message: '请输入正确的邮箱!',type:"email"}],
+              initialValue:record.email
             })(
               <Input
                 prefix={<Icon type="mail" style={iconStyle} />}
@@ -170,6 +199,7 @@ class User extends Component {
           <Form.Item>
             {getFieldDecorator('role_id', {
               // rules: [{ required: true, message: '请输入正确角色!'}],
+              initialValue:record.role_id
             })(
               <Input
                 prefix={<Icon type="user" style={iconStyle} />}

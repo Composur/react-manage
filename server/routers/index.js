@@ -341,7 +341,7 @@ router.post('/manage/role/delete', (req, res) => {
 
 // 获取角色列表
 router.get('/manage/role/list', (req, res) => {
-  RoleModel.find()
+  RoleModel.find().sort({"_id": -1})
     .then(roles => {
       res.send({status: 0, data: roles})
     })

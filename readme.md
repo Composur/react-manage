@@ -1,8 +1,11 @@
 ## 技术栈
 >项目运行之前，请确保系统已经安装以下应用
 1. node (6.0 及以上版本)
-2. mongodb (开启状态)
+2. mongodb (开启状态) [安装参考](https://blog.csdn.net/composurext/article/details/79543271)
 3. 全局安装nodemon(为了node服务热启动)
+  ```
+  yarn global add nodemon
+  ```
 4. [可以参考这里安装](https://blog.csdn.net/composurext/article/details/79543271)
 ## 运行启动
 ```
@@ -82,12 +85,16 @@
     + 其它项目展示
 
 
-### 预览
+### 登录
 ![登录](./doc/img/1572077222666.gif)
-### 主页
-![主页](./doc/img/1572077173164.jpg)
 ### 品类管理
 ![管理](./doc/img/1572508162034.gif)
 ### 商品管理
 ![管理](./doc/img/1573007074794.gif)
 ![添加](./doc/img/test.gif)
+### 用户管理
+![用户管理](./doc/img/userList.gif)
+### 角色管理
+![角色管理](./doc/img/roleList.gif)
+### 权限控制
+![权限控制](./doc/img/permission.gif)
