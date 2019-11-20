@@ -1,0 +1,35 @@
+.home {
+  padding: 24px;
+  background: #fff;
+  min-height: 850px;
+}
+.home .home-card {
+  float: left;
+}
+.home .home-content {
+  position: absolute;
+  top: 420px;
+  width: 76%;
+  border: 1px solid #e8e8e8;
+}
+.home .home-content .home-menu {
+  font-size: 20px;
+}
+.home .home-content .home-menu span {
+  cursor: pointer;
+}
+.home .home-content .home-menu .home-menu-active {
+  border-bottom: 2px solid;
+  padding: 0 0 16px 0;
+}
+.home .home-content .home-menu .home-menu-visited {
+  margin-right: 40px;
+}
+.home .home-content .home-table-left {
+  float: left;
+  width: 60%;
+}
+.home .home-content .home-table-right {
+  float: right;
+  width: 330px;
+}

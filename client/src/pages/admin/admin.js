@@ -4,6 +4,7 @@ import { Layout } from 'antd';
 import store from '../../utils/storeUtils'
 import HeaderSelf from '../../components/header'
 import LeftNav from '../../components/left-nav'
+import FooterComponent from '../../components/footer'
 import Home from '../home/home'
 import Category from '../category/category'
 import Role from '../role/role'
@@ -14,7 +15,8 @@ import Pie from '../charts/pie'
 import Bar from '../charts/bar'
 import GitHub from '../github'
 import Order from '../order/order'
-const {Footer, Sider, Content } = Layout;
+
+const {Footer, Sider, Content,Header } = Layout;
 export default class Admin extends Component {
   state = {
     collapsed: false,
@@ -27,13 +29,13 @@ export default class Admin extends Component {
       return  <Redirect to='/login'/>
     }
     return (
-      <Layout style={{minHeight: '100vh'}}>
+      <Layout style={{minHeight: '100%'}}>
           <Sider  collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             <LeftNav/>
           </Sider>
           <Layout>
             <HeaderSelf/>
-            <Content style={{margin:'14px',background:'#fff'}}>
+            <Content style={{margin:'100px 14px 14px',background:'#fff'}}>
               <Switch>
                 <Route path='/home' component={Home}/>
                 <Route path='/category' component={Category}/>
@@ -48,7 +50,9 @@ export default class Admin extends Component {
                 <Redirect to='/home' />
               </Switch>
             </Content>
-            <Footer style={{textAlign:'center',margin:'0 14px 0',background:'#fff'}}>Footer</Footer>
+            <Footer style={{textAlign:'center',margin:'0 14px 0',background:'#fff'}}>
+              <FooterComponent/>
+            </Footer>
           </Layout>
       </Layout>
     );
