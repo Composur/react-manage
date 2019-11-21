@@ -33,8 +33,8 @@ const router = express.Router()
 // console.log('router', router)
 
 // 指定需要过滤的属性
-// const filter = {password: 0, __v: 0}
-const filter = {username: 1}
+const filter = {password: 0, __v: 0}
+// const filter = {username: 1}
 
 // 登陆
 router.post('/login', (req, res) => {
@@ -103,11 +103,14 @@ router.post('/manage/user/add', (req, res) => {
 // 更新用户
 router.post('/manage/user/update', (req, res) => {
   const user = req.body
+  if(user.username==='admin'){
+    res.send({status: 1, msg: '用户名错误！'})
+  }
   UserModel.findOneAndUpdate({_id: user._id}, user)
     .then(oldUser => {
       const data = Object.assign(oldUser, user)
       // 返回
-      res.send({status: 0, data})
+      res.send({status: 0})
     })
     .catch(error => {
       console.error('更新用户异常', error)

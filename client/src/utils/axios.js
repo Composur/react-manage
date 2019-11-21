@@ -61,6 +61,7 @@ export default function (url, type = 'GET', data={}) {
           resolve(res.data)
       }else{
         message.error(res.data.msg)
+        resolve(res.data)
       }
     }).catch(err => {
       const {data}= err

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {Card,Button,Modal,Form, Icon,Input,message,Table,Popconfirm} from 'antd'
+import {Card,Button,Modal,Form, Icon,Input,message,Table,Popconfirm,Select} from 'antd'
 import moment from 'moment'
 import {reqAddUser,reqUserList,reqDeleteUser,reqUpdateUser} from '../../api'
+const {Option} = Select
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 class User extends Component {
   state = { 
@@ -11,11 +12,12 @@ class User extends Component {
     record:{},
     isUpdate:false,
     tableData:[],
+    roles:[]
   }
   constructor(){
     super()
     this.cardTitle=(
-      <Button type="primary" onClick={(e)=>(e.stopPropagation(),this.showModal(false))}>创建用户</Button>
+      <Button type="primary" onClick={(e)=>{e.stopPropagation();this.showModal(false)}}>创建用户</Button>
     )
     this.columns = [
       {
@@ -35,6 +37,7 @@ class User extends Component {
       {
         title: '角色',
         dataIndex: 'role_id',
+        render:(record)=>(this.initTableRoleText(record))
       },
       {
         title: '创建时间',
@@ -48,12 +51,12 @@ class User extends Component {
         render:(record)=>(
           <Popconfirm
             title="确认删除?"
-            onConfirm={(e)=>(e.stopPropagation(),this.deleteUser(record))}
+            onConfirm={(e)=>{e.stopPropagation();this.deleteUser(record)}}
             okText="确定"
             cancelText="取消"
           >
           <Button type='link'>删除</Button>
-          <Button type='link' onClick={(e)=>(e.stopPropagation(),this.showModal(record))}>更新</Button>
+          <Button type='link' onClick={(e)=>{e.stopPropagation();this.showModal(record)}}>更新</Button>
           </Popconfirm>
           )
       },
@@ -91,6 +94,10 @@ class User extends Component {
           this.props.form.resetFields()
           // 更新列表
           this.getUserList()
+        }else{
+          this.setState({
+            confirmLoading: false,
+          });
         }
       }else{
         return
@@ -111,11 +118,11 @@ class User extends Component {
   // 关闭模态框
   handleCancel = () => {
     // 取消的时候重置表单
-    this.props.form.resetFields()
     this.setState({
       visible: false,
       confirmLoading: false,
     });
+    this.props.form.resetFields()
   };
   // 用户列表
   getUserList= async()=>{
@@ -126,15 +133,31 @@ class User extends Component {
     const {data} = res
     this.setState({
       loading:false,
-      tableData:data.users
+      tableData:data.users,
+      roles:data.roles
     })
+  }
+  // 初始化table角色显示文字
+  initTableRoleText=(role_id)=>{
+    const {roles} = this.state
+    return  this.roleName = roles.reduce((pre,next)=>{
+      if(role_id===next._id){
+         pre = next.name
+      }
+      return pre
+    },'')
   }
   componentDidMount(){
     this.getUserList()
   }
   render() {
     const { getFieldDecorator } = this.props.form;
-    const { visible, confirmLoading,loading,tableData,record ,isUpdate} = this.state;
+    const { visible, confirmLoading,loading,tableData,record ,isUpdate,roles} = this.state;
+    const selectView=roles.map(item=>{
+      return(
+        <Option key={item._id} value={item._id}>{item.name}</Option>
+      )
+    })
     return (
       <Card title={this.cardTitle}>
         <Modal
@@ -198,14 +221,12 @@ class User extends Component {
           </Form.Item>
           <Form.Item>
             {getFieldDecorator('role_id', {
-              // rules: [{ required: true, message: '请输入正确角色!'}],
+              rules: [{ required: true, message: '请选择角色!'}],
               initialValue:record.role_id
             })(
-              <Input
-                prefix={<Icon type="user" style={iconStyle} />}
-                type="text"
-                placeholder="请输入角色"
-              />,
+              <Select placeholder='请选择角色！'>
+                 {selectView}
+              </Select>
             )}
           </Form.Item>
       </Form>

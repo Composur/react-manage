@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Menu, Icon } from 'antd';
 import {Link,withRouter} from 'react-router-dom'
+// import {user} from '../../utils/storeUtils'
+import store from '../../utils/storeUtils'
 import menuLists from '../../config/menuConfig'
 import './index.less'
 
@@ -12,6 +14,17 @@ class LeftNav extends Component {
       collapsed: false,
     };
     this.getCurrentReqParentPath(menuLists,this.props.location.pathname )
+  }
+  hasAuth=(item)=>{
+    const {username,role} = store.user
+    const {key,isPublic,children} = item
+    // 默认admin全部权限 isPublic为基础页面
+      if (username === 'admin' || isPublic || role.menus.indexOf(key)!==-1) {
+        return true
+      }else if(children){
+        return !!children.find(item=>role.menus.indexOf(item.key)!==-1)
+      }
+      return false
   }
   // 保持选中状态
   getCurrentReqParentPath(arr,getCurrentReqPath){
@@ -71,28 +84,36 @@ class LeftNav extends Component {
   // 方式二：reduce
   menuNav_reduce=(arr)=>{
     return arr.reduce((pre,item)=>{
-      if(item.children){
-        pre.push(
-          <SubMenu  key={item.key}   title={
-            <span>
+
+      /**
+       * @desc 权限控制 
+       * @desc 拿到权限列表路由进行渲染
+       */
+      // 
+      if(this.hasAuth(item)){
+        if(item.children){
+          pre.push(
+            <SubMenu  key={item.key}   title={
+              <span>
+                <Icon type={item.icon} />
+                <span>{item.title}</span>
+              </span>
+            }
+          >
+          { this.menuNav_reduce(item.children)  }
+          </SubMenu>
+          )
+        }else{
+          pre.push(
+            <Menu.Item key={item.key}>
+            <Link to={item.key}>
               <Icon type={item.icon} />
               <span>{item.title}</span>
-            </span>
-          }
-        >
-        { this.menuNav_reduce(item.children)  }
-        </SubMenu>
-        )
-      }else{
-        pre.push(
-          <Menu.Item key={item.key}>
-          <Link to={item.key}>
-            <Icon type={item.icon} />
-            <span>{item.title}</span>
-          </Link>
-        </Menu.Item>
-        )
-      }  
+            </Link>
+          </Menu.Item>
+          )
+        }  
+      }
       return pre    
     },[])
   }

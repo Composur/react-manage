@@ -79,6 +79,7 @@ class User extends Component {
           visible: false,
           confirmLoading: false,
         }))
+        this.props.form.resetFields()
         // 更新列表
         this.getUserList()
       }else{
@@ -174,7 +175,7 @@ class User extends Component {
           </Form.Item>
       </Form>
       </Modal>
-          <AuthModal ref={this.roleRef} role={role} getUserList={()=>this.getUserList()}/>
+          <AuthModal history={this.props.history} ref={this.roleRef} role={role} getUserList={()=>this.getUserList()}/>
           <Table dataSource={tableData} columns={this.columns} bordered loading={loading} rowKey={'_id'} size={'small'} 
               rowSelection={this.rowSelection()} 
               onRow={this.tableOnRow}
@@ -188,4 +189,4 @@ class User extends Component {
     )
   }
 }
-export default Form.create({ name: 'normal_login' })(User);
+export default (Form.create({ name: 'normal_login' })(User));

@@ -1,12 +1,12 @@
-import React, { Component,PureComponent} from 'react';
+import React, { Component} from 'react';
 import PropTypes from 'prop-types'
 import {Modal,Tree,Input,Form,Icon,message} from 'antd'
-import store from 'store'
+import store from '../../utils/storeUtils'
 import {reqSettingRole} from '../../api'
 import menuList from '../../config/menuConfig'
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 const { TreeNode } = Tree;
-export default class Auth extends Component {
+ class Auth extends Component {
   state = { 
     visible:false,
     confirmLoading:false,
@@ -24,15 +24,23 @@ export default class Auth extends Component {
     })
     const {role}= this.props
     role.menus=this.state.menus  //自动更新了父组件的状态，改变了props的状态
-    role.auth_name = store.get('user_key').username
+    const {username,role_id} = store.get('user_key')
+    role.auth_name = username
     const res = await reqSettingRole(role)
     if(res){
       message.success('更新成功！')
-      this.setState({
-        confirmLoading:false,
-        visible:false,
-      })
-      this.props.getUserList()
+      // 如果用户更新的是自己的权限，重新登录
+      if(role._id===role_id){
+        store.user=null
+        store.clearAll()
+        this.props.history.replace('/login')
+      }else {
+        this.setState({
+          confirmLoading:false,
+          visible:false,
+        })
+        this.props.getUserList()
+      }
     }
    }
    handleCancel=()=>{
@@ -79,7 +87,6 @@ export default class Auth extends Component {
   // }
   render() {
     // 每次需要拿到最新的role
-    console.log('render')
     const {role} = this.props 
     const {visible,confirmLoading,menus} = this.state
     return (
@@ -115,3 +122,5 @@ export default class Auth extends Component {
 Auth.propTypes={
   role:PropTypes.object.isRequired,
 }
+
+export default Auth
