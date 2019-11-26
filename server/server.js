@@ -105,7 +105,6 @@ app.use((req,res,next)=>{
             next()
         }
     }catch(e){
-      console.log(e)
       res.status(401)
       res.send({status: 1, msg: '登录信息失效，请重新登录'})
     }

@@ -16,7 +16,6 @@ const jwt = require('jsonwebtoken');
 //生成token的方法
 function  generateToken(data){
   let created = Math.floor(Date.now()/1000);
-  console.log('created',created)
   let cert = fs.readFileSync(path.join(__dirname, '../config/rsa_private_key.pem'));//私钥
   let token = jwt.sign({
       data,
