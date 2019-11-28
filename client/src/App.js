@@ -7,7 +7,7 @@ import {Provider} from 'react-redux'
 import Login from './pages/login/login'
 import Admin from './pages/admin/admin'
 import store from './utils/storeUtils'
-import reduxStore from './store'
+import reduxStore from './redux'
 class App extends Component {
   render() {
     const user= store.get('user_key')

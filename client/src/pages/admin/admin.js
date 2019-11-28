@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Redirect,Switch,Route} from 'react-router-dom'
 import { Layout } from 'antd';
-import store from '../../utils/storeUtils'
+import {connect} from 'react-redux'
 import HeaderSelf from '../../components/header'
 import LeftNav from '../../components/left-nav'
 import FooterComponent from '../../components/footer'
@@ -17,7 +17,7 @@ import GitHub from '../github'
 import Order from '../order/order'
 
 const {Footer, Sider, Content } = Layout;
-export default class Admin extends Component {
+class Admin extends Component {
   state = {
     collapsed: false,
   };
@@ -25,10 +25,8 @@ export default class Admin extends Component {
     this.setState({ collapsed });
   };
   render() {
-    const user = store.user
-    // 如果内存没有存储user ==> 当前没有登陆
-    if(!user || !user._id) {
-      // 自动跳转到登陆(在render()中)
+    const {userInfo} = this.props 
+    if(!userInfo._id){
       return <Redirect to='/login'/>
     }
     return (
@@ -61,3 +59,9 @@ export default class Admin extends Component {
     );
   }
 }
+
+const mapStateToProps=(state)=>({
+  userInfo:state.loginUserInfo
+})
+
+export default connect(mapStateToProps,null)(Admin)

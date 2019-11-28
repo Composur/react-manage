@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Menu, Icon } from 'antd';
 import {Link,withRouter} from 'react-router-dom'
-// import {user} from '../../utils/storeUtils'
-import store from '../../utils/storeUtils'
+import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
+import { setHeadTitle } from './action'
 import menuLists from '../../config/menuConfig'
 import './index.less'
 
@@ -16,7 +17,8 @@ class LeftNav extends Component {
     this.getCurrentReqParentPath(menuLists,this.props.location.pathname )
   }
   hasAuth=(item)=>{
-    const {username,role} = store.user
+    const {userInfo} = this.props
+    const {username,role} = userInfo
     const {key,isPublic,children} = item
     // 默认admin全部权限 isPublic为基础页面
       if (username === 'admin' || isPublic || role.menus.indexOf(key)!==-1) {
@@ -28,15 +30,6 @@ class LeftNav extends Component {
   }
   // 保持选中状态
   getCurrentReqParentPath(arr,getCurrentReqPath){
-    // const PATH='/product'
-    // if(getCurrentReqPath.indexOf(PATH)===0){
-    //   debugger
-    //   //得到需要选中的item
-    //   // getCurrentReqPath=PATH
-    //   this.currentReqPath=PATH
-    // }else{
-    //   this.currentReqPath=getCurrentReqPath
-    // }
     arr.forEach(element => {
       if(element.children){
         element.children.forEach((cItem)=>{
@@ -83,6 +76,7 @@ class LeftNav extends Component {
   }
   // 方式二：reduce
   menuNav_reduce=(arr)=>{
+    const {setHeadTitle} = this.props
     return arr.reduce((pre,item)=>{
 
       /**
@@ -104,9 +98,14 @@ class LeftNav extends Component {
           </SubMenu>
           )
         }else{
+        // 刷新页面的时候调用setHeadTitle
+          // const {pathname} = this.props.location
+          // if (pathname === item.key) {
+          //   setHeadTitle(item.title)
+          // }
           pre.push(
             <Menu.Item key={item.key}>
-            <Link to={item.key}>
+            <Link to={item.key} onClick={()=>setHeadTitle(item.title)}>
               <Icon type={item.icon} />
               <span>{item.title}</span>
             </Link>
@@ -142,6 +141,20 @@ class LeftNav extends Component {
     );
   }
 }
+LeftNav.propTypes={
+  setHeadTitle:PropTypes.func.isRequired,
+  userInfo:PropTypes.object.isRequired,
+}
+// 该回调函数必须返回一个纯对象
+const mapStateToProps=(state)=>({
+  userInfo:state.loginUserInfo
+})
+const mapDispatchToProps=(dispatch)=>({
+  setHeadTitle:(title)=>{
+    dispatch(setHeadTitle(title))
+  }
+})
+
 // 高阶组件
 // 新的组件向非路由组件传递history、match、location
-export default withRouter(LeftNav)
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(LeftNav))

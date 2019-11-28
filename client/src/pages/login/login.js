@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Icon, Input, Button,message} from 'antd';
+import { Form, Icon, Input, Button} from 'antd';
 import {Redirect} from 'react-router-dom'
-import {reqLogin} from '../../api'
-import store from '../../utils/storeUtils'
+import {connect} from 'react-redux'
+import {getLoginUserInfo} from './action'
 import './login.less'
 class Login extends Component {
   handleSubmit = e => {
@@ -11,16 +11,7 @@ class Login extends Component {
       async (err, values) => { //可以对所有结果校验，并返回结果
         if (!err) {
           values=Object.assign(values,{username:btoa(values.username),password:btoa(values.password)})
-          const res = await reqLogin(values)
-          if (res.status === 0) {
-            // message.success('登录成功！')
-            store.set('user_key', res.data) //全局存储
-            store.set('token', res.token) //全局存储
-            store.user=res.data
-            this.props.history.replace('/') // 登录成功，跳转页面,不需要回退，所以用replace不用push
-          } else {
-            message.error(res.msg)
-          }
+          this.props.getLoginUserInfo(values)
         }
       });
   };
@@ -36,8 +27,9 @@ class Login extends Component {
   }
   render() {
     // 如果检测到登录信息自动登录
-    if(store.user){
-      return <Redirect to='/'/>
+    const {userInfo} = this.props 
+    if(userInfo._id){
+      return <Redirect to='/home'/>
     }
     const { getFieldDecorator } = this.props.form;
     return (
@@ -91,4 +83,12 @@ class Login extends Component {
 }
 
 const WrappeLoginForm = Form.create({ name: 'normal_login' })(Login);
-export default WrappeLoginForm
+
+
+const mapStateToProps=(state)=>({
+  userInfo:state.loginUserInfo
+})
+
+const mapDispatchToProps={getLoginUserInfo}
+
+export default connect(mapStateToProps,mapDispatchToProps)(WrappeLoginForm)

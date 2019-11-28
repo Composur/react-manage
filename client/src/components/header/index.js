@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import {Modal, Button} from 'antd'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
+import PropTypes from 'prop-types'
+import {LOG_OUT} from '../../pages/login/action-type'
 import store from '../../utils/storeUtils'
 import {reqWeather,reqAddress} from '../../api'
 import {getCurrentDate} from '../../utils/common'
@@ -38,6 +41,7 @@ class HeaderSelf extends Component {
             // store.remove('user_key')
             store.user=null
             resolve(null)
+            this.props.logout()
             this.props.history.replace('/')
           },500);
         }).catch(() => console.log('Oops errors!'));
@@ -85,14 +89,14 @@ class HeaderSelf extends Component {
     })
   }
   render() {
-    const username=store.user.username
-    
+    const {headTitle,userInfo} = this.props
     return (
       <div className='header'>
         <div className='header-top'>
-          <span>欢迎您，{username}</span>
+          <span>欢迎您，{userInfo.username}</span>
           <Button type='link' onClick={this.exitConfirm}>退出</Button>
         </div>
+
         <div className='header-buttom'>
           <span className='getSource'>
           <LinkA params={this.params}/>
@@ -107,4 +111,24 @@ class HeaderSelf extends Component {
     );
   }
 }
-export default withRouter(HeaderSelf)
+
+HeaderSelf.propTypes={
+  headTitle:PropTypes.string.isRequired
+}
+// 该回调函数必须返回一个纯对
+const mapStateToProps = (state)=>({
+  headTitle:state.getHeadTitle,
+  userInfo:state.loginUserInfo
+})
+// 如果传递的是一个函数，该函数将接收一个 dispatch 函数，然后由你来决定如何返回一个对象
+const mapDispatchToProps=(dispatch)=>{
+  return {
+    logout:()=>{
+      dispatch({
+        type:LOG_OUT
+      })
+    }
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(HeaderSelf))
