@@ -33,6 +33,8 @@ const { TreeNode } = Tree;
       if(role._id===role_id){
         store.user=null
         store.clearAll()
+        // 在这里还需要reset redux 上的数据
+        // this.props.logout()
         this.props.history.replace('/login')
       }else {
         this.setState({
