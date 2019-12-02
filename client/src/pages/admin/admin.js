@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React,{ Component ,lazy,Suspense} from 'react';
 import {Redirect,Switch,Route} from 'react-router-dom'
 import { Layout,BackTop} from 'antd';
 import {connect} from 'react-redux'
@@ -6,7 +6,7 @@ import HeaderSelf from 'components/header'
 import LeftNav from 'components/left-nav'
 import FooterComponent from 'components/footer'
 import NotFoundPage from 'components/404'
-import Home from '../home/home'
+// import Home from '../home/home'
 import Category from '../category/category'
 import Role from '../role/role'
 import User from '../user/user'
@@ -18,6 +18,9 @@ import GitHub from '../github'
 import Order from '../order'
 
 const {Footer, Sider, Content } = Layout;
+
+const Home = lazy(() => import('../home/home'));
+
 class Admin extends Component {
   state = {
     collapsed: false,
@@ -38,7 +41,8 @@ class Admin extends Component {
           <Layout id='layout'>
             <HeaderSelf/>
             <Content style={{margin:'100px 14px 14px',background:'#fff'}}>
-              <Switch>
+              <Suspense fallback={()=>'loading'}>
+                <Switch>
                 <Route exact path='/' component={Home}/>
                 <Route path='/home' component={Home}/>
                 <Route path='/category' component={Category}/>
@@ -52,6 +56,7 @@ class Admin extends Component {
                 <Route path='/GitHub' component={GitHub}/>
                 <Route component={NotFoundPage}/>
               </Switch>
+              </Suspense>
             </Content>
             <Footer style={{textAlign:'center',background:'#fff'}}>
               <FooterComponent/>
