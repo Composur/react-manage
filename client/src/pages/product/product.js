@@ -98,11 +98,15 @@ class Product extends Component {
   }
   // 商品详情
   productDetail = (data) => {
+    // 这种语法只有 BrowserRouter 才支持 HashRouter不支持请注意
     this.props.history.push({
       pathname: '/product/detail',
       state: data
     })
+    // 1、HashRouter不支持请注意 可以存到redux进行处理
+    // 2、存到内存中（记得在componentWillUnmount进行清除内存中的数据）
   }
+  
   // 搜索筛选框
   selectHandleChange = selectValue => {
     this.setState({ selectValue,

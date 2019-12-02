@@ -4,7 +4,7 @@ import {
   Card,
   Statistic,
   DatePicker,
-  Timeline
+  Timeline,
 } from 'antd'
 import moment from 'moment'
 
@@ -24,7 +24,8 @@ export default class Home extends Component {
   handleChange = (isVisited) => {
     return () => this.setState({isVisited})
   }
-
+  componentDidMount(){
+  }
   render() {
     const {isVisited} = this.state
 
