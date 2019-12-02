@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card, Col, Row } from 'antd';
-import LinkA from '../../components/link-a'
+import LinkA from 'components/link-a'
 export default class  extends Component {
   state = {  }
   params={

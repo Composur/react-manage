@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import {Redirect,Switch,Route} from 'react-router-dom'
-import { Layout } from 'antd';
+import { Layout,BackTop} from 'antd';
 import {connect} from 'react-redux'
-import HeaderSelf from '../../components/header'
-import LeftNav from '../../components/left-nav'
-import FooterComponent from '../../components/footer'
-import NotFoundPage from '../../components/404'
+import HeaderSelf from 'components/header'
+import LeftNav from 'components/left-nav'
+import FooterComponent from 'components/footer'
+import NotFoundPage from 'components/404'
 import Home from '../home/home'
 import Category from '../category/category'
 import Role from '../role/role'
@@ -15,7 +15,7 @@ import Line from '../charts/line'
 import Pie from '../charts/pie'
 import Bar from '../charts/bar'
 import GitHub from '../github'
-import Order from '../order/order'
+import Order from '../order'
 
 const {Footer, Sider, Content } = Layout;
 class Admin extends Component {
@@ -35,7 +35,7 @@ class Admin extends Component {
           <Sider  collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             <LeftNav/>
           </Sider>
-          <Layout>
+          <Layout id='layout'>
             <HeaderSelf/>
             <Content style={{margin:'100px 14px 14px',background:'#fff'}}>
               <Switch>
@@ -57,6 +57,9 @@ class Admin extends Component {
               <FooterComponent/>
             </Footer>
           </Layout>
+          <BackTop
+           visibilityHeight={100}
+          />
       </Layout>
     );
   }

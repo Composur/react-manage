@@ -5,9 +5,9 @@ import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import {LOG_OUT} from '../../pages/login/action-type'
 import store from '../../utils/storeUtils'
-import {reqWeather,reqAddress} from '../../api'
+import {reqWeather,reqAddress} from 'api'
 import {getCurrentDate} from '../../utils/common'
-import LinkA from '../../components/link-a'
+import LinkA from 'components/link-a'
 import './index.less'
 
 class HeaderSelf extends Component {
@@ -89,7 +89,7 @@ class HeaderSelf extends Component {
     })
   }
   render() {
-    const {headTitle,userInfo} = this.props
+    const {userInfo} = this.props
     return (
       <div className='header'>
         <div className='header-top'>

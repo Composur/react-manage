@@ -1,5 +1,5 @@
 import {combineReducers} from  'redux' 
-import getHeadTitle from '../components/left-nav/reducer'
+import getHeadTitle from 'components/left-nav/reducer'
 import loginUserInfo from '../pages/login/reducer'
 
 /**

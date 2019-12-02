@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {withRouter} from 'react-router-dom'
 import { Card,Select,Button,Table,Input,message,Typography} from 'antd';
-import {reqProductList,reqSearchProduct,reqDeleteProduct,reqProductStatus} from '../../api'
+import {reqProductList,reqSearchProduct,reqDeleteProduct,reqProductStatus} from 'api'
 import {formatNumber} from '../../utils/common'
 const { Option } = Select;
 const { Text } = Typography;

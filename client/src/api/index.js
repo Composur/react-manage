@@ -30,7 +30,11 @@ export const reqWeather = (city) => {
         if (data && data.status === 'success') {
           resolve(data.results[0].weather_data[0])
         } else {
-          message.error(data.status)
+          if(data){
+            message.error(data.status)
+          }else{
+            message.error('请求出错，请检查网络是否正常！')
+          }
         }
       })
     }

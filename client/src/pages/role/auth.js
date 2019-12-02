@@ -2,8 +2,8 @@ import React, { Component} from 'react';
 import PropTypes from 'prop-types'
 import {Modal,Tree,Input,Form,Icon,message} from 'antd'
 import store from '../../utils/storeUtils'
-import {reqSettingRole} from '../../api'
-import menuList from '../../config/menuConfig'
+import {reqSettingRole} from 'api'
+import menuList from 'config/menuConfig'
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 const { TreeNode } = Tree;
  class Auth extends Component {

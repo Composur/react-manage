@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card,Button,Modal,Form, Icon,Input,message,Table,Popconfirm,Select} from 'antd'
 import moment from 'moment'
-import {reqAddUser,reqUserList,reqDeleteUser,reqUpdateUser} from '../../api'
+import {reqAddUser,reqUserList,reqDeleteUser,reqUpdateUser} from 'api'
 const {Option} = Select
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 class User extends Component {

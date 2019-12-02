@@ -4,7 +4,7 @@ import {Link,withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import { setHeadTitle } from './action'
-import menuLists from '../../config/menuConfig'
+import menuLists from 'config/menuConfig'
 import './index.less'
 
 const { SubMenu } = Menu;

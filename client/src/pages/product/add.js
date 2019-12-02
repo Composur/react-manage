@@ -3,7 +3,7 @@ import {Card,Icon,Form,Input,Cascader,Button,message} from 'antd'
 import UploadImg from './upload'
 import RichEditText from './richTextEdit'
 import {withRouter} from 'react-router-dom'
-import {reqCatagoryList,reqAddProduct,reqProductUpdate} from '../../api'
+import {reqCatagoryList,reqAddProduct,reqProductUpdate} from 'api'
 const { TextArea } = Input;
 
 class ProductAdd extends Component {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card,Button,Modal,Form, Icon,Input,message,Table} from 'antd'
 import moment from 'moment'
-import {reqRoleList,reqAddRole,reqDeleteRole} from '../../api'
+import {reqRoleList,reqAddRole,reqDeleteRole} from 'api'
 import AuthModal from './auth'
 const iconStyle={ color: 'rgba(0,0,0,.25)' }
 const PAGE_SIZE=5

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Upload, Icon, Modal,message } from 'antd';
-import {reqDelUploadImg} from '../../api'
-import {imgUrl} from '../../config'
+import {reqDelUploadImg} from 'api'
+import {imgUrl} from 'config'
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {

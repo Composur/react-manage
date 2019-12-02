@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Card ,Table,Button,Icon,Modal,Breadcrumb} from 'antd';
-import {reqCatagoryList,reqAddCategory,reqUpdateCategory,reqDeleteCategory} from '../../api'
+import {reqCatagoryList,reqAddCategory,reqUpdateCategory,reqDeleteCategory} from 'api'
 import AddForm from './add-form'
 import UpdateForm from './update-form'
 const { confirm } = Modal;

@@ -1,5 +1,6 @@
-const { override, fixBabelImports,addLessLoader,addWebpackPlugin,addWebpackExternals} = require('customize-cra');
+const { override, fixBabelImports,addLessLoader,addWebpackAlias} = require('customize-cra');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const path = require("path");
 const addMyPlugin = config => {
   config.plugins.push(new ProgressBarPlugin({
     format: 'Build [:bar] :percent (:elapsed seconds)',
@@ -19,19 +20,10 @@ module.exports = override(
      javascriptEnabled: true,
      modifyVars: { '@primary-color': '#00A5E4' },//主题颜色
     }),
-    // addWebpackPlugin({
-    //   plugins: [
-    //     new ProgressBarPlugin({
-    //       format: 'Build [:bar] :percent (:elapsed seconds)',
-    //       clear: false,
-    //     }),
-    //   ]
-    // }),
-    // addWebpackExternals({
-    //   output: {
-    //     path: __dirname + "/build",
-    //     filename: "[name].[chunkhash:8].js"
-    //   },
-    // }),
+    addWebpackAlias({
+      ["components"]: path.resolve(__dirname, "src/components"),
+      ["api"]: path.resolve(__dirname, "src/api"),
+      ["config"]: path.resolve(__dirname, "src/config"),
+    }),
     addMyPlugin
   );

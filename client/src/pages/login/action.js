@@ -1,6 +1,6 @@
 
 import {LOGIN_USER_INFO} from './action-type'
-import {reqLogin} from '../../api/index'
+import {reqLogin} from 'api/index'
 import {message} from 'antd'
 import store from '../../utils/storeUtils'
 export const getLoginUserInfo = (loginInfo)=>{
