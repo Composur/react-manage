@@ -2,24 +2,34 @@ import React,{ Component ,lazy,Suspense} from 'react';
 import {Redirect,Switch,Route} from 'react-router-dom'
 import { Layout,BackTop} from 'antd';
 import {connect} from 'react-redux'
+import Loadable from 'react-loadable';
 import HeaderSelf from 'components/header'
 import LeftNav from 'components/left-nav'
 import FooterComponent from 'components/footer'
-import NotFoundPage from 'components/404'
-// import Home from '../home/home'
-import Category from '../category/category'
-import Role from '../role/role'
-import User from '../user/user'
-import Product from '../product'
-import Line from '../charts/line'
-import Pie from '../charts/pie'
-import Bar from '../charts/bar'
-import GitHub from '../github'
-import Order from '../order'
+import Loading from 'components/loading'
+/**
+ * @description 路由懒加载
+ * 1. Loadable 的方式 推荐
+ * 2. react16.6.x 之后的版本自带lazy,Suspense。实验阶段，不能用于生产
+ */
+const Home = Loadable({
+  loader: () => import('../home/home'),
+  loading: Loading,
+});
+// const Home = lazy(() => import('../home/home'));
+const Category = lazy(() => import('../category/category'))
+const Role = lazy(() => import('../role/role'))
+const User = lazy(() => import('../user/user'))
+const Product = lazy(() => import('../product'))
+const Line = lazy(() => import('../charts/line'))
+const Pie = lazy(() => import('../charts/pie'))
+const Bar = lazy(() => import('../charts/bar'))
+const GitHub = lazy(() => import('../github'))
+const Order = lazy(() => import('../order'))
+const NotFoundPage = lazy(() => import('components/404'))
+
 
 const {Footer, Sider, Content } = Layout;
-
-const Home = lazy(() => import('../home/home'));
 
 class Admin extends Component {
   state = {
@@ -38,10 +48,11 @@ class Admin extends Component {
           <Sider  collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
             <LeftNav/>
           </Sider>
-          <Layout id='layout'>
+          <Layout>
             <HeaderSelf/>
             <Content style={{margin:'100px 14px 14px',background:'#fff'}}>
-              <Suspense fallback={()=>'loading'}>
+              {/* maxDuration 小于500毫秒 不展示loading 这里不生效 因为异步模式始终是0 */}
+              <Suspense fallback={<Loading/>} maxDuration={500}>
                 <Switch>
                 <Route exact path='/' component={Home}/>
                 <Route path='/home' component={Home}/>
