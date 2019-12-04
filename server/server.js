@@ -38,6 +38,14 @@ const indexRouter = require('./routers')
 app.use('/', indexRouter)  //
 
 
+
+// app.get('*.js', function (req, res, next) {
+//   req.url = req.url + '.gz';
+//   res.set('Content-Encoding', 'gzip');
+//   next();
+// });
+
+
 // 这种情况适合前后端不分离，前端静态页面嵌入到后端应用中
 // 必须在路由器中间之后声明使用；这里是为了前端访问不到对应的路由，返回index页面
        
