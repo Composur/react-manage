@@ -26,6 +26,9 @@ export default class order extends Component {
   onTabChange = (key, type) => {
     this.setState({ [type]: key });
   };
+  componentDidMount(){
+    console.log('父')
+  }
   render() {
     return (
       <Card

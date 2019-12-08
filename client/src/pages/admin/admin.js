@@ -52,7 +52,7 @@ class Admin extends Component {
             <HeaderSelf/>
             <Content style={{margin:'100px 14px 14px',background:'#fff'}}>
               {/* maxDuration 小于500毫秒 不展示loading 这里不生效 因为异步模式始终是0 */}
-              <Suspense fallback={<Loading/>} maxDuration={500}>
+              <Suspense fallback={<Loading/>}>
                 <Switch>
                 <Route exact path='/' component={Home}/>
                 <Route path='/home' component={Home}/>

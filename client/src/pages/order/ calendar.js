@@ -67,6 +67,9 @@ export default class  extends Component {
   onPanelChange = value => {
     this.setState({ value });
   };
+  componentDidMount(){
+    console.log('子组件')
+  }
   render() {
     const { value, selectedValue } = this.state;
     return (

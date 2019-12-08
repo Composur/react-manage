@@ -26,14 +26,6 @@ const addMyPlugin = config => {
   return config
 }
 
-// const addCustom = () => config => {
-//   let plugins = []
-
-//   config.plugins = [...config.plugins, ...plugins]
-//   return config
-// }
-
-
 
 // 关闭map
 process.env.GENERATE_SOURCEMAP = "false";
