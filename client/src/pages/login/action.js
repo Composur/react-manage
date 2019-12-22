@@ -4,7 +4,8 @@ import {reqLogin} from 'api/index'
 import {message} from 'antd'
 import store from '../../utils/storeUtils'
 export const getLoginUserInfo = (loginInfo)=>{
-  return async dispatch=>{
+  return async (dispatch,getState)=>{
+    // console.log(getState())
     const res = await reqLogin(loginInfo)
       if (res.status === 0) {
         message.success('登录成功！')
