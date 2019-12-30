@@ -41,11 +41,15 @@ class LeftNav extends Component {
       }
     });
   }
-  toggleCollapsed = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  };
+  // toggleCollapsed = () => {
+  //   this.setState({
+  //     collapsed: !this.state.collapsed,
+  //   },()=>{
+  //     if(this.state.collapsed){
+  //       console.log(this.state.collapsed)
+  //     }
+  //   });
+  // };
   // 根据导航json格式进行递归渲染
   // 方式一：map
   menuNav_map = (menuConfig) => {
@@ -123,21 +127,21 @@ class LeftNav extends Component {
     if(getCurrentReqPath.includes('/product')){getCurrentReqPath='/product'}
     const getCurrentReqParentPath=this.getCurrentReqParentPath
     return (
-      <div className='left-nav' >
-
+      <div>
+        <div className='left-nav' >
         <Link to='/'>
-          <header className='left-nav-header'>
-          <h1 className='left-nav-header-content'>管理系统</h1>
-          </header>
+          <div className='left-nav-header'>
+          <h1 className='left-nav-header-content'>{this.props.collapsed?null:'管理系统'}</h1>
+          </div>
         </Link>
-        
         <Menu mode="inline" theme="dark" selectedKeys={[getCurrentReqPath]}
          defaultOpenKeys={[getCurrentReqParentPath]}
          >
           {this.menuNav_reduce(menuLists)}
         </Menu>
-
       </div>
+      </div>
+      
     );
   }
 }

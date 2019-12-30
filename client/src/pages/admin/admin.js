@@ -45,8 +45,8 @@ class Admin extends Component {
     }
     return (
       <Layout style={{minHeight: '100%'}}>
-          <Sider  collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
-            <LeftNav/>
+          <Sider style={{zIndex: 2}} collapsible collapsed={this.state.collapsed} onCollapse={this.onCollapse}>
+            <LeftNav collapsed={this.state.collapsed}/>
           </Sider>
           <Layout>
             <HeaderSelf/>

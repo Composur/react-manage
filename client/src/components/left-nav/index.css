@@ -4,6 +4,7 @@
 }
 .left-nav .left-nav-header {
   margin-top: 60px;
+  z-index: 2;
 }
 .left-nav .left-nav-header .left-nav-header-content {
   height: 30px;
@@ -13,4 +14,9 @@
   color: #fff;
   overflow: hidden;
   vertical-align: middle;
+}
+@media screen and (max-width: 960px) {
+  .left-nav-header-content {
+    display: none;
+  }
 }
