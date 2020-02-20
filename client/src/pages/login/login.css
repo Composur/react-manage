@@ -35,3 +35,13 @@
 .login .content .login-form .login-btn {
   width: 100%;
 }
+.login .footer {
+  position: fixed;
+  bottom: 0;
+  color: #fff;
+  left: 0;
+  right: 0;
+}
+.login .footer a {
+  color: #fff;
+}

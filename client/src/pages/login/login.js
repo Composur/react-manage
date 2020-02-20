@@ -3,8 +3,16 @@ import { Form, Icon, Input, Button} from 'antd';
 import {Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {getLoginUserInfo} from './action'
+import LinkA from '../../components/link-a'
 import './login.less'
 class Login extends Component {
+  state={
+    params:{
+      href:'http://beian.miit.gov.cn/',
+      target:'_black',
+      text:'粤ICP备19121998号'
+    }
+  }
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields(
@@ -76,6 +84,11 @@ class Login extends Component {
           </Form.Item>
         </Form>
           </section>
+        </div>
+        <div className='footer'>
+          <div className='content'>
+             Made with ❤ by XT&nbsp;<LinkA params={this.state.params}/>
+          </div>  
         </div>
       </div>
     );
