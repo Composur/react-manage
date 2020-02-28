@@ -67,6 +67,11 @@ const menuList = [
     key: '/github',
     icon: 'github',
   },
+  {
+    title: '组件拖拽',
+    key: '/drag',
+    icon: 'drag',
+  },
 ]
 
 export default menuList

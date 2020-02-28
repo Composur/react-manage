@@ -26,6 +26,7 @@ const Pie = lazy(() => import('../charts/pie'))
 const Bar = lazy(() => import('../charts/bar'))
 const GitHub = lazy(() => import('../github'))
 const Order = lazy(() => import('../order'))
+const Drag = lazy(() => import('../drag'))
 const NotFoundPage = lazy(() => import('components/404'))
 
 
@@ -65,6 +66,7 @@ class Admin extends Component {
                 <Route path='/charts/pie' component={Pie}/>
                 <Route path='/order' component={Order}/>
                 <Route path='/GitHub' component={GitHub}/>
+                <Route path='/drag' component={Drag}/>
                 <Route component={NotFoundPage}/>
               </Switch>
               </Suspense>
