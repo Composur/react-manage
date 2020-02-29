@@ -27,6 +27,7 @@ const Bar = lazy(() => import('../charts/bar'))
 const GitHub = lazy(() => import('../github'))
 const Order = lazy(() => import('../order'))
 const Drag = lazy(() => import('../drag'))
+const Hooks = lazy(() => import('../hooks/hooks'))
 const NotFoundPage = lazy(() => import('components/404'))
 
 
@@ -67,6 +68,7 @@ class Admin extends Component {
                 <Route path='/order' component={Order}/>
                 <Route path='/GitHub' component={GitHub}/>
                 <Route path='/drag' component={Drag}/>
+                <Route path='/hooks' component={Hooks}/>
                 <Route component={NotFoundPage}/>
               </Switch>
               </Suspense>

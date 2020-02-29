@@ -15,7 +15,8 @@ class HeaderSelf extends Component {
     weather:'',
     date:getCurrentDate(new Date()),
     weatherText:'',
-    address:''
+    address:'',
+    env:process.env.NODE_ENV
    }
    params={
     href:'https://github.com/Composur/react-manage',
@@ -74,7 +75,10 @@ class HeaderSelf extends Component {
     }
   }
   componentDidMount(){
-    this.getAddress()
+    // 获取定位 + 天气信息 
+    if(this.state.env !== 'development'){
+      this.getAddress()
+    }
     this.timerID = setInterval(()=>{
       this.clock()
     },1000)

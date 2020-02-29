@@ -72,6 +72,11 @@ const menuList = [
     key: '/drag',
     icon: 'drag',
   },
+  {
+    title: 'Hooks',
+    key: '/hooks',
+    icon: 'smile',
+  },
 ]
 
 export default menuList
