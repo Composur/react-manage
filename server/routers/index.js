@@ -7,15 +7,14 @@ const atob = require('atob');
 const fs=require('fs')
 const path = require('path');
 const jwt = require('jsonwebtoken');
-const fse = require('fs-extra')
-const multiparty = require("multiparty");
+
 const UserModel = require('../models/UserModel')
 const CategoryModel = require('../models/CategoryModel')
 const ProductModel = require('../models/ProductModel')
 const RoleModel = require('../models/RoleModel')
 const ControlUpload = require('../controller/bigupload')
 
-const UPLOAD_DIR = path.resolve(__dirname, "..", "target"); // 大文件存储目录
+
 
 //生成token的方法
 function  generateToken(data){
@@ -397,30 +396,15 @@ function pageFilter(arr, pageNum, pageSize) {
   }
 }
 
-const ext = (filename)=>{
-  return filename.split('.')[0]
-}
 
 // 大文件分片上传
 router.post('/bigupload',(req,res)=>{
-  const multipart = new multiparty.Form();
-   // fields: 其它formData字段
-  // files：二进制文件 
-  multipart.parse(req, async (err,fileds,files)=>{
-    if(err) return
-    const [chunk] = files.chunk;
-    const [hash] = fileds.hash 
-    const [filename] = fileds.filename
-    const chunkDir = path.resolve(UPLOAD_DIR, ext(filename));
-    if(!fse.existsSync(chunkDir)){
-      await fse.mkdirp(chunkDir)
-    }
-    await fse.move(chunk.path,path.resolve(chunkDir,hash))
-    res.send({status: 0, msg: '上传成功'})
-  })
-  
+  ControlUpload.upload(req,res)
 })
 
+router.post('/mergefile',(req,res)=>{
+  ControlUpload.mergeFile(req,res)
+})
 
 require('./file-upload')(router)
 

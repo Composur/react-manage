@@ -24,9 +24,8 @@ axios.interceptors.response.use(
   error => {
     if (error.response) {
       switch (error.response.status) {
-        case 401:
-        // store.clearAll();
-        // redirect();
+        case 303:
+        message.error('请求出错'+error.response.msg);
         break;
         default:
         return

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button,Input } from 'antd';
+import { Button,Input,message} from 'antd';
 import store from 'store'
 const token = store.get('token')
 const SIZE = 10 * 1024 * 1024; // 切片大小
 const uploadUrl = '/bigupload'
+const mergeUrl = '/mergefile'
 // 封装请求
 const request = ({
   url,
@@ -15,6 +16,7 @@ const request = ({
   return new Promise(resolve => {
     const xhr = new XMLHttpRequest();
     xhr.open(method, url);
+    headers.Authorization = token
     Object.keys(headers).forEach(key =>
       xhr.setRequestHeader(key, headers[key])
     );
@@ -42,15 +44,33 @@ const createFileChunk = (file,size=SIZE)=>{
     }
   })
 }
-// // 转换为上传的格式
-// const fileChunkList = (file=[],filename)=>{
-//   return file.map((item,index)=>{
-//     return {
-//       chunk:item,
-//       hash:filename+'-'+index
-//     }
-//   })
-// }
+
+// 上传
+const requestList =(file,container)=>(
+    file.map(({chunk,hash})=>{
+      const formData = new FormData()
+      formData.append('chunk', chunk)
+      formData.append('hash', hash)
+      formData.append('filename',container.name)
+      return {formData}
+    }).map( async ({formData}) =>{
+     await request({
+        url:uploadUrl,
+        data:formData
+      })
+    })
+  )
+// 合并请求
+const mergeRequest = async (container)=>{
+  await request({
+    url:mergeUrl,
+    headers:{ "content-type": "application/json"},
+    data:JSON.stringify({
+      filename:container.name,
+      size:SIZE
+    })
+  })
+}
 
 function UploadSlice() {
   const [file,setFile] = useState([])
@@ -68,19 +88,12 @@ function UploadSlice() {
   };
   const handleUpload = async ()=>{
     if(!container.name) return 
-    const requestList = file.map(({chunk,hash})=>{
-      const formData = new FormData()
-      formData.append('chunk', chunk)
-      formData.append('hash', hash)
-      formData.append('filename',container.name)
-      return {formData}
-    }).map( async ({formData}) =>{
-      request({
-        url:uploadUrl,
-        data:formData
-      })
-    })
-    await Promise.all(requestList)
+    // 切片上传
+     await Promise.all(requestList(file,container))
+    // message.success(uploadResult.msg)
+    // if(uploadResult.status === 1) return
+    // 上传完成通知后台进行合并
+     await mergeRequest(container)
   }
   return (
     <div>
