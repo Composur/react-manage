@@ -397,6 +397,10 @@ function pageFilter(arr, pageNum, pageSize) {
 }
 
 
+// 大文件分片上传校验
+router.post('/verify',(req,res)=>{
+  ControlUpload.verify(req,res)
+})
 // 大文件分片上传
 router.post('/bigupload',(req,res)=>{
   ControlUpload.upload(req,res)

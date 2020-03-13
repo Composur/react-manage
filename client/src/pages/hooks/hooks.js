@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect ,useRef} from "react";
 import { Button, Input, message, Row, Col, Progress, Table } from "antd";
 import store from "store";
+import { calculateHash,createFileChunk } from "./calculate-hash";
 const token = store.get("token");
 const SIZE = 10 * 1024 * 1024; // 切片大小
 const uploadUrl = "/bigupload";
 const mergeUrl = "/mergefile";
+const verifyUrl = "/verify";
 const requestResults = [];
 
 const columns = [
@@ -14,27 +16,25 @@ const columns = [
     key: "hash"
   },
   {
-    title: "切片大小",
+    title: "切片大小（MB）",
     dataIndex: "chunk",
     render(h) {
-      return Math.floor(h.size/1024)
-    },
+      return Math.floor(h.size / 1024 / 1024);
+    }
   },
   {
     title: "上传进度",
     dataIndex: "percentage",
     render(h) {
-      return (<Progress percent={h}/>)
-    },
+      return <Progress percent={h} />;
+    }
   },
   {
     title: "操作",
     render(h) {
-      return ( <Button type="link" danger>
-      操作
-    </Button>)
-    },
-  },
+      return <Button type="link">操作</Button>;
+    }
+  }
 ];
 
 // 封装请求
@@ -63,23 +63,7 @@ const request = ({
   });
 };
 
-// 文件切片
-const createFileChunk = (file, size = SIZE) => {
-  const fileChunkList = [];
-  let cur = 0;
-  while (cur < file.size) {
-    fileChunkList.push({ file: file.slice(cur, cur + size) });
-    cur += size;
-  }
-  return fileChunkList.map((item, index) => {
-    return {
-      chunk: item.file,
-      hash: file.name + "-" + index,
-      index: index,
-      percentage:0,
-    };
-  });
-};
+
 // 切片进度条 给文件添加一个 percentage 属性
 const createProgressHandler = (item, setFile, file) => {
   return e => {
@@ -93,14 +77,16 @@ const createProgressHandler = (item, setFile, file) => {
     setFile(result);
   };
 };
+
 // 上传
-const requestList = (file, container, setFile) =>
-  file
-    .map(({ chunk, hash, index }) => {
+const requestList = (file, container, setFile) => {
+  return file
+    .map(({ chunk, hash, index ,fileHash}) => {
       const formData = new FormData();
       formData.append("chunk", chunk);
       formData.append("hash", hash);
       formData.append("filename", container.name);
+      formData.append("fileHash", fileHash);
       return { formData, index };
     })
     .map(async ({ formData, index }) => {
@@ -111,35 +97,79 @@ const requestList = (file, container, setFile) =>
       });
       requestResults.push(result);
     });
+};
+
 // 合并请求
-const mergeRequest = async container => {
+const mergeRequest = async (container,fileHash) => {
   await request({
     url: mergeUrl,
     headers: { "content-type": "application/json" },
     data: JSON.stringify({
       filename: container.name,
+      fileHash:fileHash,
       size: SIZE
     })
   });
 };
+
+//  预请求验证 hash (确实是否已经上传)
+const verifyUpload = async (filename,fileHash)=>{
+  const {data} = await request({
+    url:verifyUrl,
+    headers: {
+      "content-type": "application/json"
+    },
+    data:JSON.stringify({
+      filename,
+      fileHash
+    })
+  })
+  return JSON.parse(data)
+}
+
 function UploadSlice() {
   const [file, setFile] = useState([]);
   const [container, setContainer] = useState({});
+  const [tableData,setTableData] = useState([])
   const [loading, setLoading] = useState(false);
+  // 计算 hash 百分比
+  const [hashPercentage, setHashPercentage] = useState(0);
+  // const [hash, setHash] = useState('');
+
   // useEffect 相当于 componentDidMount 和 componentDidUpdate:
   useEffect(() => {}, [file]);
   const handleFileChange = e => {
     const [inputFile] = e.target.files;
     // 存一个初始的全局文件对象
     setContainer(inputFile);
-    // 文件切片
-    setFile(createFileChunk(inputFile));
   };
   const handleUpload = async () => {
     if (!container.name) return;
-    setLoading(true)
+    setLoading(true);
+    // 文件切片
+    const fileChunkList = createFileChunk(container,SIZE);
+    // 计算文件 hash
+    const fileHash =  await calculateHash(fileChunkList, setHashPercentage)
+    const data = fileChunkList.map((item, index) => {
+      return {
+        fileHash:fileHash,
+        chunk: item.file,
+        // hash: container.name + "-" + index,
+        hash: fileHash + "-" + index,
+        index: index,
+        percentage: 0
+      };
+    });
+    // 渲染 dom 
+    setTableData(data)
+    // 验证文件是否已经存在
+    const { shouldUpload } = await verifyUpload(container.name,fileHash)
+    if(!shouldUpload){
+      message.error('文件已存在')
+      return
+    }
     // 切片上传
-    await Promise.all(requestList(file, container, setFile));
+    await Promise.all(requestList(data, container, setFile));
     requestResults.forEach(item => {
       const { status, msg } = JSON.parse(item.data);
       if (status === 1) {
@@ -147,9 +177,9 @@ function UploadSlice() {
         return;
       }
     });
-    setLoading(false)
+    setLoading(false);
     // 上传完成通知后台进行合并
-    await mergeRequest(container);
+    await mergeRequest(container,fileHash);
   };
   return (
     <div>
@@ -163,8 +193,22 @@ function UploadSlice() {
           </Button>
         </Col>
       </Row>
+      <Row style={{ margin: "10px" }}>
+        <Col span={6} style={{ fontSize: "14px" }}>
+          计算 hash 进度 ：
+        </Col>
+        <Col span={18}>
+          <Progress percent={hashPercentage} />
+        </Col>
+      </Row>
       <Row>
-        <Table columns={columns} dataSource={file} rowKey = {(record)=>record.hash}/>
+        <Table
+          bordered
+          columns={columns}
+          size="small"
+          dataSource={tableData}
+          rowKey={record => record.hash}
+        />
       </Row>
     </div>
   );
