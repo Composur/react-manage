@@ -21,6 +21,21 @@ const upload =  function(req, res) {
     if (!fse.existsSync(chunkDir)) {
       await fse.mkdirp(chunkDir);
     }
+    // else{
+    //   await fse.readdir(chunkDir,(err,files)=>{
+    //     if(err) {
+    //       res.send({ status: 1,msg: "error" });
+    //       return
+    //     }
+    //     files.forEach(item=>{
+    //       if(item===filename){
+    //         res.send({ status: 1,msg: "文件已存在" });
+    //         return
+    //       }
+    //     })
+    //     return
+    //   })
+    // }
     await fse.move(chunk.path, path.resolve(chunkDir, hash));
     res.send({ status: 0,msg: "上传成功" });
   });
@@ -28,8 +43,9 @@ const upload =  function(req, res) {
 const pipeStream = (path,writeStream,filename)=>{
   return new Promise(resolve=>{
     const readStream = fse.createReadStream(path)
+    const pathHash = path.slice(path.length-2)
     readStream.on('end',()=>{
-      if(path.includes(filename)){
+      if(/^-[0-9]$/.test(pathHash)){
         fse.unlinkSync(path) // 删除读过的切片
       }
       resolve()
