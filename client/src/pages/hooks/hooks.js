@@ -164,19 +164,14 @@ function UploadSlice() {
     setTableData(data)
     // 验证文件是否已经存在
     const { shouldUpload } = await verifyUpload(container.name,fileHash)
+    debugger
     if(!shouldUpload){
       message.error('文件已存在')
+      setLoading(false);
       return
     }
     // 切片上传
     await Promise.all(requestList(data, container, setFile));
-    requestResults.forEach(item => {
-      const { status, msg } = JSON.parse(item.data);
-      if (status === 1) {
-        message.error(msg);
-        return;
-      }
-    });
     setLoading(false);
     // 上传完成通知后台进行合并
     await mergeRequest(container,fileHash);
