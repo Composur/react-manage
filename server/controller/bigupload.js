@@ -12,7 +12,8 @@ const extractRemove = filename =>filename.slice(0, filename.lastIndexOf("."));
 const verify = function(req,res){
   const {filename,fileHash} = req.body
   const filePath = path.resolve(UPLOAD_DIR,fileHash+extractExt(filename))
-  console.log(filePath)
+
+  // 文件存在不上传
   if(fse.existsSync(filePath)){
     res.send({status:1,shouldUpload:false})
   }else {
@@ -36,7 +37,7 @@ const upload =  function(req, res) {
       UPLOAD_DIR,
       `${fileHash}${extractExt(filename)}`
     );
-    // 文件存在直接返回
+    // 文件切片存在直接返回
     if (fse.existsSync(filePath)) {
       res.end("file exist");
       return;
@@ -44,21 +45,6 @@ const upload =  function(req, res) {
     if (!fse.existsSync(chunkDir)) {
       await fse.mkdirp(chunkDir);
     }
-    // else{
-    //   await fse.readdir(chunkDir,(err,files)=>{
-    //     if(err) {
-    //       res.send({ status: 1,msg: "error" });
-    //       return
-    //     }
-    //     files.forEach(item=>{
-    //       if(item===filename){
-    //         res.send({ status: 1,msg: "文件已存在" });
-    //         return
-    //       }
-    //     })
-    //     return
-    //   })
-    // }
     await fse.move(chunk.path, path.resolve(chunkDir, hash));
     res.send({ status: 0,msg: "上传成功" });
   });
@@ -72,29 +58,11 @@ const pipeStream =  (path, writeStream) =>
     });
     readStream.pipe(writeStream);
   });
-// 合并切片
-// const mergeFileChunk = async (filePath,fileHash,size)=>{
-//   // 找到文件夹 文件路径
-//   const chunkDir = path.resolve(UPLOAD_DIR,fileHash)
-//   // 遍历文件夹里面的切片
-//   const chunkPaths = await fse.readdir(chunkDir)
-//   // 对文件名排序 xx0.jpg,xx1.jpg ...
-//   chunkPaths.sort((a,b)=> a.split('-')[1] - b.split('-')[1])
-//   // 创建可读流
-//   await Promise.all(
-//     chunkPaths.map((chunkPath, index)=>{
-//       pipeStream(path.resolve(chunkDir,chunkPath),
-//       // 指定位置创建可写流
-//       fse.createWriteStream(filePath,{
-//         start:index * size,
-//         end: (index + 1) * size
-//       }),fileHash)
-//     })
-//   )
-//   // fse.rmdirSync(chunkDir); // 合并后删除保存切片的目录
-// }
+
 const mergeFileChunk = async (filePath, fileHash, size) => {
+  // 找到文件夹 文件路径
   const chunkDir = path.resolve(UPLOAD_DIR, fileHash);
+   // 遍历文件夹里面的切片名
   const chunkPaths = await fse.readdir(chunkDir);
   // 根据切片下标进行排序
   // 否则直接读取目录的获得的顺序可能会错乱

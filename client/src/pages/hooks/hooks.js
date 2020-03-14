@@ -9,7 +9,12 @@ const mergeUrl = "/mergefile";
 const verifyUrl = "/verify";
 const requestResults = [];
 
+
 const columns = [
+  {
+    title: "文件名",
+    dataIndex: "filename",
+  },
   {
     title: "文件切片名",
     dataIndex: "hash",
@@ -19,7 +24,7 @@ const columns = [
     title: "切片大小（MB）",
     dataIndex: "chunk",
     render(h) {
-      return Math.floor(h.size / 1024 / 1024);
+      return Math.floor(h.size / 1024 );
     }
   },
   {
@@ -152,6 +157,7 @@ function UploadSlice() {
     const fileHash =  await calculateHash(fileChunkList, setHashPercentage)
     const data = fileChunkList.map((item, index) => {
       return {
+        filename:container.name,
         fileHash:fileHash,
         chunk: item.file,
         // hash: container.name + "-" + index,
@@ -160,16 +166,15 @@ function UploadSlice() {
         percentage: 0
       };
     });
-    // 渲染 dom 
-    setTableData(data)
     // 验证文件是否已经存在
     const { shouldUpload } = await verifyUpload(container.name,fileHash)
-    debugger
     if(!shouldUpload){
       message.error('文件已存在')
       setLoading(false);
       return
     }
+    // 渲染 dom 
+    setTableData(data)
     // 切片上传
     await Promise.all(requestList(data, container, setFile));
     setLoading(false);

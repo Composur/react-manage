@@ -73,7 +73,7 @@ const menuList = [
     icon: 'drag',
   },
   {
-    title: 'Hooks',
+    title: 'Hooks 切片上传',
     key: '/hooks',
     icon: 'smile',
   },
