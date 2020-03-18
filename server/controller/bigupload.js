@@ -85,7 +85,6 @@ const mergeFile = async function(req,res){
   let {filename,size,fileHash} = req.body
   const ext = extractExt(filename);
   const filePath = path.resolve(UPLOAD_DIR, `${fileHash}${ext}`);
-  console.log(filePath)
   await mergeFileChunk(filePath,fileHash,size);
   res.send({ status: 0, msg: "合并完成" });
 }

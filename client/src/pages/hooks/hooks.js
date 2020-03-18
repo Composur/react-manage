@@ -2,11 +2,10 @@ import React, { useState, useEffect ,useRef} from "react";
 import { Button, Input, message, Row, Col, Progress, Table } from "antd";
 import store from "store";
 import { calculateHash,createFileChunk } from "./calculate-hash";
-const token = store.get("token");
 const SIZE = 10 * 1024 * 1024; // 切片大小
-const uploadUrl = "/bigupload";
-const mergeUrl = "/mergefile";
-const verifyUrl = "/verify";
+const uploadUrl = "/api//bigupload";
+const mergeUrl = "/api/mergefile";
+const verifyUrl = "/api/verify";
 const requestResults = [];
 
 
@@ -47,7 +46,7 @@ const request = ({
   url,
   method = "post",
   data,
-  headers = { Authorization: token },
+  headers = {},
   onProgress = e => e,
   requestList
 }) => {
@@ -55,7 +54,7 @@ const request = ({
     const xhr = new XMLHttpRequest();
     xhr.upload.onprogress = onProgress;
     xhr.open(method, url);
-    headers.Authorization = token;
+    headers.Authorization = store.get("token");
     Object.keys(headers).forEach(key =>
       xhr.setRequestHeader(key, headers[key])
     );
