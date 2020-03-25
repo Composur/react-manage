@@ -7,6 +7,7 @@ import HeaderSelf from 'components/header'
 import LeftNav from 'components/left-nav'
 import FooterComponent from 'components/footer'
 import Loading from 'components/loading'
+import AuthRouter from 'components/AuthRouter'
 /**
  * @description 路由懒加载
  * 1. Loadable 的方式 推荐
@@ -56,20 +57,20 @@ class Admin extends Component {
               {/* maxDuration 小于500毫秒 不展示loading 这里不生效 因为异步模式始终是0 */}
               <Suspense fallback={<Loading/>}>
                 <Switch>
-                <Route exact path='/' component={Home}/>
-                <Route path='/home' component={Home}/>
-                <Route path='/category' component={Category}/>
-                <Route path='/product' component={Product}/>
-                <Route path='/role' component={Role}/>
-                <Route path='/user' component={User}/>
-                <Route path='/charts/bar' component={Bar}/>
-                <Route path='/charts/line' component={Line}/>
-                <Route path='/charts/pie' component={Pie}/>
-                <Route path='/order' component={Order}/>
-                <Route path='/GitHub' component={GitHub}/>
-                <Route path='/drag' component={Drag}/>
-                <Route path='/hooks' component={Hooks}/>
-                <Route component={NotFoundPage}/>
+                <AuthRouter exact path='/' component={Home}/>
+                <AuthRouter path='/home' component={Home}/>
+                <AuthRouter path='/category' component={Category}/>
+                <AuthRouter path='/product' component={Product}/>
+                <AuthRouter path='/role' component={Role}/>
+                <AuthRouter path='/user' component={User}/>
+                <AuthRouter path='/charts/bar' component={Bar}/>
+                <AuthRouter path='/charts/line' component={Line}/>
+                <AuthRouter path='/charts/pie' component={Pie}/>
+                <AuthRouter path='/order' component={Order}/>
+                <AuthRouter path='/GitHub' component={GitHub}/>
+                <AuthRouter path='/drag' component={Drag}/>
+                <AuthRouter path='/hooks' component={Hooks}/>
+                <AuthRouter component={NotFoundPage}/>
               </Switch>
               </Suspense>
             </Content>
