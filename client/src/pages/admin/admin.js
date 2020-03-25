@@ -1,5 +1,5 @@
 import React,{ Component ,lazy,Suspense} from 'react';
-import {Redirect,Switch,Route} from 'react-router-dom'
+import {Redirect,Switch} from 'react-router-dom'
 import { Layout,BackTop} from 'antd';
 import {connect} from 'react-redux'
 import Loadable from 'react-loadable';
@@ -57,6 +57,7 @@ class Admin extends Component {
               {/* maxDuration 小于500毫秒 不展示loading 这里不生效 因为异步模式始终是0 */}
               <Suspense fallback={<Loading/>}>
                 <Switch>
+                {/* 可以加入 noCheck 属性为 true 不进行权限验证 */}
                 <AuthRouter exact path='/' component={Home}/>
                 <AuthRouter path='/home' component={Home}/>
                 <AuthRouter path='/category' component={Category}/>
