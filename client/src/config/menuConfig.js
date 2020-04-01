@@ -73,9 +73,21 @@ const menuList = [
     icon: 'drag',
   },
   {
-    title: 'Hooks 切片上传',
+    title: 'Hooks',
     key: '/hooks',
     icon: 'smile',
+    children: [
+      {
+        title: '切片上传',
+        key: '/hooks/slice',
+        icon: 'cloud-upload'
+      },
+      {
+        title: '实践',
+        key: '/hooks/test',
+        icon: 'loading'
+      },
+    ]
   },
 ]
 

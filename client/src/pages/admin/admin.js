@@ -28,7 +28,8 @@ const Bar = lazy(() => import('../charts/bar'))
 const GitHub = lazy(() => import('../github'))
 const Order = lazy(() => import('../order'))
 const Drag = lazy(() => import('../drag'))
-const Hooks = lazy(() => import('../hooks/hooks'))
+const FileUpload = lazy(() => import('../hooks/fileUpload'))
+const HooksTest = lazy(() => import('../hooks/hooks'))
 const NotFoundPage = lazy(() => import('components/404'))
 
 
@@ -70,7 +71,8 @@ class Admin extends Component {
                 <AuthRouter path='/order' component={Order}/>
                 <AuthRouter path='/GitHub' component={GitHub}/>
                 <AuthRouter path='/drag' component={Drag}/>
-                <AuthRouter path='/hooks' component={Hooks}/>
+                <AuthRouter path='/hooks/slice' component={FileUpload}/>
+                <AuthRouter path='/hooks/test' component={HooksTest}/>
                 <AuthRouter component={NotFoundPage}/>
               </Switch>
               </Suspense>

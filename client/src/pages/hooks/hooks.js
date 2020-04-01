@@ -1,216 +1,113 @@
-import React, { useState, useEffect ,useRef} from "react";
-import { Button, Input, message, Row, Col, Progress, Table } from "antd";
-import store from "store";
-import { calculateHash,createFileChunk } from "./calculate-hash";
-const SIZE = 10 * 1024 * 1024; // 切片大小
-const uploadUrl = "/api//bigupload";
-const mergeUrl = "/api/mergefile";
-const verifyUrl = "/api/verify";
-const requestResults = [];
-
-
-const columns = [
-  {
-    title: "文件名",
-    dataIndex: "filename",
-  },
-  {
-    title: "文件切片名",
-    dataIndex: "hash",
-    key: "hash"
-  },
-  {
-    title: "切片大小（MB）",
-    dataIndex: "chunk",
-    render(h) {
-      return Math.floor(h.size / 1024 );
-    }
-  },
-  {
-    title: "上传进度",
-    dataIndex: "percentage",
-    render(h) {
-      return <Progress percent={h} />;
-    }
-  },
-  {
-    title: "操作",
-    render(h) {
-      return <Button type="link">操作</Button>;
-    }
-  }
-];
-
-// 封装请求
-const request = ({
-  url,
-  method = "post",
-  data,
-  headers = {},
-  onProgress = e => e,
-  requestList
-}) => {
-  return new Promise(resolve => {
-    const xhr = new XMLHttpRequest();
-    xhr.upload.onprogress = onProgress;
-    xhr.open(method, url);
-    headers.Authorization = store.get("token");
-    Object.keys(headers).forEach(key =>
-      xhr.setRequestHeader(key, headers[key])
-    );
-    xhr.send(data);
-    xhr.onload = e => {
-      resolve({
-        data: e.target.response
-      });
-    };
+import React, { useState, useEffect, memo } from "react";
+import { Button } from "antd";
+let timer;
+function ajax() {
+  return new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      resolve("我是后台返回的内容");
+    }, 1000);
   });
-};
-
-
-// 切片进度条 给文件添加一个 percentage 属性
-const createProgressHandler = (item, setFile, file) => {
-  return e => {
-    item.percentage = parseInt(String((e.loaded / e.total) * 100));
-    const result = file.map(v => {
-      if (v.hash === item.hash) {
-        v.percentage = item.percentage;
-      }
-      return v;
-    });
-    setFile(result);
-  };
-};
-
-// 上传
-const requestList = (file, container, setFile) => {
-  return file
-    .map(({ chunk, hash, index ,fileHash}) => {
-      const formData = new FormData();
-      formData.append("chunk", chunk);
-      formData.append("hash", hash);
-      formData.append("filename", container.name);
-      formData.append("fileHash", fileHash);
-      return { formData, index };
-    })
-    .map(async ({ formData, index }) => {
-      const result = await request({
-        url: uploadUrl,
-        data: formData,
-        onProgress: createProgressHandler(file[index], setFile, file)
-      });
-      requestResults.push(result);
-    });
-};
-
-// 合并请求
-const mergeRequest = async (container,fileHash) => {
-  await request({
-    url: mergeUrl,
-    headers: { "content-type": "application/json" },
-    data: JSON.stringify({
-      filename: container.name,
-      fileHash:fileHash,
-      size: SIZE
-    })
-  });
-};
-
-//  预请求验证 hash (确实是否已经上传)
-const verifyUpload = async (filename,fileHash)=>{
-  const {data} = await request({
-    url:verifyUrl,
-    headers: {
-      "content-type": "application/json"
-    },
-    data:JSON.stringify({
-      filename,
-      fileHash
-    })
-  })
-  return JSON.parse(data)
 }
+// 自定义 Hooks 必须以use开头
+function useNumber() {
+  let [number, setNumber] = useState(0);
+  useEffect(() => {
+    console.log("useNumber render");
+    let timer = setInterval(() => {
+      setNumber(number => number + 1);
+    }, 1000);
+  },[]);
+  return [number, setNumber];
+}
+function Counter1() {
+  let [number, setNumber] = useNumber();
+  return (
+    <Button
+      type="primary"
+      onClick={() => {
+        setNumber(number + 10);
+      }}
+    >
+      点击加10 : {number}
+    </Button>
+  );
+}
+function test(props) {
+  console.log("test");
+  return { count: props.number };
+}
+function Hooks() {
+  // 每一个 Hooks 相互独立
+  // 必须把hooks写在函数的最外层
+  // 不能写在 if...else 等条件语句当中
+  console.log("Hooks render");
+  const [count, setCount] = useState(0);
+  const [content, setContent] = useState("loading");
 
-function UploadSlice() {
-  const [file, setFile] = useState([]);
-  const [container, setContainer] = useState({});
-  const [tableData,setTableData] = useState([])
-  const [loading, setLoading] = useState(false);
-  // 计算 hash 百分比
-  const [hashPercentage, setHashPercentage] = useState(0);
-  // const [hash, setHash] = useState('');
+  const [number, setNumber] = useState(test({ number: 123 }));
 
-  // useEffect 相当于 componentDidMount 和 componentDidUpdate:
-  useEffect(() => {}, [file]);
-  const handleFileChange = e => {
-    const [inputFile] = e.target.files;
-    // 存一个初始的全局文件对象
-    setContainer(inputFile);
-  };
-  const handleUpload = async () => {
-    if (!container.name) return;
-    setLoading(true);
-    // 文件切片
-    const fileChunkList = createFileChunk(container,SIZE);
-    // 计算文件 hash
-    const fileHash =  await calculateHash(fileChunkList, setHashPercentage)
-    const data = fileChunkList.map((item, index) => {
-      return {
-        filename:container.name,
-        fileHash:fileHash,
-        chunk: item.file,
-        // hash: container.name + "-" + index,
-        hash: fileHash + "-" + index,
-        index: index,
-        percentage: 0
-      };
+  // const [permissions,setPermissions] = useGetPermissions('123')
+  // useEffect 相当于 componentDidMount 和 componentDidUpdate、componentWillUnmount
+  // 在这里进行 ajax 数据请求，添加一些监听的注册和取消注册，手动修改dom等操作
+  // 给每个产生副作用的操作单独写一个 useEffect，每次 render 都会调用。
+  // useEffect 是异步执行的不会阻碍浏览器的更新视图，componentDidMount或componentDidUpdate中的代码则是同步执行
+
+  // 获取 Dom
+  useEffect(() => {
+    document.title = `点击了${count}次`;
+  });
+
+  // 异步请求 ，清除 timeout
+  useEffect(() => {
+    console.log(1);
+    ajax().then(data => {
+      setContent(data);
     });
-    // 验证文件是否已经存在
-    const { shouldUpload } = await verifyUpload(container.name,fileHash)
-    if(!shouldUpload){
-      message.error('文件已存在')
-      setLoading(false);
-      return
-    }
-    // 渲染 dom 
-    setTableData(data)
-    // 切片上传
-    await Promise.all(requestList(data, container, setFile));
-    setLoading(false);
-    // 上传完成通知后台进行合并
-    await mergeRequest(container,fileHash);
-  };
+    return function clear() {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [content]); // 只有当count的值发生变化时，才会重新执行，只会首次渲染的时候执行。少用，或者不用这个特性。
+
+  function Counter() {
+    const [counter, setCounter] = useState({
+      name: "计数器",
+      number: 0,
+      count: 0
+    });
+    console.log("render Counter");
+    // 如果你修改状态的时候，传的状态值没有变化，则不重新渲染
+    return (
+      <>
+        <p>
+          {counter.name}number:{counter.number}count:{counter.count}
+        </p>
+        <button
+          onClick={() =>
+            setCounter({
+              ...counter,
+              number: counter.number + 1,
+              count: counter.count + 1
+            })
+          }
+        >
+          +
+        </button>
+      </>
+    );
+  }
+
   return (
     <div>
-      <Row>
-        <Col span={16}>
-          <Input type="file" onChange={handleFileChange}></Input>
-        </Col>
-        <Col span={6} push={1}>
-          <Button type="primary" onClick={handleUpload} loading={loading}>
-            点击上传
-          </Button>
-        </Col>
-      </Row>
-      <Row style={{ margin: "10px" }}>
-        <Col span={6} style={{ fontSize: "14px" }}>
-          计算 hash 进度 ：
-        </Col>
-        <Col span={18}>
-          <Progress percent={hashPercentage} />
-        </Col>
-      </Row>
-      <Row>
-        <Table
-          bordered
-          columns={columns}
-          size="small"
-          dataSource={tableData}
-          rowKey={record => record.hash}
-        />
-      </Row>
+      <h1>{count}</h1>
+      <p>{content}</p>
+      <Button size="small" type="primary" onClick={() => setCount(count + 1)}>
+        加一
+      </Button>
+      <Counter1 />
     </div>
   );
 }
 
-export default UploadSlice;
+export default Hooks;
