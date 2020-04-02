@@ -8,6 +8,7 @@ import LeftNav from 'components/left-nav'
 import FooterComponent from 'components/footer'
 import Loading from 'components/loading'
 import AuthRouter from 'components/AuthRouter'
+import BigTable from 'components/BigTable'
 /**
  * @description 路由懒加载
  * 1. Loadable 的方式 推荐
@@ -73,6 +74,7 @@ class Admin extends Component {
                 <AuthRouter path='/drag' component={Drag}/>
                 <AuthRouter path='/hooks/slice' component={FileUpload}/>
                 <AuthRouter path='/hooks/test' component={HooksTest}/>
+                <AuthRouter path='/bigTable' component={BigTable}/>
                 <AuthRouter component={NotFoundPage}/>
               </Switch>
               </Suspense>

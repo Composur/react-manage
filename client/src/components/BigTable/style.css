@@ -1,0 +1,16 @@
+.container{
+  width: 100%;
+  height: 100%;
+}
+
+.odd,.even{
+  text-align: center;
+  background: #5CC9F5;
+ 
+}
+.even:hover{
+  box-shadow:         inset 0 0 10px #5CC9F5;
+}
+.even{
+  background: #ffff;
+}

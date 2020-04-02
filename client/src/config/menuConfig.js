@@ -89,6 +89,11 @@ const menuList = [
       },
     ]
   },
+  {
+    title: '长列表渲染',
+    key: '/bigTable',
+    icon: 'table',
+  },
 ]
 
 export default menuList
