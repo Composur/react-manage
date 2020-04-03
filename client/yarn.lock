@@ -4654,6 +4654,11 @@ eslint-plugin-react-hooks@^1.6.1:
   resolved "https://registry.npm.taobao.org/eslint-plugin-react-hooks/download/eslint-plugin-react-hooks-1.7.0.tgz#6210b6d5a37205f0b92858f895a4e827020a7d04"
   integrity sha1-YhC21aNyBfC5KFj4laToJwIKfQQ=
 
+eslint-plugin-react-hooks@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/eslint-plugin-react-hooks/download/eslint-plugin-react-hooks-3.0.0.tgz#9e80c71846eb68dd29c3b21d832728aa66e5bd35"
+  integrity sha1-noDHGEbraN0pw7IdgycoqmblvTU=
+
 eslint-plugin-react@7.14.3:
   version "7.14.3"
   resolved "https://registry.npm.taobao.org/eslint-plugin-react/download/eslint-plugin-react-7.14.3.tgz#911030dd7e98ba49e1b2208599571846a66bdf13"

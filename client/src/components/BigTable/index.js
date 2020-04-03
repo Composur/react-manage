@@ -4,8 +4,8 @@ import AntoSize from "react-virtualized-auto-sizer";
 import "./style.css";
 const Row = ({ style, index }) => {
   return (
-    <div style={style} className={index % 2 === 0 ? "odd" : "even"}>
-      Row {index}
+    <div style={style} className={index & 1  ? "odd" : "even"}>
+      Row {index} {index & 1  ? "even" : "odd"}
     </div>
   );
 };
@@ -27,9 +27,6 @@ const Example = () => (
   </AntoSize>
 );
 export default class BigTable extends Component {
-  constructor() {
-    super();
-  }
   render() {
     return (
       <div className='container'>

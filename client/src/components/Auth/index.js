@@ -21,23 +21,22 @@ class Auth extends Component {
   componentWillMount() {
     const { permissionPath, userInfo } = this.props;
     if (userInfo.username === "admin") {
-      this.state.superAdmin = true;
+      this.setState({
+        superAdmin:true
+      })
     }
     this.verification(userInfo.role.menus, permissionPath);
   }
   UNSAFE_componentWillReceiveProps({ userInfo }) {
-    // if(userInfo.role.menus.length!==this.props.userInfo.role.menus.length){
-    //   console.log(124)
-    // }
     this.verification(
       userInfo.role.menus,
       this.props.history.location.pathname
     );
   }
-  render(h) {
+  render() {
     const { hasPermission, superAdmin } = this.state;
     const { noCheck = false } = this.props;
-    return hasPermission || noCheck || superAdmin ? (
+    return hasPermission || noCheck || superAdmin || this.cancelPermission ? (
       this.props.children
     ) : (
       <div className="noPermission">没有查看该模块的权限</div>

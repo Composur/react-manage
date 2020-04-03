@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useRef} from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, message, Row, Col, Progress, Table } from "antd";
 import store from "store";
 import { calculateHash,createFileChunk } from "./calculate-hash";
