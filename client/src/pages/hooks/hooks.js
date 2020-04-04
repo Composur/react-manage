@@ -1,4 +1,12 @@
-import React, { useState, useEffect, useContext, useMemo, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+  useRef,
+  PureComponent
+} from "react";
 import { Card, Col, Row, Button } from "antd";
 let timer;
 function ajax(param) {
@@ -10,19 +18,23 @@ function ajax(param) {
   });
 }
 // 自定义 Hooks 必须以use开头
-function useNumber() {
-  let [number, setNumber] = useState(0);
+function useNumber(defaultNumber) {
+  let [number, setNumber] = useState(defaultNumber);
+  const ref = useRef()
   useEffect(() => {
-    console.log("useNumber render");
-    let timers = setInterval(() => {
+   ref.current = setInterval(() => {
       setNumber(number => number + 1);
     }, 1000);
-    return () => clearTimeout(timers);
   }, []);
+  useEffect(()=>{
+    if(number>=10){
+      clearTimeout(ref.current)
+    }
+  })
   return [number, setNumber];
 }
 function Counter1() {
-  let [number, setNumber] = useNumber();
+  let [number, setNumber] = useNumber(0);
   return (
     <Button
       type="primary"
@@ -46,6 +58,22 @@ function Context() {
   return <span>{test}</span>;
 }
 
+// 注意：不能在函数组上件创建 ref 要用类组件
+// function Ref(){
+//   return (
+//     <div>ref</div>
+//   )
+// }
+
+class Ref extends PureComponent {
+  refFoo() {
+    console.log("我是子组件方法");
+  }
+  render() {
+    return <div>ref</div>;
+  }
+}
+
 function Hooks() {
   // 每一个 Hooks 相互独立
   // 必须把hooks写在函数的最外层
@@ -57,8 +85,8 @@ function Hooks() {
   // 惰性 useState
   const [computed, setComputed] = useState(() => test());
 
-  // useMemo 
-  const [testUseMemo,setTestUseMemo] = useState(0)
+  // useMemo
+  const [testUseMemo, setTestUseMemo] = useState(0);
 
   // useEffect 相当于 componentDidMount 和 componentDidUpdate、componentWillUnmount
   // 在这里进行 ajax 数据请求，添加一些监听的注册和取消注册，手动修改dom等操作
@@ -72,16 +100,15 @@ function Hooks() {
 
   // 异步请求 ，清除 timeout
   useEffect(() => {
-    console.log("useEffect render");
     const getData = async () => {
       const res = await ajax(query);
       console.log(res);
       setContent(res);
     };
     getData();
-    return function clear() {
+    return ()=> {
       if (timer) {
-        console.log("clear timer");
+        console.log("clear timer",timer);
         clearTimeout(timer);
       }
     };
@@ -89,24 +116,37 @@ function Hooks() {
 
   // useMemo 有返回值可用于渲染（在渲染期间获得返回值并用于渲染）
   const newCount = useMemo(() => {
-    return count*2
-  }, [count]); 
+    return count * 2;
+  }, [count]);
+  const ref = useRef();
+  // console.log(ref);
+  // const testUseCallBack = useMemo(()=>{
+  //   return function(){
+  //     setTestUseMemo(testUseMemo+1)
+  //   }
+  // },[])
+  // 等价于上面的写法
+  const testUseCallBack = useCallback(() => {
+    setTestUseMemo(testUseMemo + 1);
+  }, [testUseMemo]);
 
-
-// const testUseCallBack = useMemo(()=>{
-//   return function(){
-//     setTestUseMemo(testUseMemo+1)
-//   }
-// },[])
-// 等价于上面的写法
-const testUseCallBack = useCallback(()=>{
-    setTestUseMemo(testUseMemo+1)
-},[testUseMemo])
+  const refTimer = useRef();
+  // 用 ref 保存变量
+  useEffect(() => {
+    refTimer.current = setInterval(() => {
+      setCount(count => count + 1);
+    }, 1000);
+  }, []);
+  useEffect(() => {
+    if (count >= 3) {
+      clearTimeout(refTimer.current);
+    }
+  });
 
   return (
     <div>
       <div style={{ padding: "30px" }}>
-        <Row gutter={16}>
+        <Row gutter={6}>
           <Col span={8}>
             <Card title="useState useEffect">
               <p>数量加一且改变页面title,count:{count}</p>
@@ -134,11 +174,13 @@ const testUseCallBack = useCallback(()=>{
           </Col>
           <Col span={8}>
             <Card title="自定义 Hooks">
-              <Counter1/>
+              <p>number>=10停止</p>
+              <p>自定义hooks的目的就是为了代码复用</p>
+              <Counter1 />
             </Card>
           </Col>
         </Row>
-        <Row gutter={16}>
+        <Row gutter={6}>
           <Col span={8}>
             <Card title="惰性 useState">
               <p>
@@ -168,8 +210,7 @@ const testUseCallBack = useCallback(()=>{
             <Card title="useMemo">
               <p>判断函数是否重复执行，达到性能优化的目的</p>
               <p>限制条件 count === 2</p>
-              count:{count}&nbsp;
-              newCount:{newCount}
+              count:{count}&nbsp; newCount:{newCount}
               <div>
                 <Button
                   size="small"
@@ -178,16 +219,26 @@ const testUseCallBack = useCallback(()=>{
                 >
                   + 1
                 </Button>
-                
-                <Button
-                  size="small"
-                  type="primary"
-                  onClick={testUseCallBack}
-                >
+
+                <Button size="small" type="primary" onClick={testUseCallBack}>
                   {testUseMemo}
                 </Button>
-                
               </div>
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={6}>
+          <Col span={8}>
+            <Card title="useRef">
+              count: {count} >=3 的时候停止
+              <Ref ref={ref} />
+              <Button
+                size="small"
+                type="primary"
+                onClick={() => ref.current.refFoo()}
+              >
+                获取子组件方法
+              </Button>
             </Card>
           </Col>
         </Row>
