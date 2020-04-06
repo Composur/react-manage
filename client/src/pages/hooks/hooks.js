@@ -28,7 +28,7 @@ function useNumber(defaultNumber) {
   }, []);
   useEffect(()=>{
     if(number>=10){
-      clearTimeout(ref.current)
+      clearInterval(ref.current)
     }
   })
   return [number, setNumber];
