@@ -101,28 +101,28 @@ function verifyToken(token){
 // });
 
 
-app.use((req,res,next)=>{
-  let token=req.headers.authorization
-  const cookie=req.cookies
-  const url=req.url
-  let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
+// app.use((req,res,next)=>{
+//   let token=req.headers.authorization
+//   const cookie=req.cookies
+//   const url=req.url
+//   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
   
-  if(url.indexOf('/api/login') !== 0){
-      try{
-        let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
-        let {exp = 0} = result,current = Math.floor(Date.now()/1000);
-        if(current <= exp){
-            next()
-        }
-    }catch(e){
-      res.status(401)
-      res.send({status: 1, msg: '登录信息失效，请重新登录'})
-    }
+//   if(url.indexOf('/api/login') !== 0){
+//       try{
+//         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
+//         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
+//         if(current <= exp){
+//             next()
+//         }
+//     }catch(e){
+//       res.status(401)
+//       res.send({status: 1, msg: '登录信息失效，请重新登录'})
+//     }
         
-  }else{
-    next()
-  }
-})
+//   }else{
+//     next()
+//   }
+// })
 
 
 /*

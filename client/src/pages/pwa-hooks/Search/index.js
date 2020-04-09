@@ -1,9 +1,12 @@
-import React from "react";
+import React,{useCallback} from "react";
 import { connect } from "react-redux";
+// import {bindActionCreators} from 'redux'
 import ShowHeightSpeed from "./SearchighSpeed";
 import Journey from "./Journey.js";
 import Departdate from "./Departdate.js";
-import {showCitySelector,exchangeFromTo} from './actions'
+import CitySelector from "../../../components/pwa/CitySelector";
+// import { showCitySelector, exchangeFromTo } from "./actions";
+import * as Actions from "./actions";
 const submitButton = {
   backgroundColor: "#f90",
   height: "40px",
@@ -17,19 +20,20 @@ const submitButton = {
   width: "100%"
 };
 function Search(props) {
-  const exchangeFromTo =()=>{
-    return props.exchangeFromTo()
-  }
-  const showCitySelector =(m)=>{
-    return props.showCitySelector(m)
-  }
+  // const exchangeFromTo = () => {
+  //   return props.exchangeFromTo();
+  // };
+  // const showCitySelector = m => {
+  //   return props.showCitySelector(m);
+  // };
   return (
-    <div>
+    <div style={{ padding: "10px" }}>
       <Journey
-        from={props.from}
-        to={props.to}
-        exchangeFromTo={exchangeFromTo}
-        showCitySelector={showCitySelector}
+        // from={props.from}
+        // to={props.to}
+        {...props}
+        // exchangeFromTo={exchangeFromTo}
+        // showCitySelector={showCitySelector}
       />
       <Departdate time={+new Date()} onClick={() => {}} />
       <ShowHeightSpeed highSpeed toggle={() => ({})} />
@@ -39,15 +43,32 @@ function Search(props) {
           搜索{" "}
         </button>
       </div>
+      {/* 城市选择器浮层 */}
+      <CitySelector
+        show={props.isCitySelectorVisible}
+        cityData={props.cityData}
+        isLoading={props.isLoadingCityData}
+        onSelect={()=>{}}
+        {...props}
+      />
+      {/* 日期选择器浮层 */}
     </div>
   );
 }
 
 const mapStateToProps = state => ({
-  from: state.from,
-  to: state.to,
+  // from: state.from,
+  // to: state.to,
+  ...state
 });
 
-const mapDispatchToProps = {showCitySelector,exchangeFromTo}
+// const mapDispatchToProps = { showCitySelector, exchangeFromTo };
+const mapDispatchToProps = { ...Actions };
+// const mapDispatchToProps = (dispatch)=>{
+//   return bindActionCreators({
+//     showCitySelector,
+//     exchangeFromTo,
+//   },dispatch)
+// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Search);

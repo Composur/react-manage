@@ -120,3 +120,10 @@ export const reqRoleList=(data)=>request('/manage/role/list','GET',data)
 
 // 设置权限
 export const reqSettingRole=(data)=>request('/manage/role/update','POST',data)
+
+
+
+
+// paw 测试接口
+
+export const reqCityData= (data)=>request('/pwa/citys','GET',data)

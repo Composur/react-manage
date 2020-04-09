@@ -410,6 +410,16 @@ router.post('/mergefile',(req,res)=>{
   ControlUpload.mergeFile(req,res)
 })
 
+
+
+router.get('/pwa/citys',(req,res)=>{ 
+  const file = path.join(__dirname,'../db/citys.json')
+  fs.readFile(file,'utf-8',(err,data)=>{
+    if(err)  res.send({status: 1, msg: '获取列表失败'})
+    res.send({status: 0, data:JSON.parse(data)})
+  })
+})
+
 require('./file-upload')(router)
 
 module.exports = router

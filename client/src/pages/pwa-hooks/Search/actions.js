@@ -1,3 +1,4 @@
+import { reqCityData } from "../../../api";
 export const ACTION_SET_FROM = "SET_FROM";
 export const ACTION_SET_TO = "SET_TO";
 export const ACTION_SET_IS_CITY_SELECTOR_VISIBLE =
@@ -49,6 +50,7 @@ export function toggleHighSpeed() {
   };
 }
 
+// 显示选择城市浮层
 export function showCitySelector(currentSelectingLeftCity) {
   return dispatch => {
     dispatch({
@@ -98,6 +100,7 @@ export function hideDateSelector() {
   };
 }
 
+// 出发站-目的站-互换
 export function exchangeFromTo() {
   return (dispatch, getState) => {
     const { from, to } = getState();
@@ -113,10 +116,11 @@ export function setDepartDate(departDate) {
   };
 }
 
+// 请求城市列表
 export function fetchCityData() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const { isLoadingCityData } = getState();
-
+    // 如在请求中 直接 return
     if (isLoadingCityData) {
       return;
     }
@@ -128,26 +132,17 @@ export function fetchCityData() {
 
       return;
     }
-
+    // loading
     dispatch(setIsLoadingCityData(true));
-
-    fetch("/rest/cities?_" + Date.now())
-      .then(res => res.json())
-      .then(cityData => {
-        dispatch(setCityData(cityData));
-
-        localStorage.setItem(
-          "city_data_cache",
-          JSON.stringify({
-            expires: Date.now() + 60 * 1000,
-            data: cityData
-          })
-        );
-
-        dispatch(setIsLoadingCityData(false));
+    const {data} = await reqCityData();
+    dispatch(setCityData(data));
+    localStorage.setItem(
+      "city_data_cache",
+      JSON.stringify({
+        expires: Date.now() + 60 * 1000,
+        data: data
       })
-      .catch(() => {
-        dispatch(setIsLoadingCityData(false));
-      });
+    );
+    dispatch(setIsLoadingCityData(false));
   };
 }

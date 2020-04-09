@@ -6,7 +6,6 @@ import {combineReducers} from  'redux'
  */
 
 import searchInfo from '../pages/pwa-hooks/Search/reducer'
-
 export default combineReducers({
   ...searchInfo
 })
