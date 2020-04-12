@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect, useMemo, memo } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
+import { reqSuggestCityData } from "../../../api";
+import { debounce } from "../../../utils/common";
 import "./index.css";
 
 const CityItem = memo(function CityItem(props) {
@@ -55,7 +57,10 @@ AlphaIndex.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
+// 返回 26 个字母的 ascii 的字符串表示
+// ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 const alphabet = Array.from(new Array(26), (ele, index) => {
+  // fromCharCode 返回由指定的UTF-16代码单元序列创建的字符串
   return String.fromCharCode(65 + index);
 });
 const CityList = memo(function CityList(props) {
@@ -89,6 +94,7 @@ CityList.propTypes = {
   toAlpha: PropTypes.func.isRequired
 };
 
+// 城市搜索
 const SuggestItem = memo(function SuggestItem(props) {
   const { name, onClick } = props;
 
@@ -104,21 +110,22 @@ SuggestItem.propTypes = {
   onClick: PropTypes.func.isRequired
 };
 
+// 搜索列表
 const Suggest = memo(function Suggest(props) {
   const { searchKey, onSelect } = props;
 
   const [result, setResult] = useState([]);
 
   useEffect(() => {
-    fetch("/rest/search?key=" + encodeURIComponent(searchKey))
-      .then(res => res.json())
-      .then(data => {
-        const { result, searchKey: sKey } = data;
-
-        if (sKey === searchKey) {
-          setResult(result);
-        }
-      });
+    const getSuggestData = async () => {
+      const { data } = await reqSuggestCityData({ searchKey });
+      const { searchKey: skey } = data;
+      if (skey === searchKey) {
+        // 避免因网络请求的快慢返回的请求与相应的结果不一致
+        setResult(data.result);
+      }
+    };
+    getSuggestData();
   }, [searchKey]);
 
   const fallBackResult = useMemo(() => {
@@ -156,7 +163,14 @@ Suggest.propTypes = {
 };
 
 const CitySelector = memo(function CitySelector(props) {
-  const { show, cityData, isLoading, hideCitySelector , fetchCityData, onSelect } = props;
+  const {
+    show,
+    cityData,
+    isLoading,
+    hideCitySelector,
+    fetchCityData,
+    onSelect
+  } = props;
   // 搜索框值
   const [searchKey, setSearchKey] = useState("");
 
@@ -173,6 +187,8 @@ const CitySelector = memo(function CitySelector(props) {
 
   // 锚点
   const toAlpha = useCallback(alpha => {
+    // scrollIntoView 让当前的元素滚动到浏览器窗口的可视区域内
+    // 实验功能
     document.querySelector(`[data-cate='${alpha}']`).scrollIntoView();
   }, []);
 
@@ -193,13 +209,12 @@ const CitySelector = memo(function CitySelector(props) {
 
     return <div>error</div>;
   };
-
   return (
     // classnames 是一个函数接收任意数量的参数，和下面filter写法返回相似
     <div className={classnames("city-selector", { hidden: !show })}>
-    {/* <div className={['city-selector',!show && 'hidden'].filter(Boolean).join(' ')} > */}
+      {/* <div className={['city-selector',!show && 'hidden'].filter(Boolean).join(' ')} > */}
       <div className="city-search">
-        <div className="search-back" onClick={()=>hideCitySelector()}>
+        <div className="search-back" onClick={() => hideCitySelector()}>
           <svg width="42" height="42">
             <polyline
               points="25,13 16,21 25,29"

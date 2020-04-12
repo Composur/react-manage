@@ -35,7 +35,7 @@ function Search(props) {
         // exchangeFromTo={exchangeFromTo}
         // showCitySelector={showCitySelector}
       />
-      <Departdate time={+new Date()} onClick={() => {}} />
+      <Departdate time={props.departDate} onClick={props.showDateSelector} />
       <ShowHeightSpeed highSpeed toggle={() => ({})} />
       <div style={{ padding: "10px 0 17px 0" }}>
         <button type="submit" style={submitButton}>
@@ -48,10 +48,11 @@ function Search(props) {
         show={props.isCitySelectorVisible}
         cityData={props.cityData}
         isLoading={props.isLoadingCityData}
-        onSelect={()=>{}}
+        onSelect={props.setSelectedCity}
         {...props}
       />
       {/* 日期选择器浮层 */}
+    
     </div>
   );
 }

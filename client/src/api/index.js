@@ -124,6 +124,12 @@ export const reqSettingRole=(data)=>request('/manage/role/update','POST',data)
 
 
 
-// paw 测试接口
-
+/**
+ * 
+ * @description { paw 测试接口} 
+ */
+// 城市列表
 export const reqCityData= (data)=>request('/pwa/citys','GET',data)
+
+// 城市模糊搜索
+export const reqSuggestCityData = (data)=>request('/pwa/suggestCitys','GET',data)

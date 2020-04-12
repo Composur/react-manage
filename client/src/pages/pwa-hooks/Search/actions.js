@@ -75,7 +75,6 @@ export function hideCitySelector() {
 export function setSelectedCity(city) {
   return (dispatch, getState) => {
     const { currentSelectingLeftCity } = getState();
-
     if (currentSelectingLeftCity) {
       dispatch(setFrom(city));
     } else {
@@ -83,20 +82,6 @@ export function setSelectedCity(city) {
     }
 
     dispatch(hideCitySelector());
-  };
-}
-
-export function showDateSelector() {
-  return {
-    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: true
-  };
-}
-
-export function hideDateSelector() {
-  return {
-    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
-    payload: false
   };
 }
 
@@ -127,22 +112,40 @@ export function fetchCityData() {
 
     const cache = JSON.parse(localStorage.getItem("city_data_cache") || "{}");
 
-    if (Date.now() < cache.expires) {
+    if (Date.now() < cache.expires) { // 判断缓存是否有效
       dispatch(setCityData(cache.data));
 
       return;
     }
-    // loading
+    // 无缓存 缓存获取请求数据
     dispatch(setIsLoadingCityData(true));
     const {data} = await reqCityData();
     dispatch(setCityData(data));
     localStorage.setItem(
       "city_data_cache",
       JSON.stringify({
-        expires: Date.now() + 60 * 1000,
+        expires: Date.now() + 600 * 1000, // 设置缓存的有效期
         data: data
       })
     );
     dispatch(setIsLoadingCityData(false));
+  };
+}
+
+
+/**
+ * @description 日期选择框
+ */
+export function showDateSelector() {
+  return {
+    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
+    payload: true
+  };
+}
+
+export function hideDateSelector() {
+  return {
+    type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
+    payload: false
   };
 }
