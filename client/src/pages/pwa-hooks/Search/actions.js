@@ -94,12 +94,7 @@ export function exchangeFromTo() {
   };
 }
 
-export function setDepartDate(departDate) {
-  return {
-    type: ACTION_SET_DEPART_DATE,
-    payload: departDate
-  };
-}
+
 
 // 请求城市列表
 export function fetchCityData() {
@@ -147,5 +142,13 @@ export function hideDateSelector() {
   return {
     type: ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
     payload: false
+  };
+}
+
+// 设置日期
+export function setDepartDate(departDate) {
+  return {
+    type: ACTION_SET_DEPART_DATE,
+    payload: departDate
   };
 }

@@ -2,7 +2,6 @@ import React, { useState, useCallback, useEffect, useMemo, memo } from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
 import { reqSuggestCityData } from "../../../api";
-import { debounce } from "../../../utils/common";
 import "./index.css";
 
 const CityItem = memo(function CityItem(props) {

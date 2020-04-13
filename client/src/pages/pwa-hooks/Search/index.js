@@ -1,10 +1,12 @@
-import React,{useCallback} from "react";
+import React, { useCallback } from "react";
 import { connect } from "react-redux";
 // import {bindActionCreators} from 'redux'
 import ShowHeightSpeed from "./SearchighSpeed";
 import Journey from "./Journey.js";
 import Departdate from "./Departdate.js";
 import CitySelector from "../../../components/pwa/CitySelector";
+import DateSelector from "../../../components/pwa/DateSelector";
+import { h0 } from "../../../utils/common";
 // import { showCitySelector, exchangeFromTo } from "./actions";
 import * as Actions from "./actions";
 const submitButton = {
@@ -26,6 +28,11 @@ function Search(props) {
   // const showCitySelector = m => {
   //   return props.showCitySelector(m);
   // };
+  const onSelectDate = day => {
+    if (!day || h0() > day) return;
+    props.setDepartDate(day);
+    props.hideDateSelector();
+  };
   return (
     <div style={{ padding: "10px" }}>
       <Journey
@@ -52,7 +59,12 @@ function Search(props) {
         {...props}
       />
       {/* 日期选择器浮层 */}
-    
+      <DateSelector
+        // show onBack 为显示隐藏
+        show={props.isDateSelectorVisible}
+        onBack={props.hideDateSelector}
+        onSelect={onSelectDate}
+      />
     </div>
   );
 }
