@@ -6,8 +6,12 @@ import {combineReducers} from  'redux'
  */
 
 import searchInfo from '../pages/pwa-hooks/Search/reducer'
+import list from '../pages/pwa-hooks/List/reducer'
+import searchDetail from '../pages/pwa-hooks/reducer'
 export default combineReducers({
-  ...searchInfo
+  ...searchInfo,
+  ...list,
+  ...searchDetail,
 })
 
 

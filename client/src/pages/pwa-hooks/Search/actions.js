@@ -40,15 +40,7 @@ export function setCityData(cityDate) {
   };
 }
 
-export function toggleHighSpeed() {
-  return (dispatch, getState) => {
-    const { highSpeed } = getState();
-    dispatch({
-      type: ACTION_SET_HIGH_SPEED,
-      payload: !highSpeed
-    });
-  };
-}
+
 
 // 显示选择城市浮层
 export function showCitySelector(currentSelectingLeftCity) {
@@ -150,5 +142,16 @@ export function setDepartDate(departDate) {
   return {
     type: ACTION_SET_DEPART_DATE,
     payload: departDate
+  };
+}
+
+// 只看高铁动车
+export function toggleHighSpeed() {
+  return (dispatch, getState) => {
+    const { highSpeed } = getState();
+    dispatch({
+      type: ACTION_SET_HIGH_SPEED,
+      payload: !highSpeed
+    });
   };
 }

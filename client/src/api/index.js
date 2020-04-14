@@ -133,3 +133,6 @@ export const reqCityData= (data)=>request('/pwa/citys','GET',data)
 
 // 城市模糊搜索
 export const reqSuggestCityData = (data)=>request('/pwa/suggestCitys','GET',data)
+
+// 车次列表
+export const reqTripLists = (data)=>request('/pwa/trips','GET',data)

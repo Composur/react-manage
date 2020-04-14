@@ -430,6 +430,16 @@ router.get('/pwa/suggestCitys',(req,res)=>{
     res.send({status: 0, data:result})
   })
 })
+// 车次列表
+router.get('/pwa/trips',(req,res)=>{ 
+  const {from,to} = req.query
+  const file = path.join(__dirname,'../db/state.json')
+  fs.readFile(file,'utf-8',(err,data)=>{
+    if(err)  res.send({status: 1, msg: '获取列表失败'})
+    const result  = JSON.parse(data)
+    res.send({status: 0, data:result})
+  })
+})
 
 require('./file-upload')(router)
 

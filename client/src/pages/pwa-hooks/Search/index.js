@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { connect } from "react-redux";
-// import {bindActionCreators} from 'redux'
+import { useHistory} from "react-router-dom";
 import ShowHeightSpeed from "./SearchighSpeed";
 import Journey from "./Journey.js";
 import Departdate from "./Departdate.js";
 import CitySelector from "../../../components/pwa/CitySelector";
 import DateSelector from "../../../components/pwa/DateSelector";
 import { h0 } from "../../../utils/common";
-// import { showCitySelector, exchangeFromTo } from "./actions";
+import {setHeadTitle} from '../reducer'
 import * as Actions from "./actions";
 const submitButton = {
   backgroundColor: "#f90",
@@ -22,33 +22,32 @@ const submitButton = {
   width: "100%"
 };
 function Search(props) {
-  // const exchangeFromTo = () => {
-  //   return props.exchangeFromTo();
-  // };
-  // const showCitySelector = m => {
-  //   return props.showCitySelector(m);
-  // };
+  props.setHeadTitle('查询')
+  const history = useHistory()
   const onSelectDate = day => {
     if (!day || h0() > day) return;
     props.setDepartDate(day);
     props.hideDateSelector();
   };
+  const searchBtn = ()=>{
+    history.push('/list')
+  }
   return (
     <div style={{ padding: "10px" }}>
+      {/* 车站选择 */}
       <Journey
-        // from={props.from}
-        // to={props.to}
         {...props}
-        // exchangeFromTo={exchangeFromTo}
-        // showCitySelector={showCitySelector}
       />
+      {/* 日期选择 */}
       <Departdate time={props.departDate} onClick={props.showDateSelector} />
-      <ShowHeightSpeed highSpeed toggle={() => ({})} />
+      {/* 只看高铁动车 */}
+      <ShowHeightSpeed
+        highSpeed={props.highSpeed}
+        toggle={props.toggleHighSpeed}
+      />
+      {/* 提交按钮 */}
       <div style={{ padding: "10px 0 17px 0" }}>
-        <button type="submit" style={submitButton}>
-          {" "}
-          搜索{" "}
-        </button>
+        <button style={submitButton} onClick={()=>searchBtn()}> 搜索 </button>
       </div>
       {/* 城市选择器浮层 */}
       <CitySelector
@@ -70,13 +69,10 @@ function Search(props) {
 }
 
 const mapStateToProps = state => ({
-  // from: state.from,
-  // to: state.to,
   ...state
 });
 
-// const mapDispatchToProps = { showCitySelector, exchangeFromTo };
-const mapDispatchToProps = { ...Actions };
+const mapDispatchToProps = { ...Actions,setHeadTitle };
 // const mapDispatchToProps = (dispatch)=>{
 //   return bindActionCreators({
 //     showCitySelector,
@@ -84,4 +80,4 @@ const mapDispatchToProps = { ...Actions };
 //   },dispatch)
 // }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+export default connect(mapStateToProps, mapDispatchToProps)((Search));
