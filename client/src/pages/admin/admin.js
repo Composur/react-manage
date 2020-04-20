@@ -29,6 +29,7 @@ const Bar = lazy(() => import("../charts/bar"));
 const GitHub = lazy(() => import("../github"));
 const Order = lazy(() => import("../order"));
 const Drag = lazy(() => import("../drag"));
+const FormDesign = lazy(() => import("../form-design"));
 const FileUpload = lazy(() => import("../hooks/fileUpload"));
 const HooksTest = lazy(() => import("../hooks/hooks"));
 const NotFoundPage = lazy(() => import("components/404"));
@@ -70,14 +71,16 @@ class Admin extends Component {
                 <AuthRouter path="/home" component={Home} />
                 <AuthRouter path="/category" component={Category} />
                 <AuthRouter path="/product" component={Product} />
+                <AuthRouter path="/order" component={Order} />
                 <AuthRouter path="/role" component={Role} />
                 <AuthRouter path="/user" component={User} />
                 <AuthRouter path="/charts/bar" component={Bar} />
                 <AuthRouter path="/charts/line" component={Line} />
                 <AuthRouter path="/charts/pie" component={Pie} />
-                <AuthRouter path="/order" component={Order} />
+              
                 <AuthRouter path="/GitHub" component={GitHub} />
-                <AuthRouter path="/drag" component={Drag} />
+                <AuthRouter path="/drag/native" component={Drag} />
+                <AuthRouter path="/drag/form-design" component={FormDesign} />
                 <AuthRouter path="/hooks/slice" component={FileUpload} />
                 <AuthRouter path="/hooks/test" component={HooksTest} />
                 <AuthRouter path="/bigTable" component={BigTable} />

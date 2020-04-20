@@ -1,8 +1,9 @@
 .left-nav{
     position: fixed;
     min-width:200px;
-  .left-nav-header{
-    margin-top: 60px;
+    height: 100%;
+    .left-nav-header{
+    margin-top: 10px;
     z-index: 2;
     .left-nav-header-content{
       height: 30px;
@@ -14,7 +15,10 @@
       vertical-align: middle;
     }
   }
-  
+  .left-nav-content{
+    height: 100%;
+    overflow: scroll;
+  }
 }
 @media screen and (max-width: 960px){
   .left-nav-header-content{

@@ -6,7 +6,7 @@ const menuList = [
     isPublic: true, // 公开的
   },
   {
-    title: '商品',
+    title: 'CRUD',
     key: '/products',
     icon: 'appstore',
     children: [ // 子菜单列表
@@ -19,6 +19,10 @@ const menuList = [
         title: '商品管理',
         key: '/product',
         icon: 'tool'
+      },{
+        title: '订单管理',
+        key: '/order',
+        icon: 'windows',
       },
     ]
   },
@@ -35,7 +39,7 @@ const menuList = [
   },
 
   {
-    title: '图形图表',
+    title: '图表可视化',
     key: '/charts',
     icon: 'area-chart',
     children: [
@@ -57,11 +61,7 @@ const menuList = [
     ]
   },
 
-  {
-    title: '订单管理',
-    key: '/order',
-    icon: 'windows',
-  },
+  
   {
     title: 'GitHub',
     key: '/github',
@@ -71,6 +71,18 @@ const menuList = [
     title: '组件拖拽',
     key: '/drag',
     icon: 'drag',
+    children: [
+      {
+        title: '元素拖拽',
+        key: '/drag/native',
+        icon: 'drag'
+      },
+      {
+        title: '自定义组件',
+        key: '/drag/form-design',
+        icon: 'form'
+      },
+    ]
   },
   {
     title: 'Hooks',

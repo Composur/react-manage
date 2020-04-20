@@ -1,0 +1,19 @@
+
+@import '~antd/dist/antd.min.css';
+.ant-tabs{
+  overflow-y: auto;
+} 
+
+body{
+  background-color: #f6f6f6;
+}
+.form-display .ant-form-item {
+  display: flex;
+  margin-bottom: 16px;
+}
+.form-display .ant-form-item-label {
+  text-overflow: ellipsis;
+}
+.form-display .ant-form-item-control-wrapper {
+  flex: 1 1 auto;
+}
