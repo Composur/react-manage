@@ -36,6 +36,7 @@
     "redux-devtools": "^3.5.0",
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
+    "rxjs": "^6.5.5",
     "store": "^2.0.12"
   },
   "scripts": {

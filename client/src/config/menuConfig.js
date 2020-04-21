@@ -11,16 +11,16 @@ const menuList = [
     icon: 'appstore',
     children: [ // 子菜单列表
       {
-        title: '品类管理',
+        title: '增删改查',
         key: '/category',
         icon: 'bars'
       },
       {
-        title: '商品管理',
+        title: '富文本',
         key: '/product',
         icon: 'tool'
       },{
-        title: '订单管理',
+        title: 'tabs',
         key: '/order',
         icon: 'windows',
       },
