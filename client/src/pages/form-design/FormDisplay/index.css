@@ -1,0 +1,16 @@
+.form-display .flex-row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.form-display .flex-item {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 0px;
+          flex: 1 1 0;
+}
+
+.form-display .flex-item .ant-input-number {
+  width: 100%;
+}
+/*# sourceMappingURL=index.css.map */

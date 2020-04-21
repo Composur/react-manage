@@ -1,0 +1,13 @@
+
+.form-display{
+    .flex-row {
+        display: flex;
+      }
+      .flex-item {
+        flex: 1 1 0;
+        .ant-input-number{
+          width:100%;
+        }
+      }
+      
+}
