@@ -48,7 +48,9 @@ router.post('/login', (req, res) => {
       res.setHeader('Cache-Control', 'no-store')
       if (user) { // 登陆成功
         // 生成一个cookie(userid: user._id), 并交给浏览器保存
-        res.cookie('userid', user._id, {maxAge: 1000 * 60 * 60 * 24})
+        res.cookie('userid', user._id, {maxAge: 1000 * 60 * 60 * 24,httpOnly: true})
+        // res.cookie('userid00', user._id, {maxAge: 1000 * 60 * 60 * 24})
+        // res.cookie('userid01', user._id, {maxAge: 1000 * 60 * 60 * 24})
         let token = generateToken({username});
         if (user.role_id) {
           RoleModel.findOne({_id: user.role_id})

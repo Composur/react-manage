@@ -4,103 +4,103 @@ const layoutItems = [
   {
     name: "布局控件",
     url: fieldImages.img_formsection,
-    type: "grid"
-  }
+    type: "grid",
+  },
 ];
 const baseItems = [
   {
     name: "单行输入框",
     url: fieldImages.img_textfield,
-    type: "textfield"
+    type: "textfield",
   },
-  {
-    name: "多行输入框",
-    url: fieldImages.img_textareafield,
-    type: "textareafield"
-  },
-  {
-    name: "日期",
-    url: fieldImages.img_date,
-    type: "dateformat"
-  },
-  {
-    name: "日期区间",
-    url: fieldImages.img_datesection,
-    type: "dateformatsection"
-  },
-  {
-    name: "单选框",
-    url: fieldImages.img_radiobox,
-    type: "radiobox"
-  },
-  {
-    name: "多选框",
-    url: fieldImages.img_multiplebox,
-    type: "multiplebox"
-  },
-  {
-    name: "下拉框",
-    url: fieldImages.img_angledown,
-    type: "dropdownfield"
-  },
-  {
-    name: "级联下拉",
-    url: fieldImages.img_cascadedrop,
-    type: "cascadedrop"
-  },
-  {
-    name: "附件",
-    url: fieldImages.img_attachment,
-    type: "attachment"
-  },
-  {
-    name: "表单隐藏域",
-    url: fieldImages.img_formhidden,
-    type: "formhidden"
-  },
-  {
-    name: "数字输入框",
-    url: fieldImages.img_img_number,
-    type: "number"
-  },
-  {
-    name: "金额",
-    url: fieldImages.img_img_money,
-    type: "money"
-  }
+  // {
+  //   name: "多行输入框",
+  //   url: fieldImages.img_textareafield,
+  //   type: "textareafield",
+  // },
+  // {
+  //   name: "日期",
+  //   url: fieldImages.img_date,
+  //   type: "dateformat",
+  // },
+  // {
+  //   name: "日期区间",
+  //   url: fieldImages.img_datesection,
+  //   type: "dateformatsection",
+  // },
+  // {
+  //   name: "单选框",
+  //   url: fieldImages.img_radiobox,
+  //   type: "radiobox",
+  // },
+  // {
+  //   name: "多选框",
+  //   url: fieldImages.img_multiplebox,
+  //   type: "multiplebox",
+  // },
+  // {
+  //   name: "下拉框",
+  //   url: fieldImages.img_angledown,
+  //   type: "dropdownfield",
+  // },
+  // {
+  //   name: "级联下拉",
+  //   url: fieldImages.img_cascadedrop,
+  //   type: "cascadedrop",
+  // },
+  // {
+  //   name: "附件",
+  //   url: fieldImages.img_attachment,
+  //   type: "attachment",
+  // },
+  // {
+  //   name: "表单隐藏域",
+  //   url: fieldImages.img_formhidden,
+  //   type: "formhidden",
+  // },
+  // {
+  //   name: "数字输入框",
+  //   url: fieldImages.img_img_number,
+  //   type: "number",
+  // },
+  // {
+  //   name: "金额",
+  //   url: fieldImages.img_img_money,
+  //   type: "money",
+  // },
 ];
-const deepClone = obj => {
+const deepClone = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 };
-const initArray = num => {
+const initArray = (num) => {
   let arr = [];
   for (let i = 0; i < num; i++) {
     arr[i] = { active: false, cellIndex: i };
   }
   return arr;
 };
-const resetArrayActive = arr => {
-  arr.forEach(item => {
+const resetArrayActive = (arr) => {
+  arr.forEach((item) => {
     item.active = false;
     const cells = item.attrInfo.grid.cells;
-    cells.forEach(subItem => (subItem.active = false));
+    cells.forEach((subItem) => (subItem.active = false));
   });
 };
 //for move
-const resetArrayCellActive = arr => {
-  arr.forEach(item => {
+const resetArrayCellActive = (arr) => {
+  arr.forEach((item) => {
     const cells = item.attrInfo.grid.cells;
-    cells.forEach(subItem => (subItem.active = false));
+    cells.forEach((subItem) => (subItem.active = false));
   });
 };
-const resetArrayCellGridIndex = arr => {
+const resetArrayCellGridIndex = (arr) => {
   arr.forEach((item, index) => {
     const cells = item.attrInfo.grid.cells;
-    cells.forEach(subItem => {
+    cells.forEach((subItem) => {
       subItem.item && (subItem.item.gridIndex = index);
       if (subItem.item && subItem.item.type === "grid") {
         subItem.item.attrInfo.grid.cells.forEach(
-          cellGridItem =>
+          (cellGridItem) =>
             cellGridItem.item && (cellGridItem.item.gridIndex = index)
         );
       }
@@ -109,23 +109,23 @@ const resetArrayCellGridIndex = arr => {
 };
 const resetCellActive = (arr, gridIndex, cellIndex) => {
   const cells = arr[gridIndex].attrInfo.grid.cells;
-  cells.forEach(item => (item.active = false));
+  cells.forEach((item) => (item.active = false));
   cells[cellIndex].active = true;
 };
-const addArrayIndex = arr => {
+const addArrayIndex = (arr) => {
   arr.forEach((item, index) => (item.gridIndex = index));
 };
-const initLayoutValue = item => {
+const initLayoutValue = (item) => {
   const layoutInitValue = deepClone({
-    ...FieldCorAttr[item.type].initValues
+    ...FieldCorAttr[item.type].initValues,
   });
   const attrInfo = {
     titleValue: item.name,
-    ...layoutInitValue
+    ...layoutInitValue,
   };
   return { ...item, attrInfo, active: true };
 };
-const initGridCells = arr => {
+const initGridCells = (arr) => {
   arr.forEach((item, index) => {
     const cells = item.attrInfo.grid.cells;
     cells.forEach((subItem, cellIndex) => {
@@ -139,8 +139,8 @@ const initGridCells = arr => {
 const activeIndex = (arr, index) => {
   arr[index].active = true;
 };
-const getActiveItem = arr => {
-  return arr.find(item => item.active === true);
+const getActiveItem = (arr) => {
+  return arr.find((item) => item.active === true);
 };
 const getCellActiveItem = (arr, gridIndex, cellIndex) => {
   return arr[gridIndex].attrInfo.grid.cells[cellIndex].item;
@@ -149,15 +149,15 @@ const addCellItem = (arr, gridIndex, cellIndex, cellItem) => {
   arr[gridIndex].attrInfo.grid.cells[cellIndex].item = initLayoutValue(
     cellItem
   );
-    // arr[gridIndex].attrInfo.grid.cells[cellIndex].item = cellItem
+  // arr[gridIndex].attrInfo.grid.cells[cellIndex].item = cellItem
 };
 const addCanvasItem = (arr, index, item) => {
   arr.splice(index + 1, 0, initLayoutValue(item));
 };
-const addcellGridcellGridIndex = item => {
+const addcellGridcellGridIndex = (item) => {
   const cellGridIndex = item.cellIndex;
   const cells = item.attrInfo.grid.cells;
-  cells.forEach(item => (item.cellGridIndex = cellGridIndex));
+  cells.forEach((item) => (item.cellGridIndex = cellGridIndex));
 };
 const updateCurrentCanvasItem = (arr, gridIndex, item) => {
   arr[gridIndex] = item;
@@ -212,20 +212,20 @@ const resetGridCellGridCellActive = (
 ) => {
   const gridCellGridCell =
     arr[gridIndex].attrInfo.grid.cells[cellGridIndex].item.attrInfo.grid.cells;
-  gridCellGridCell.forEach(item => (item.active = false));
+  gridCellGridCell.forEach((item) => (item.active = false));
   gridCellGridCell[cellIndex].active = true;
 };
-const resetAllGridCellGridCellActice = arr => {
-  arr.forEach(items => {
+const resetAllGridCellGridCellActice = (arr) => {
+  arr.forEach((items) => {
     const cells = items.attrInfo.grid.cells;
-    cells.forEach(item => {
+    cells.forEach((item) => {
       item.item &&
         item.item.type === "grid" &&
-        item.item.attrInfo.grid.cells.forEach(ite => (ite.active = false));
+        item.item.attrInfo.grid.cells.forEach((ite) => (ite.active = false));
     });
   });
 };
-const initGridRowOrColumn = row => {
+const initGridRowOrColumn = (row) => {
   let arr = [];
   for (let i = 0; i < row; i++) {
     arr.push("1fr");
@@ -267,19 +267,34 @@ const swapItem = (arr, gridIndex, item, srcItem) => {
   );
 };
 const swapCellGridItem = (arr, gridIndex, cellGridIndex, item, srcItem) => {
-  if(item.cellGridIndex === srcItem.cellGridIndex){
+  if (item.cellGridIndex === srcItem.cellGridIndex) {
     const cellGridcells =
-    arr[gridIndex].attrInfo.grid.cells[cellGridIndex].item.attrInfo.grid.cells;
+      arr[gridIndex].attrInfo.grid.cells[cellGridIndex].item.attrInfo.grid
+        .cells;
     cellGridcells.splice(
-    srcItem.cellIndex,
-    1,
-    ...cellGridcells.splice(item.cellIndex, 1, cellGridcells[srcItem.cellIndex])
+      srcItem.cellIndex,
+      1,
+      ...cellGridcells.splice(
+        item.cellIndex,
+        1,
+        cellGridcells[srcItem.cellIndex]
+      )
     );
-  }else{
-      const cells = arr[gridIndex].attrInfo.grid.cells;
-      const itemCellGridCells = cells[item.cellGridIndex].item.attrInfo.grid.cells;
-      const srcItemCellGridCells = cells[srcItem.cellGridIndex].item.attrInfo.grid.cells;
-      itemCellGridCells.splice(item.cellIndex,1,...srcItemCellGridCells.splice(srcItem.cellIndex,1,itemCellGridCells[item.cellIndex]))
+  } else {
+    const cells = arr[gridIndex].attrInfo.grid.cells;
+    const itemCellGridCells =
+      cells[item.cellGridIndex].item.attrInfo.grid.cells;
+    const srcItemCellGridCells =
+      cells[srcItem.cellGridIndex].item.attrInfo.grid.cells;
+    itemCellGridCells.splice(
+      item.cellIndex,
+      1,
+      ...srcItemCellGridCells.splice(
+        srcItem.cellIndex,
+        1,
+        itemCellGridCells[item.cellIndex]
+      )
+    );
   }
 };
 const swapCellGridBaseItem2CellBaseItem = (
@@ -320,7 +335,7 @@ const resetCellsIndex = (arr, gridIndex) => {
     item.cellIndex = index;
     item.item && (item.item.cellIndex = index);
     if (item.item && item.item.type === "grid") {
-      item.item.attrInfo.grid.cells.forEach(subitem => {
+      item.item.attrInfo.grid.cells.forEach((subitem) => {
         subitem.item && (subitem.item.cellGridIndex = index);
       });
     }
@@ -338,8 +353,8 @@ const resetCellGridIndexandCellItemIndex = (arr, gridIndex) => {
   const cells = arr[gridIndex].attrInfo.grid.cells;
   cells.forEach((item, index) => {
     item.cellIndex = index;
-    if(item.cellGridIndex!==undefined){
-      delete item.cellGridIndex
+    if (item.cellGridIndex !== undefined) {
+      delete item.cellGridIndex;
     }
     item.item && (item.item.cellIndex = index);
     if (
@@ -360,32 +375,31 @@ const resetCellGridIndexandCellItemIndex = (arr, gridIndex) => {
       });
     }
   });
-
 };
-const resetAllGridIndexandCellItemIndex = (arr) =>{
-    arr.forEach((item,index)=>{
-      item.gridIndex = index;
-      const cells = item.attrInfo.grid.cells
-      cells.forEach((subitem,idx)=>{
-        subitem.cellIndex = idx;
-        if(subitem.item){
-          subitem.item.cellIndex = idx;
-          subitem.item.gridIndex = index;
-        }
-        if(subitem.item&&subitem.item.type ==='grid'){
-          subitem.item.attrInfo.grid.cells.forEach((sub2item,ix) => {
-            sub2item.cellIndex = ix;
-            sub2item.cellGridIndex = idx;
-            if(sub2item.item){
-              sub2item.item.cellIndex = ix;
-              sub2item.item.cellGridIndex = idx;
-              sub2item.item.gridIndex = index;
-            }
-          });
-        }
-      })
-    })
-}
+const resetAllGridIndexandCellItemIndex = (arr) => {
+  arr.forEach((item, index) => {
+    item.gridIndex = index;
+    const cells = item.attrInfo.grid.cells;
+    cells.forEach((subitem, idx) => {
+      subitem.cellIndex = idx;
+      if (subitem.item) {
+        subitem.item.cellIndex = idx;
+        subitem.item.gridIndex = index;
+      }
+      if (subitem.item && subitem.item.type === "grid") {
+        subitem.item.attrInfo.grid.cells.forEach((sub2item, ix) => {
+          sub2item.cellIndex = ix;
+          sub2item.cellGridIndex = idx;
+          if (sub2item.item) {
+            sub2item.item.cellIndex = ix;
+            sub2item.item.cellGridIndex = idx;
+            sub2item.item.gridIndex = index;
+          }
+        });
+      }
+    });
+  });
+};
 export default {
   deepClone,
   initArray,
@@ -424,5 +438,5 @@ export default {
   resetcellGridCellsIndex,
   resetCellGridIndexandCellItemIndex,
   addcellGridcellGridIndex,
-  resetAllGridIndexandCellItemIndex
+  resetAllGridIndexandCellItemIndex,
 };

@@ -29,7 +29,6 @@ import FormLayout from "../components/FormLayout";
 import TextNumberField from '../components/TextNumberField';
 import TextMoneyField from '../components/TextMoneyField';
 import Util from '../utils/utils-form-design';
-console.log(Util)
 const TextFieldAttr = TextField.TextFieldAttr;
 const TextAreaFieldAttr = TextAreaField.TextAreaFieldAttr;
 const DateAttr = DateFormat.DateAttr;

@@ -10,6 +10,7 @@ export default function WrapperDrag(Component, dragTag) {
     };
     onDragStart = () => {
       const { dataSet} = this.props;
+      console.log(this.props)
       emitter$.setDragData({ tag: dragTag, type: "new", data: dataSet });
       this.setState({ dragStart: true });
     };

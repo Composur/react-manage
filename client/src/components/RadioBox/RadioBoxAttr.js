@@ -1,18 +1,14 @@
 import React, { PureComponent } from "react";
-import { Checkbox } from "antd";
+import { Checkbox, Button } from "antd";
 export default class RadioBoxAttr extends PureComponent {
-  handleChange = item => {
+  handleChange = (item) => {
     const { activeItem, onSave } = this.props;
-    const{
-     index,
-     attrInfo,
-     cellIndex
-    } = activeItem;
+    const { index, attrInfo, cellIndex } = activeItem;
     const updateAttrInfo = {
       ...attrInfo,
-      ...item
+      ...item,
     };
-    const updateActiveItem = {...activeItem,attrInfo:updateAttrInfo}
+    const updateActiveItem = { ...activeItem, attrInfo: updateAttrInfo };
     onSave(updateActiveItem, index, cellIndex);
   };
   handleAddOptions({ index, radioboxoptions }) {
@@ -24,7 +20,7 @@ export default class RadioBoxAttr extends PureComponent {
     radioboxoptions = [
       ...radioboxoptions.slice(0, index),
       option,
-      ...radioboxoptions.slice(index + 1)
+      ...radioboxoptions.slice(index + 1),
     ];
     this.handleChange({ radioboxoptions: radioboxoptions });
   }
@@ -35,14 +31,8 @@ export default class RadioBoxAttr extends PureComponent {
   render() {
     const {
       activeItem: {
-        attrInfo: {
-          titleValue,
-          tipValue,
-          verifyValue,
-          name,
-          radioboxoptions
-        }
-      }
+        attrInfo: { titleValue, tipValue, verifyValue, name, radioboxoptions },
+      },
     } = this.props;
     return (
       <div className="wf-panel wf-settingpanel open">
@@ -64,7 +54,7 @@ export default class RadioBoxAttr extends PureComponent {
                 <input
                   type="text"
                   value={titleValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ titleValue: e.target.value });
                   }}
                 />
@@ -85,7 +75,7 @@ export default class RadioBoxAttr extends PureComponent {
                 <input
                   type="text"
                   value={name}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ name: e.target.value });
                   }}
                 />
@@ -106,7 +96,7 @@ export default class RadioBoxAttr extends PureComponent {
                 <input
                   type="text"
                   value={tipValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ tipValue: e.target.value });
                   }}
                 />
@@ -129,14 +119,14 @@ export default class RadioBoxAttr extends PureComponent {
                         type="text"
                         maxLength="50"
                         value={val.key}
-                        onChange={e => {
+                        onChange={(e) => {
                           const key = e.target.value;
                           const value = val.value;
                           this.handleUpdateOptions({
                             index,
                             radioboxoptions,
                             key,
-                            value
+                            value,
                           });
                         }}
                       />
@@ -145,35 +135,35 @@ export default class RadioBoxAttr extends PureComponent {
                         maxLength="50"
                         value={val.value}
                         className="margin-left-5px"
-                        onChange={e => {
+                        onChange={(e) => {
                           const key = val.key;
                           const value = e.target.value;
                           this.handleUpdateOptions({
                             index,
                             radioboxoptions,
                             key,
-                            value
+                            value,
                           });
                         }}
                       />
-                      <a
+                      <Button
+                        type="link"
                         className="action action-del"
-                        
                         onClick={() =>
                           this.handleDelOptions(index, radioboxoptions)
                         }
                       >
                         <i className="icon icon-minus" />
-                      </a>
-                      <a
+                      </Button>
+                      <Button
+                        type="link"
                         className="action action-add"
-                        
                         onClick={() =>
                           this.handleAddOptions({ index, radioboxoptions })
                         }
                       >
                         <i className="icon icon-plus" />
-                      </a>
+                      </Button>
                     </div>
                   </div>
                 );
@@ -181,15 +171,15 @@ export default class RadioBoxAttr extends PureComponent {
             </div>
             {radioboxoptions.length === 0 ? (
               <div className="wf-setting-line">
-                <a
-                  onClick={(event) =>{
+                <Button
+                  type="link"
+                  onClick={(event) => {
                     event.preventDefault();
-                    this.handleAddOptions({ index: 0, radioboxoptions: [] })
-                  }
-                  }
+                    this.handleAddOptions({ index: 0, radioboxoptions: [] });
+                  }}
                 >
                   新增
-                </a>
+                </Button>
               </div>
             ) : (
               ""
@@ -199,7 +189,7 @@ export default class RadioBoxAttr extends PureComponent {
               <label className="fieldblock">
                 <Checkbox
                   checked={verifyValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ verifyValue: e.target.checked });
                   }}
                 >
