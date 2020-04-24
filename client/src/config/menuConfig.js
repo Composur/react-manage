@@ -78,6 +78,11 @@ const menuList = [
         icon: 'drag'
       },
       {
+        title: 'Rxjs拖拽',
+        key: '/drag/rxjs',
+        icon: 'drag'
+      },
+      {
         title: '自定义组件',
         key: '/drag/form-design',
         icon: 'form'
