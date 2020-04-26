@@ -9,6 +9,11 @@ const layoutItems = [
 ];
 const baseItems = [
   {
+    name: "test",
+    url: fieldImages.img_textfield,
+    type: "test",
+  },
+  {
     name: "单行输入框",
     url: fieldImages.img_textfield,
     type: "textfield",

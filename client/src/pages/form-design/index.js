@@ -89,12 +89,12 @@ export default class  extends PureComponent {
             <WrappedFormShow fieldsData={this.state.fieldsData} />
           </div>
         </TabPane>
-        <TabPane tab="form表单还原" key="3">
+        {/* <TabPane tab="form表单还原" key="3">
           <FormDesign
             onSave={this.save}
             fieldsData={this.state.fieldsData}
           />
-        </TabPane>
+        </TabPane> */}
       </Tabs>
     );
   }

@@ -35,6 +35,7 @@ export default class FormDesign extends PureComponent {
   updateGridState = item => {
     this.setState(
       prevState => {
+        console.log('prevState',prevState)
         const canvasItems = [...prevState.canvasItems];
         Util.resetArrayActive(canvasItems);
         Util.resetAllGridCellGridCellActice(canvasItems);
@@ -88,6 +89,8 @@ export default class FormDesign extends PureComponent {
     const cellIndex = item.cellIndex;
     const cellGridIndex = item.cellGridIndex;
     data$.subscribe(dragData => {
+      console.log('dragData',dragData)
+      // grid 布局组件
       if (this.state.dropTags.indexOf(dragData.tag) > -1) {
         if (cellIndex === undefined) {
           this.updateGridState(item);

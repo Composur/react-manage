@@ -2,11 +2,14 @@ import React, { PureComponent, Fragment } from "react";
 import emitter from "../../directive/dragdropdirective";
 import { take } from "rxjs/operators";
 const emitter$ = emitter;
-const data$ = emitter$.getDragData().pipe(take(1));
+const data$ = emitter$.getDragData().pipe(take(1));//发出接收源最初的一个值
+// 定义-释放区域的高阶组件
 export default function WrapperDrop(Component) {
   return class DropElement extends PureComponent {
+    // 设置被释放区域-拖拽元素携带的信息
     onDragStart = event => {
       event.stopPropagation();
+
       const {dataSet} = this.props;
       const tag = dataSet.type ==='grid'?dataSet.type:'base';
       emitter$.setDragData({
@@ -16,6 +19,7 @@ export default function WrapperDrop(Component) {
         index: dataSet.gridIndex
       });
     }
+    // 定义被释放区域，需要先绑定 onDragEnter、onDragOver 并且阻止默认事件
     onDragEnter = event =>{
       event.preventDefault();
       event.stopPropagation();
@@ -61,7 +65,7 @@ export default function WrapperDrop(Component) {
         //往上拖拽
       }
     };
-    //插入新项并排序
+    //放入的组件-插入新项并排序
     dropJudge = data => {
       const { onDrop } = this.props;
       if (!onDrop) {
@@ -69,20 +73,20 @@ export default function WrapperDrop(Component) {
       }
       onDrop(data);
     };
+    // drop  事件中获取元素携带的信息，并进行展示
     onDrop = event => {
       event.preventDefault();
       event.stopPropagation();
       data$.subscribe(dragData => {
-        //  console.log(dragData)
         if (dragData.tag !== "base") {
           if (dragData.type === "move") {
             this.moveJudge(dragData.index);
           } else {
+            debugger
               this.dropJudge(dragData.data, event);
           }
         }else{
           const { onDrop ,dataSet} = this.props;
-          // console.log(this.props)
            onDrop(dragData.data,dataSet)
         }
       });
@@ -92,10 +96,10 @@ export default function WrapperDrop(Component) {
       return (
         <Fragment>
           <div
-            onDragOver={this.onDragOver}
-            onDragLeave={this.onDragLeave}
             onDragStart={this.onDragStart}
             onDragEnter={event=>this.onDragEnter(event)}
+            onDragOver={this.onDragOver}
+            onDragLeave={this.onDragLeave}
             onDrop={this.onDrop}
             ref={comp => {
               this.containerComp = comp;
