@@ -1,5 +1,6 @@
 import React, { PureComponent } from "react";
 import { Button, Form, Tabs } from "antd";
+import {Link} from 'react-router-dom'
 import FormDesign from "./containers";
 import "./index.scss";
 const TabPane = Tabs.TabPane;
@@ -48,6 +49,7 @@ class FormShow extends PureComponent {
 
 const WrappedFormShow = Form.create({
   mapPropsToFields(props) {
+    console.log(props)
     let obj = {};
     let { initValues } = props;
     if (initValues) {
@@ -63,7 +65,9 @@ const WrappedFormShow = Form.create({
 export default class  extends PureComponent {
   state = { fieldsData: [] };
   save = data => {
-    this.setState({ fieldsData: data });
+    this.setState({ fieldsData: data },()=>{
+      console.log(this.state.fieldsData)
+    });
   };
   onSubmit = values => {
     console.log(values);
@@ -88,13 +92,14 @@ export default class  extends PureComponent {
           <div style={{ backgroundColor: "#fff", padding: "15px 0" }}>
             <WrappedFormShow fieldsData={this.state.fieldsData} />
           </div>
+          {/* <Link to={'/'}>预览</Link> */}
         </TabPane>
-        {/* <TabPane tab="form表单还原" key="3">
+        <TabPane tab="form表单还原" key="3">
           <FormDesign
             onSave={this.save}
             fieldsData={this.state.fieldsData}
           />
-        </TabPane> */}
+        </TabPane>
       </Tabs>
     );
   }
