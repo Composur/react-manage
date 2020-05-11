@@ -112,7 +112,8 @@ app.use((req,res,next)=>{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
         if(current <= exp){
-            next()
+          res.setHeader('Cache-Control', 'no-cache')
+          next()
         }
     }catch(e){
       res.status(401)
