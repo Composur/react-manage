@@ -116,11 +116,17 @@ app.use((req,res,next)=>{
           next()
         }
     }catch(e){
-      res.status(401)
+      console.log(e)
+      if(url.indexOf('/api/refreshtoken') !== -1){
+        next()
+        return
+      }
+      res.status(200)
       res.send({status: 1, msg: '登录信息失效，请重新登录'})
     }
         
   }else{
+    // 登录不验证 token 
     next()
   }
 })

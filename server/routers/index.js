@@ -22,8 +22,8 @@ function  generateToken(data){
   let cert = fs.readFileSync(path.join(__dirname, '../config/rsa_private_key.pem'));//私钥
   let token = jwt.sign({
       data,
-      exp: created + 3600 * 24 
-      // exp: created + 5
+      // exp: created + 3600 * 24 
+      exp: created + 5
   },cert, {algorithm: 'RS256'});
   return token;
 }
@@ -73,6 +73,14 @@ router.post('/login', (req, res) => {
       console.error('登陆异常', error)
       res.send({status: 1, msg: '登陆异常, 请重新尝试'})
     })
+})
+
+router.post('/refreshToken',(req,res)=>{
+  let token = req.headers.authorization
+  if(token){
+    let token = generateToken({username});
+    res.send({status: 100, msg: token})
+  }
 })
 
 // 添加用户

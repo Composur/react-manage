@@ -6,6 +6,7 @@ import {message} from 'antd'
 import store from 'store'
 import config from '../config'
 import axios from 'axios'
+import {refreshToken} from '../api'
 // import {Redirect} from 'react-router-dom'
 
 // 把 Token 存在localStroage,每次请求在 Axios 请求头上进行携带
@@ -19,6 +20,8 @@ axios.interceptors.request.use()
 // 响应拦截
 axios.interceptors.response.use(
   response => {
+    const {data} = response
+    console.log(data)
     return response
   },
   error => {
@@ -27,6 +30,9 @@ axios.interceptors.response.use(
         case 303:
         message.error('请求出错'+error.response.msg);
         break;
+        case 401:
+          // console.log(error)
+          break;
         default:
         return
       }
@@ -64,8 +70,18 @@ export default function (url, type = 'GET', data={}) {
       }
     }).catch(err => {
       const {data}= err
+      const {status} = data
+      debugger
+      if(status===1){
+        // refreshToken().then(data=>{
+        //   console.log(data)
+        // })
+      }
       if(data&&data.msg){
         message.error('请求出错'+data.msg)
+        // window.location.href = '/'
+        store.clearAll()
+        window.location.href = '/login'
         return 
       }
       // 3.失败调用reject，但是不能调用，调用就进入外层catch里了，为了不在外层用try...catch这里显式的返回error
