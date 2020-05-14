@@ -6,6 +6,10 @@ function getLocalToken() {
   const token = window.localStorage.getItem("token");
   return token;
 }
+
+function refreshToken() {
+  return instance.post("/refreshtoken").then((res) => res.data);
+}
 // 创建一个axios实例
 const instance = axios.create({
   baseURL: config.baseURl,
@@ -25,33 +29,31 @@ instance.setToken = (token) => {
 // 是否正在刷新的标记
 let isRefreshing = false;
 // 重试队列，每一项将是一个待执行的函数形式
-let requests = []
+let requests = [];
 // 拦截返回的数据
 instance.interceptors.response.use(
   (response) => {
     const { status } = response.data;
     // 根据后台请求超时状态码的返回
-    if (status === 1) {
+    if (status === 1000) {
+      const config = response.config; // 这个就是原来的请求
       if (!isRefreshing) {
         isRefreshing = true;
         // 说明token过期了,刷新token
         return refreshToken()
           .then((res) => {
-            debugger
             // 刷新token成功，将最新的token更新到header中，同时保存在localStorage中
-            const { token } = res.data;
+            const { token } = res;
             instance.setToken(token);
             // 获取当前失败的请求
-            const config = response.config; // 这个就是原来的请求
             // 重置一下配置
             config.headers["Authorization"] = token;
             config.baseURL = ""; // url已经带上了/api，避免出现/api/api的情况
 
-
-             // 已经刷新了token，将所有队列中的请求进行重试
-            requests.forEach(cb => cb(token))
+            // 已经刷新了token，将所有队列中的请求进行重试
+            requests.forEach((cb) => cb(token));
             // 重试完了别忘了清空这个队列（掘金评论区同学指点）
-            requests = []
+            requests = [];
 
             // 重试当前请求并返回promise
             return instance(config);
@@ -60,30 +62,29 @@ instance.interceptors.response.use(
             console.error("refreshtoken error =>", res);
             //刷新token失败，神仙也救不了了，跳转到首页重新登录吧
             window.location.href = "/";
+          })
+          .finally(() => {
+            isRefreshing = false;
           });
-      }else{
-         // 正在刷新token，返回一个未执行resolve的promise
-      return new Promise((resolve) => {
-        // 将resolve放进队列，用一个函数形式来保存，等token刷新后直接执行
-        requests.push((token) => {
-          config.baseURL = ''
-          config.headers['Authorization'] = token
-          resolve(instance(config))
-        })
-      })
+      } else {
+        // 正在刷新token，返回一个未执行resolve的promise
+        return new Promise((resolve) => {
+          // 将resolve放进队列，用一个函数形式来保存，等token刷新后直接执行
+          requests.push((token) => {
+            config.baseURL = "";
+            config.headers["Authorization"] = token;
+            resolve(instance(config));
+          });
+        });
       }
     }
     return response;
   },
   (error) => {
+    debugger;
     return Promise.reject(error);
   }
 );
-
-function refreshToken() {
-  // instance是当前request.js中已创建的axios实例
-  return instance.post("/refreshtoken").then((res) => res.data);
-}
 
 export default function (url, type = "GET", data = {}) {
   let promise;

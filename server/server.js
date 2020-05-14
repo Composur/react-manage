@@ -111,18 +111,18 @@ app.use((req,res,next)=>{
       try{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
+        req.result = result
         if(current <= exp){
           res.setHeader('Cache-Control', 'no-cache')
           next()
         }
     }catch(e){
-      console.log(e)
       if(url.indexOf('/api/refreshtoken') !== -1){
         next()
         return
       }
       res.status(200)
-      res.send({status: 1, msg: '登录信息失效，请重新登录'})
+      res.send({status: 1000, msg: '登录信息失效，请重新登录'})
     }
         
   }else{

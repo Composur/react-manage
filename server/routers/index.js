@@ -17,13 +17,13 @@ const ControlUpload = require('../controller/bigupload')
 
 
 //生成token的方法
-function  generateToken(data){
+function  generateToken(data={}){
   let created = Math.floor(Date.now()/1000);
   let cert = fs.readFileSync(path.join(__dirname, '../config/rsa_private_key.pem'));//私钥
   let token = jwt.sign({
       data,
       // exp: created + 3600 * 24 
-      exp: created + 5
+      exp: created + 15
   },cert, {algorithm: 'RS256'});
   return token;
 }
@@ -77,9 +77,10 @@ router.post('/login', (req, res) => {
 
 router.post('/refreshToken',(req,res)=>{
   let token = req.headers.authorization
+  res.setHeader('Cache-Control', 'no-store')
   if(token){
-    let token = generateToken({username});
-    res.send({status: 100, msg: token})
+    let token = generateToken();
+    res.send({status: 100, token: token})
   }
 })
 
