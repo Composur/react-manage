@@ -106,12 +106,11 @@ app.use((req,res,next)=>{
   const cookie=req.cookies
   const url=req.url
   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
-  
   if(url.indexOf('/api/login') !== 0){
       try{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
-        req.result = result
+        req.payload = result
         if(current <= exp){
           res.setHeader('Cache-Control', 'no-cache')
           next()
