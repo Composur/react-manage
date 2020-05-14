@@ -2,6 +2,7 @@ import React, { PureComponent } from "react";
 import WrapperDrop from "../DragAndDrop/WrapperDrop.js";
 import WrapperDrag from "../DragAndDrop/WrapperDrag.js";
 
+// 改变 组件在布局中的位置
 class TextField extends PureComponent {
   render() {
     const {

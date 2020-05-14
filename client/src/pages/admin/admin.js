@@ -30,6 +30,7 @@ const Graph = lazy(() => import("../charts/D3/graph"));
 const GitHub = lazy(() => import("../github"));
 const Order = lazy(() => import("../order"));
 const Drag = lazy(() => import("../drag"));
+const RxjsDrag = lazy(() => import("../drag/Rxjs"));
 const FormDesign = lazy(() => import("../form-design"));
 const FileUpload = lazy(() => import("../hooks/fileUpload"));
 const HooksTest = lazy(() => import("../hooks/hooks"));
@@ -82,6 +83,7 @@ class Admin extends Component {
               
                 <AuthRouter path="/GitHub" component={GitHub} />
                 <AuthRouter path="/drag/native" component={Drag} />
+                <AuthRouter path="/drag/rxjs" component={RxjsDrag} />
                 <AuthRouter path="/drag/form-design" component={FormDesign} />
                 <AuthRouter path="/hooks/slice" component={FileUpload} />
                 <AuthRouter path="/hooks/test" component={HooksTest} />

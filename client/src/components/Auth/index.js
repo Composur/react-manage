@@ -35,9 +35,9 @@ class Auth extends Component {
   }
   render() {
     const { hasPermission, superAdmin } = this.state;
-    const { noCheck = false } = this.props;
+    const { noCheck = false,children } = this.props;
     return hasPermission || noCheck || superAdmin || this.cancelPermission ? (
-      this.props.children
+      children
     ) : (
       <div className="noPermission">没有查看该模块的权限</div>
     );

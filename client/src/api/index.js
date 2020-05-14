@@ -1,13 +1,16 @@
 /**
  * @param 应用接口
  */
-import request from '../utils/axios'
+// import request from '../utils/axios'
+import request from '../utils/ajax'
 import jsonp from 'jsonp'
 // import md5 from 'md5'
 import { message} from 'antd'
 
 // 登录
 export const reqLogin = data => request('/login', 'POST', data)
+
+export const refreshToken = data => request('/refreshToken')
 
 // 新增用户
 export const reqAddUser = data => request('/manage/user/add', 'POST', data)

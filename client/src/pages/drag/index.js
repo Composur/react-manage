@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { List } from 'antd';
-
+import RxjsDrag from './Native'
 const data = [];
 for (let i = 0; i < 5; i++) {
   data.push(`item${i}`)
@@ -83,7 +83,7 @@ export default class Drag extends Component {
   render() {
     return (
       <div>
-        <h2>原生事件实现拖动组件</h2>
+        <h2>原生事件实现拖动上下组件变换index</h2>
         <List
           header={<div>列表头部</div>}
           footer={<div>列表尾部</div>}
@@ -108,6 +108,7 @@ export default class Drag extends Component {
             </div>
           )
         }
+        <RxjsDrag/>
       </div>
     )
   }

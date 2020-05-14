@@ -1,11 +1,12 @@
 import React, { PureComponent } from "react";
 import { findDOMNode } from "react-dom";
 import PropTypes from "prop-types";
+import LocalStore from 'store'
 import "./index.scss";
 import { take } from "rxjs/operators";
 import DropContainer from "../../../components/DragAndDrop/DropContainer.js";
 import BaseFields from "../../../components/BaseFields";
-import { Collapse } from "antd";
+import { Collapse, Button } from "antd";
 import LayoutFields from "../../../components/LayoutFields";
 import FieldCorAttr from "../../../utils/field-cor-attr";
 import Util from "../../../utils/utils-form-design";
@@ -35,6 +36,7 @@ export default class FormDesign extends PureComponent {
   updateGridState = item => {
     this.setState(
       prevState => {
+        console.log('prevState',prevState)
         const canvasItems = [...prevState.canvasItems];
         Util.resetArrayActive(canvasItems);
         Util.resetAllGridCellGridCellActice(canvasItems);
@@ -88,6 +90,8 @@ export default class FormDesign extends PureComponent {
     const cellIndex = item.cellIndex;
     const cellGridIndex = item.cellGridIndex;
     data$.subscribe(dragData => {
+      console.log('dragData',dragData)
+      // grid 布局组件
       if (this.state.dropTags.indexOf(dragData.tag) > -1) {
         if (cellIndex === undefined) {
           this.updateGridState(item);
@@ -689,6 +693,10 @@ export default class FormDesign extends PureComponent {
     const fieldsData = canvasItems;
     this.props.onSave(fieldsData);
   };
+  saveLocal = ()=>{
+    LocalStore.set('from-design',{a:2})
+    console.log('dd')
+  }
   render() {
     const { activeItem, currentDropIndex } = this.state;
     return (
@@ -741,7 +749,9 @@ export default class FormDesign extends PureComponent {
                 activeItem
               })
             : ""}
+          {/* <Button type='primary' size='small' onClick={()=>this.saveLocal()}>保存</Button> */}
         </div>
+        
       </div>
     );
   }

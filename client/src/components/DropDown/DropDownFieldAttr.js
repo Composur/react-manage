@@ -1,19 +1,15 @@
 import React, { PureComponent } from "react";
-import { Checkbox } from "antd";
+import { Checkbox, Button } from "antd";
 
 export default class DropDownFieldAttr extends PureComponent {
-  handleChange = item => {
+  handleChange = (item) => {
     const { activeItem, onSave } = this.props;
-    const{
-     index,
-     attrInfo,
-     cellIndex
-    } = activeItem;
+    const { index, attrInfo, cellIndex } = activeItem;
     const updateAttrInfo = {
       ...attrInfo,
-      ...item
+      ...item,
     };
-    const updateActiveItem = {...activeItem,attrInfo:updateAttrInfo}
+    const updateActiveItem = { ...activeItem, attrInfo: updateAttrInfo };
     onSave(updateActiveItem, index, cellIndex);
   };
   handleAddOptions({ index, dropdownoptions }) {
@@ -25,7 +21,7 @@ export default class DropDownFieldAttr extends PureComponent {
     dropdownoptions = [
       ...dropdownoptions.slice(0, index),
       option,
-      ...dropdownoptions.slice(index + 1)
+      ...dropdownoptions.slice(index + 1),
     ];
     this.handleChange({ dropdownoptions: dropdownoptions });
   }
@@ -36,8 +32,8 @@ export default class DropDownFieldAttr extends PureComponent {
   render() {
     const {
       activeItem: {
-        attrInfo: { titleValue, tipValue, verifyValue, name, dropdownoptions }
-      }
+        attrInfo: { titleValue, tipValue, verifyValue, name, dropdownoptions },
+      },
     } = this.props;
     return (
       <div className="wf-panel wf-settingpanel open">
@@ -59,7 +55,7 @@ export default class DropDownFieldAttr extends PureComponent {
                 <input
                   type="text"
                   value={titleValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ titleValue: e.target.value });
                   }}
                 />
@@ -80,7 +76,7 @@ export default class DropDownFieldAttr extends PureComponent {
                 <input
                   type="text"
                   value={name}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ name: e.target.value });
                   }}
                 />
@@ -102,7 +98,7 @@ export default class DropDownFieldAttr extends PureComponent {
                   type="text"
                   value={tipValue}
                   data-spm-anchor-id="0.0.0.i48.42024490REaRWU"
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ tipValue: e.target.value });
                   }}
                 />
@@ -125,14 +121,14 @@ export default class DropDownFieldAttr extends PureComponent {
                         type="text"
                         maxLength="50"
                         value={val.key}
-                        onChange={e => {
+                        onChange={(e) => {
                           const key = e.target.value;
                           const value = val.value;
                           this.handleUpdateOptions({
                             index,
                             dropdownoptions,
                             key,
-                            value
+                            value,
                           });
                         }}
                       />
@@ -141,27 +137,26 @@ export default class DropDownFieldAttr extends PureComponent {
                         maxLength="50"
                         value={val.value}
                         className="margin-left-5px"
-                        onChange={e => {
+                        onChange={(e) => {
                           const key = val.key;
                           const value = e.target.value;
                           this.handleUpdateOptions({
                             index,
                             dropdownoptions,
                             key,
-                            value
+                            value,
                           });
                         }}
                       />
-                      <a
+                      <Button type='link'
                         className="action action-del"
-                        
                         onClick={() =>
                           this.handleDelOptions(index, dropdownoptions)
                         }
                       >
                         <i className="icon icon-minus" />
-                      </a>
-                      <a 
+                      </Button>
+                      <a
                         className="action action-add"
                         href
                         onClick={() =>
@@ -180,13 +175,14 @@ export default class DropDownFieldAttr extends PureComponent {
             </div>
             {dropdownoptions.length === 0 ? (
               <div className="wf-setting-line">
-                <a 
+                <Button
+                  type='link'
                   onClick={() =>
                     this.handleAddOptions({ index: 0, dropdownoptions: [] })
                   }
                 >
                   新增
-                </a>
+                </Button>
               </div>
             ) : (
               ""
@@ -196,7 +192,7 @@ export default class DropDownFieldAttr extends PureComponent {
               <label className="fieldblock">
                 <Checkbox
                   checked={verifyValue}
-                  onChange={e => {
+                  onChange={(e) => {
                     this.handleChange({ verifyValue: e.target.checked });
                   }}
                 >

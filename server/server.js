@@ -106,20 +106,26 @@ app.use((req,res,next)=>{
   const cookie=req.cookies
   const url=req.url
   let cert = fs.readFileSync(path.join(__dirname, './config/rsa_public_key.pem'));//公钥
-  
   if(url.indexOf('/api/login') !== 0){
       try{
         let result = jwt.verify(token, cert, {algorithms: ['RS256']}) || {};
         let {exp = 0} = result,current = Math.floor(Date.now()/1000);
+        req.payload = result
         if(current <= exp){
-            next()
+          res.setHeader('Cache-Control', 'no-cache')
+          next()
         }
     }catch(e){
-      res.status(401)
-      res.send({status: 1, msg: '登录信息失效，请重新登录'})
+      if(url.indexOf('/api/refreshtoken') !== -1){
+        next()
+        return
+      }
+      res.status(200)
+      res.send({status: 1000, msg: '登录信息失效，请重新登录'})
     }
         
   }else{
+    // 登录不验证 token 
     next()
   }
 })

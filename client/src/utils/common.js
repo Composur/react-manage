@@ -339,6 +339,19 @@ export function createUniqueString() {
   const randomNum = parseInt((1 + Math.random()) * 65536) + "";
   return (+(randomNum + timestamp)).toString(32);
 }
+/**
+ * @description 随机字符
+ * @returns {string}
+ */
+export function createRandomStr() {
+  Math.random()
+  .toString(36)
+  .substring(7)
+  .split('')
+  .join('.')
+}
+
+
 
 /**
  * Check if an element has a class
@@ -399,3 +412,10 @@ export function bigNumPlus(a, b) {
   return res;
 }
 
+/** 
+ * @description 千分位
+ */
+export function numFormat(num) {
+  var c = (num.toString().indexOf ('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+  return c;
+}

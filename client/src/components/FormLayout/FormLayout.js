@@ -11,27 +11,27 @@ import GridCol from "../GridCol";
 
 class FormLayout extends PureComponent {
   state = {
-    dragStart: false
+    dragStart: false,
   };
   onDragStart = (event) => {
     event.stopPropagation();
-    const {dataSet} = this.props;
+    const { dataSet } = this.props;
     this.setState({
-      dragStart: true
+      dragStart: true,
     });
     emitter.setDragData({
       tag: dataSet.type,
       type: "move",
       data: dataSet,
-      index: dataSet.gridIndex
+      index: dataSet.gridIndex,
     });
   };
   onDragEnd = () => {
     this.setState({
-      dragStart: false
+      dragStart: false,
     });
   };
-  onDropFormLayout = (item,srcItem)=> {
+  onDropFormLayout = (item, srcItem) => {
     const { onDrop } = this.props;
     // const { active } = dataSet;
     // if (!active) {
@@ -43,7 +43,7 @@ class FormLayout extends PureComponent {
     onDrop(item, srcItem);
   };
   generateField = (data, active, index) => {
-    const { onDrop, dataSet, onSave , onDragStart} = this.props;
+    const { onDrop, dataSet, onSave, onDragStart } = this.props;
     const type = data.type;
     return FieldCorAttr[type].showField({
       dataSet: { ...data, active },
@@ -55,14 +55,14 @@ class FormLayout extends PureComponent {
       onDragStart,
       onSave,
       dropTags: ["base"],
-      cellGridIndex: index
+      cellGridIndex: index,
     });
   };
-  removeFields = item => {
+  removeFields = (item) => {
     const { removeField } = this.props;
     removeField(item);
   };
-  activeFields = item => {
+  activeFields = (item) => {
     const { activeField } = this.props;
     const active = item.active;
     if (item.type === "grid") {
@@ -78,7 +78,7 @@ class FormLayout extends PureComponent {
     event.stopPropagation();
     event.preventDefault();
     let { dataSet, onSave } = this.props;
-    const currentCell = this.refs['cell'+index];
+    const currentCell = this.refs["cell" + index];
     const parent = currentCell.parentElement;
     const gridStyle = parent;
 
@@ -87,25 +87,25 @@ class FormLayout extends PureComponent {
     let {
       attrInfo,
       attrInfo: {
-        grid: { row, col, rowtem, coltem, cells }
-      }
+        grid: { row, col, rowtem, coltem, cells },
+      },
     } = dataSet;
     const leftStyle = getComputedStyle(this.refs["cell" + index]);
     const width0 = parseFloat(leftStyle.getPropertyValue("width"));
     let totalWidth = 0;
     const startX = event.clientX;
     const result$ = fromEvent(window, "mousemove").pipe(
-      map(moveEvent => {
+      map((moveEvent) => {
         const moveX = moveEvent.clientX;
         const cellcol = [...parent.children];
-        totalWidth = Util.getCurrentAndNextCellWidth(cellcol,index);
-        if(moveX<gridRight){
+        totalWidth = Util.getCurrentAndNextCellWidth(cellcol, index);
+        if (moveX < gridRight) {
           return moveX - startX + width0;
         }
       }),
       takeUntil(fromEvent(window, "mouseup"))
     );
-    result$.subscribe(data => {
+    result$.subscribe((data) => {
       const updateAttrInfo = {
         ...attrInfo,
         grid: {
@@ -113,8 +113,14 @@ class FormLayout extends PureComponent {
           row,
           col,
           cells,
-          coltem: Util.resetGridRowOrColumn(coltem, index, col, data,totalWidth)
-        }
+          coltem: Util.resetGridRowOrColumn(
+            coltem,
+            index,
+            col,
+            data,
+            totalWidth
+          ),
+        },
       };
       const updateItem = { ...dataSet, attrInfo: updateAttrInfo };
       onSave(updateItem);
@@ -125,8 +131,8 @@ class FormLayout extends PureComponent {
     let {
       attrInfo,
       attrInfo: {
-        grid: { row, col, rowtem, coltem, cells }
-      }
+        grid: { row, col, rowtem, coltem, cells },
+      },
     } = dataSet;
     const updateAttrInfo = {
       ...attrInfo,
@@ -135,8 +141,8 @@ class FormLayout extends PureComponent {
         row,
         col,
         cells,
-        coltem: Util.resetGridResizerRowOrColumn(coltem, index, col)
-      }
+        coltem: Util.resetGridResizerRowOrColumn(coltem, index, col),
+      },
     };
 
     const updateItem = { ...dataSet, attrInfo: updateAttrInfo };
@@ -148,19 +154,19 @@ class FormLayout extends PureComponent {
       isDragging,
       activeField,
       removeField,
-      draggabled
+      draggabled,
     } = this.props;
     const { dragStart } = this.state;
     const {
       active,
       attrInfo: {
-        grid: { rowtem, coltem, cells, col }
-      }
+        grid: { rowtem, coltem, cells, col },
+      },
     } = dataSet;
     const GridStyle = {
       display: "grid",
       gridTemplateRows: `${rowtem.join(" ")}`,
-      gridTemplateColumns: `${coltem.join(" ")}`
+      gridTemplateColumns: `${coltem.join(" ")}`,
     };
     let status = "";
     if (active) {
@@ -175,16 +181,16 @@ class FormLayout extends PureComponent {
           dragStart ? "drag-start" : ""
         }`}
         draggable={draggabled}
-        onMouseDown={event => {
+        onMouseDown={(event) => {
           event.stopPropagation();
           activeField(dataSet);
         }}
-        onDragStart={event => this.onDragStart(event)}
-        onDragEnd={event => this.onDragEnd()}
+        onDragStart={(event) => this.onDragStart(event)}
+        onDragEnd={(event) => this.onDragEnd()}
       >
         <div
           className="wf-remove icon icon-close"
-          onMouseDown={event => {
+          onMouseDown={(event) => {
             event.stopPropagation();
             removeField(dataSet);
           }}
@@ -198,7 +204,9 @@ class FormLayout extends PureComponent {
                 ref={"cell" + index}
               >
                 <GridCol
-                  onDropFormLayout={(item ,srcItem)=> this.onDropFormLayout(item,srcItem)}
+                  onDropFormLayout={(item, srcItem) =>
+                    this.onDropFormLayout(item, srcItem)
+                  }
                   cells={cells}
                   cellIndex={index}
                   {...this.props}
@@ -210,8 +218,8 @@ class FormLayout extends PureComponent {
                 {(index + 1) % col !== 0 ? (
                   <div
                     className="resizer"
-                    onMouseDown={event => this.onMouseDown(event, index)}
-                    onDoubleClick={event => {
+                    onMouseDown={(event) => this.onMouseDown(event, index)}
+                    onDoubleClick={(event) => {
                       this.onDoubleClick(event, index);
                     }}
                   />

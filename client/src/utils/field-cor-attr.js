@@ -21,6 +21,9 @@ import DropDownField from "../components/DropDown";
 import DateSection from "../components/DateSection";
 import RadioBox from "../components/RadioBox";
 
+// 测试组件
+import Test from '../components/test/index'
+
 import Attachment from "../components/Attachment";
 import CascadeDrop from "../components/CascadeDrop";
 import FormHidden from "../components/FormHidden";
@@ -29,7 +32,6 @@ import FormLayout from "../components/FormLayout";
 import TextNumberField from '../components/TextNumberField';
 import TextMoneyField from '../components/TextMoneyField';
 import Util from '../utils/utils-form-design';
-console.log(Util)
 const TextFieldAttr = TextField.TextFieldAttr;
 const TextAreaFieldAttr = TextAreaField.TextAreaFieldAttr;
 const DateAttr = DateFormat.DateAttr;
@@ -43,7 +45,7 @@ const MultipleBoxAttr = MultipleBox.MultipleBoxAttr;
 const FormLayoutAttr = FormLayout.FormLayoutAttr;
 const TextNumberFieldAttr = TextNumberField.TextNumberFieldAttr;
 const TextMoneyFieldAttr = TextMoneyField.TextMoneyFieldAttr;
-
+const TestFieldAttr = Test.TextFieldAttr
 
 
 const Option = Select.Option;
@@ -56,7 +58,28 @@ const radioStyle = {
   height: "30px",
   lineHeight: "30px"
 };
+// 各个组件的配置项，需要传入的 props 
 const FieldCorAttr = {
+  test: {
+    initValues: {
+      titleValue: "测试-title",
+      tipValue: 'tips',
+      name: "字段名",
+      verifyValue: false
+    },
+    // 布局
+    showField: rest => {
+      return <Test {...rest} />;
+    },
+    // 配置项
+    showAttr: rest => {
+      return <TestFieldAttr {...rest} />;
+    },
+    // 预览-真实的 Input 
+    getReallyField: item => {
+      return <Button placeholder={item.tipValue}/>;
+    }
+  },
   textfield: {
     initValues: {
       titleValue: "单行输入框",
@@ -64,12 +87,15 @@ const FieldCorAttr = {
       name: "input",
       verifyValue: false
     },
+    // 布局
     showField: rest => {
       return <TextField {...rest} />;
     },
+    // 配置项
     showAttr: rest => {
       return <TextFieldAttr {...rest} />;
     },
+    // 预览-真实的 Input 
     getReallyField: item => {
       return <Input placeholder={item.tipValue}/>;
     }

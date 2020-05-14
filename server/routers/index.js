@@ -17,13 +17,13 @@ const ControlUpload = require('../controller/bigupload')
 
 
 //生成token的方法
-function  generateToken(data){
+function  generateToken(data={}){
   let created = Math.floor(Date.now()/1000);
   let cert = fs.readFileSync(path.join(__dirname, '../config/rsa_private_key.pem'));//私钥
   let token = jwt.sign({
       data,
-      exp: created + 3600 * 24 
-      // exp: created + 5
+      // exp: created + 3600 * 24 
+      exp: created + 15
   },cert, {algorithm: 'RS256'});
   return token;
 }
@@ -48,7 +48,9 @@ router.post('/login', (req, res) => {
       res.setHeader('Cache-Control', 'no-store')
       if (user) { // 登陆成功
         // 生成一个cookie(userid: user._id), 并交给浏览器保存
-        res.cookie('userid', user._id, {maxAge: 1000 * 60 * 60 * 24})
+        res.cookie('userid', user._id, {maxAge: 1000 * 60 * 60 * 24,httpOnly: true})
+        // res.cookie('userid00', user._id, {maxAge: 1000 * 60 * 60 * 24})
+        // res.cookie('userid01', user._id, {maxAge: 1000 * 60 * 60 * 24})
         let token = generateToken({username});
         if (user.role_id) {
           RoleModel.findOne({_id: user.role_id})
@@ -71,6 +73,15 @@ router.post('/login', (req, res) => {
       console.error('登陆异常', error)
       res.send({status: 1, msg: '登陆异常, 请重新尝试'})
     })
+})
+
+router.post('/refreshToken',(req,res)=>{
+  let token = req.headers.authorization
+  res.setHeader('Cache-Control', 'no-store')
+  if(token){
+    let token = generateToken();
+    res.send({status: 100, token: token})
+  }
 })
 
 // 添加用户
