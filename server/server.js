@@ -14,6 +14,11 @@ const fs = require('fs')
 const path=require('path')
 const jwt=require('jsonwebtoken')
 const morgan=require('morgan')
+const pino = require('pino');
+const expressPino = require('express-pino-logger');
+const chalk = require('chalk');
+// console.log('%s Hi there', chalk.cyan('INFO'));
+// console.log(process.stdout.isTTY);
 
 // 日志中间件
 // 自定义token
@@ -22,6 +27,12 @@ const morgan=require('morgan')
 // morgan.format('logs', '[logs] :method :url :status :res[content-length] - :response-time ms');
 // const accessLogStream = fs.createWriteStream(path.join(__dirname, './logs/access.log'), {flags: 'a'});
 // app.use(morgan('short', {stream: accessLogStream}));
+
+const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
+
+const expressLogger = expressPino({ logger });
+
+app.use(expressLogger)
 
 // 跨域
 // app.use(cors())
@@ -147,7 +158,8 @@ app.use('/api', require('./routers'));
 // 优化数据库连接
 const startServer=function(){
   app.listen(server_port, () => {
-    console.log('服务器启动成功, 监听端口:'+server_port)
+    // console.log('服务器启动成功, 监听端口:'+server_port)
+    logger.info('服务器启动成功, 监听端口:'+server_port)
   })
 }
 // 连接成功后启动server
