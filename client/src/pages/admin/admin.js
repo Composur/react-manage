@@ -33,6 +33,7 @@ const RxjsDrag = lazy(() => import("../drag/Rxjs"));
 const FormDesign = lazy(() => import("../form-design"));
 const FileUpload = lazy(() => import("../hooks/fileUpload"));
 const HooksTest = lazy(() => import("../hooks/hooks"));
+const VirtualDom = lazy(() => import("../VirtualDom"));
 const NotFoundPage = lazy(() => import("components/404"));
 
 const { Footer, Sider, Content } = Layout;
@@ -75,6 +76,7 @@ class Admin extends Component {
                 <AuthRouter path="/order" component={Order} />
                 <AuthRouter path="/role" component={Role} />
                 <AuthRouter path="/user" component={User} />
+                <AuthRouter path="/virtualDom" component={VirtualDom} />
                 <AuthRouter path="/charts/bar" component={Bar} />
                 <AuthRouter path="/charts/line" component={Line} />
                 <AuthRouter path="/charts/pie" component={Pie} />

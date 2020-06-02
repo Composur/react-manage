@@ -31,8 +31,8 @@ const chalk = require('chalk');
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 
 const expressLogger = expressPino({ logger });
-
-app.use(expressLogger)
+// 日志
+// app.use(expressLogger)
 
 // 跨域
 // app.use(cors())
