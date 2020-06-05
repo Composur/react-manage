@@ -65,6 +65,11 @@ const menuList = [
         key: "/charts/pie",
         icon: "pie-chart",
       },
+      {
+        title: "地图",
+        key: "/charts/map",
+        icon: "radar-chart",
+      },
     ],
   },
 

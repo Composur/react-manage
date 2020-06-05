@@ -2,6 +2,7 @@
  * @param 应用接口
  */
 // import request from '../utils/axios'
+import axios from 'axios'
 import request from '../utils/ajax'
 import jsonp from 'jsonp'
 // import md5 from 'md5'
@@ -123,3 +124,7 @@ export const reqRoleList=(data)=>request('/manage/role/list','GET',data)
 
 // 设置权限
 export const reqSettingRole=(data)=>request('/manage/role/update','POST',data)
+
+// 获取地图数据
+export const reqMapOptions=()=>axios('../mock/map.json')
+export const reqMapWorld=()=>axios('https://unpkg.com/echarts@4.1.0/map/json/world.json')

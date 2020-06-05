@@ -57,7 +57,6 @@ export default class Bar extends Component {
         <Card title={'2019-11-07'} extra={( <Button type='primary' onClick={this.update}>更新</Button>)}>
           <ReactEcharts option={this.getOption(sales, stores)} />
         </Card>
-
       </div>
     )
   }
