@@ -19,7 +19,7 @@ export default class Map extends Component {
   constructor() {
     super();
     this.state = {
-      options: {},
+      options,
       world: {},
     };
   }
@@ -28,7 +28,7 @@ export default class Map extends Component {
     return result.slice(0, Math.round(Math.random() * (data.length - 1)));
   }
   componentDidMount() {
-    this.getOptions();
+    // this.getOptions();
   }
   refreshData() {
     const { options } = this.state;
@@ -51,43 +51,43 @@ export default class Map extends Component {
     });
   }
   getOptions = async () => {
-    // const option = await reqMapOptions() 
-    const option = options
-    // option.geo.zlevel = 1;
-    // option.series.forEach((s, index) => {
-    //   s.zlevel = index + 2;
-    //   if (s.effect) {
-    //     s.effect.zlevel = index + option.series.length + 2;
-    //   }
-    //   if (s.rippleEffect) {
-    //     s.rippleEffect.zlevel = index + option.series.length + 2;
-    //   }
-    // });
-    // this.rawOptions = option;
-    // this.options = option;
+    const option = await reqMapOptions();
+    // const option = options
+    option.geo.zlevel = 1;
+    option.series.forEach((s, index) => {
+      s.zlevel = index + 2;
+      if (s.effect) {
+        s.effect.zlevel = index + option.series.length + 2;
+      }
+      if (s.rippleEffect) {
+        s.rippleEffect.zlevel = index + option.series.length + 2;
+      }
+    });
+    this.rawOptions = option;
+    this.options = option;
     const world = await reqMapWorld();
     echarts.registerMap("world", world);
-    // this.setState({
-    //   options: option,
-    //   world,
-    // });
-    // var chart = echarts.init(document.getElementById("map"), null, {
-    //   devicePixelRatio: 1,
-    // });
-    
-    // chart.setOption(option);
-    // window.addEventListener("resize", chart.resize);
-    // setInterval(() => {
-    //   this.refreshData();
-    // }, 5000);
+    this.setState({
+      options: option,
+      world,
+    });
+    var chart = echarts.init(document.getElementById("map"), null, {
+      devicePixelRatio: 1,
+    });
+
+    chart.setOption(option);
+    window.addEventListener("resize", chart.resize);
+    setInterval(() => {
+      this.refreshData();
+    }, 5000);
   };
-  getOption(){
-    return options
+  getOption() {
+    return this.state.options;
   }
   render() {
     return (
       <>
-        <ReactEcharts option={this.getOption()}/>
+        <ReactEcharts option={this.state.options} />
       </>
     );
   }

@@ -51,20 +51,9 @@ const menuList = [
     icon: "area-chart",
     children: [
       {
-<<<<<<< HEAD
-        title: 'D3',
-        key: '/charts/d3/graph',
-        icon: 'bar-chart'
-      },
-      {
-        title: '柱形图',
-        key: '/charts/bar',
-        icon: 'bar-chart'
-=======
         title: "柱形图",
         key: "/charts/bar",
         icon: "bar-chart",
->>>>>>> form-design
       },
       {
         title: "折线图",
