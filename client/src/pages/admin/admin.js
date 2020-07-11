@@ -26,7 +26,11 @@ const Product = lazy(() => import("../product"));
 const Line = lazy(() => import("../charts/line"));
 const Pie = lazy(() => import("../charts/pie"));
 const Bar = lazy(() => import("../charts/bar"));
+<<<<<<< HEAD
 const Graph = lazy(() => import("../charts/D3/graph"));
+=======
+const Map = lazy(() => import("../charts/map"));
+>>>>>>> form-design
 const GitHub = lazy(() => import("../github"));
 const Order = lazy(() => import("../order"));
 const Drag = lazy(() => import("../drag"));
@@ -34,6 +38,7 @@ const RxjsDrag = lazy(() => import("../drag/Rxjs"));
 const FormDesign = lazy(() => import("../form-design"));
 const FileUpload = lazy(() => import("../hooks/fileUpload"));
 const HooksTest = lazy(() => import("../hooks/hooks"));
+const VirtualDom = lazy(() => import("../VirtualDom"));
 const NotFoundPage = lazy(() => import("components/404"));
 
 const { Footer, Sider, Content } = Layout;
@@ -76,10 +81,15 @@ class Admin extends Component {
                 <AuthRouter path="/order" component={Order} />
                 <AuthRouter path="/role" component={Role} />
                 <AuthRouter path="/user" component={User} />
+                <AuthRouter path="/virtualDom" component={VirtualDom} />
                 <AuthRouter path="/charts/bar" component={Bar} />
                 <AuthRouter path="/charts/line" component={Line} />
                 <AuthRouter path="/charts/pie" component={Pie} />
+<<<<<<< HEAD
                 <AuthRouter path="/charts/d3/graph" component={Graph} />
+=======
+                <AuthRouter path="/charts/map" component={Map} />
+>>>>>>> form-design
               
                 <AuthRouter path="/GitHub" component={GitHub} />
                 <AuthRouter path="/drag/native" component={Drag} />

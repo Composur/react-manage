@@ -15,6 +15,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
+    "express-pino-logger": "^5.0.0",
     "fs-extra": "^8.1.0",
     "global": "^4.4.0",
     "jsonwebtoken": "^8.5.1",
@@ -22,6 +23,10 @@
     "morgan": "^1.9.1",
     "multer": "^1.4.1",
     "multiparty": "^4.2.1",
-    "nodemon": "^1.19.4"
+    "nodemon": "^1.19.4",
+    "pino": "^6.2.1"
+  },
+  "devDependencies": {
+    "pino-pretty": "^4.0.0"
   }
 }

@@ -19,7 +19,6 @@ export default class NativeDrag extends PureComponent {
     }
   }
   componentDidMount(){
-   
   }
   mouseDown(e) {
     this.setState({

@@ -43,7 +43,8 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "dev": "react-app-rewired start",
+    "dev": "yarn start & yarn server",
+    "server": " nodemon ../server/server.js ",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"
