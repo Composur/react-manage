@@ -1,5 +1,6 @@
 const { override, fixBabelImports,addLessLoader,addWebpackAlias} = require('customize-cra');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const path = require("path");
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -18,6 +19,13 @@ const addMyPlugin = config => {
       threshold: 10240,
       minRatio: 0.8
     }),
+    new StyleLintPlugin({
+      'files': ['**/*.{html,vue,css,sass,scss}'],
+      'fix': false,
+      'cache': true,
+      'emitErrors': true,
+      'failOnError': false
+    }),
     // new BundleAnalyzerPlugin(),
   ]
 
@@ -25,6 +33,16 @@ const addMyPlugin = config => {
 
   return config
 }
+
+// const addWebpackModules = () => config => {
+//   const loaders = config.module.rules.find(rule => Array.isArray(rule.oneOf)).oneOf
+//   loaders[loaders.length - 4] = Object.assign(
+//     loaders[loaders.length - 4],
+//     webpackConfig.module.rules[0]
+//   )
+//   return config
+// }
+
 
 
 // 关闭map
@@ -44,6 +62,7 @@ module.exports = override(
     }, //主题颜色
   }),
   addWebpackAlias({
+    ["@"]: path.resolve(__dirname, "src"),
     ["components"]: path.resolve(__dirname, "src/components"),
     ["api"]: path.resolve(__dirname, "src/api"),
     ["config"]: path.resolve(__dirname, "src/config"),

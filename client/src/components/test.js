@@ -1,5 +1,4 @@
 class ExampleComponent extends React.Component {
-
   // 用于初始化 state
   constructor() {}
 
@@ -30,9 +29,11 @@ class ExampleComponent extends React.Component {
 
   // 渲染组件函数
   render() {}
-  
+
   // 以下函数不建议使用
   UNSAFE_componentWillMount() {}
+
   UNSAFE_componentWillUpdate(nextProps, nextState) {}
+
   UNSAFE_componentWillReceiveProps(nextProps) {}
 }

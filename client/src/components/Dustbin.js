@@ -54,7 +54,7 @@
 // 		// 拖拽组件此时正处于 drag target 区域时，当前组件背景色变为 darkgreen
 // 		if (isActive) {
 // 			backgroundColor = 'darkgreen';
-// 		} 
+// 		}
 // 		// 当前组件可以放置 drag source 时，背景色变为 pink
 // 		else if (canDrop) {
 // 			backgroundColor = 'darkkhaki';

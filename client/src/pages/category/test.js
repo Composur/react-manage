@@ -1,11 +1,11 @@
-var twoSum = function(nums, target) {
-  for(var i=0;i<nums.length;i++){
-    var diff=target-nums[i]
-      for(var j=0;j<nums.length;j++){
-        if(diff===nums[j]){
-          return [i,j]
-        }
+const twoSum = function (nums, target) {
+  for (let i = 0; i < nums.length; i++) {
+    const diff = target - nums[i];
+    for (let j = 0; j < nums.length; j++) {
+      if (diff === nums[j]) {
+        return [i, j];
       }
+    }
   }
 };
 // var twoSum = function(nums, target) {
@@ -20,5 +20,5 @@ var twoSum = function(nums, target) {
 // };
 
 
-var arr=twoSum([2,7,11,15],9)
-console.log(arr)
+const arr = twoSum([2, 7, 11, 15], 9);
+console.log(arr);

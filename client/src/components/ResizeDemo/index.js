@@ -1,8 +1,10 @@
-import React, { useRef } from "react";
-import { useEventCallback } from "rxjs-hooks";
-import { fromEvent } from "rxjs";
-import "./styles.scss";
-import { map, switchMap, takeUntil, withLatestFrom } from "rxjs/operators";
+import React, { useRef } from 'react';
+import { useEventCallback } from 'rxjs-hooks';
+import { fromEvent } from 'rxjs';
+import './styles.scss';
+import {
+  map, switchMap, takeUntil, withLatestFrom,
+} from 'rxjs/operators';
 
 function Resize() {
   const leftEle = useRef(null);
@@ -23,23 +25,19 @@ function Resize() {
   //   null,
   //   [leftEle]
   // );
-  const [onMouseDown, leftX] = useEventCallback(() => {
-    return (event$, inputs$) => {
-      return event$.pipe(
-        withLatestFrom(inputs$.pipe(map(([leftEle]) => leftEle))),
-        switchMap(([event, leftEle]) => {
-          const leftStyle = getComputedStyle(leftEle.current);
-          const width0 = parseFloat(leftStyle.getPropertyValue("width"));
-          const startX = event.clientX;
-          return fromEvent(window, "mousemove").pipe(
-            // 计算元素的位置并设置样式改变元素位置
-            map((moveEvent) => moveEvent.clientX - startX + width0),
-            takeUntil(fromEvent(window, "mouseup"))
-          );
-        },null)
+  const [onMouseDown, leftX] = useEventCallback(() => (event$, inputs$) => event$.pipe(
+    withLatestFrom(inputs$.pipe(map(([leftEle]) => leftEle))),
+    switchMap(([event, leftEle]) => {
+      const leftStyle = getComputedStyle(leftEle.current);
+      const width0 = parseFloat(leftStyle.getPropertyValue('width'));
+      const startX = event.clientX;
+      return fromEvent(window, 'mousemove').pipe(
+        // 计算元素的位置并设置样式改变元素位置
+        map((moveEvent) => moveEvent.clientX - startX + width0),
+        takeUntil(fromEvent(window, 'mouseup')),
       );
-    };
-  }, [leftEle]);
+    }, null),
+  ), [leftEle]);
 
   const leftStyle = {
     flexBasis: leftX === null ? 0 : leftX,

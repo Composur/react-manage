@@ -1,22 +1,23 @@
 /**
  * @description localStore
  */
-import store from 'store'
+import store from 'store';
+
 export default {
-  user:null,
-  set(key, value){
+  user: null,
+  set(key, value) {
     // localStorage.setItem(key, JSON.stringify(value))
-    store.set(key,value)
+    store.set(key, value);
   },
   get(key) {
     // return JSON.parse(localStorage.getItem(key) || '{}')
-    return store.get(key)
+    return store.get(key);
   },
-  remove(key){
+  remove(key) {
     // localStorage.removeItem(key)
-    store.remove(key)
+    store.remove(key);
   },
-  clearAll(){
-    store.clearAll()
-  }
-}
+  clearAll() {
+    store.clearAll();
+  },
+};
