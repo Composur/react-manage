@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 
 // export default class  extends Component {
 //   state = {  }
-  
+
 //   render() {
 //     return (
 //      <div style={{textAlign:'center',marginTop:'10%'}}>
@@ -13,10 +13,10 @@ import { Spin } from 'antd';
 //   }
 // }
 
-export default function (){
+export default function () {
   return (
-    <div style={{textAlign:'center',marginTop:'10%'}}>
-     <Spin tip="努力加载中..." size='large'/>
+    <div style={{ textAlign: 'center', marginTop: '10%' }}>
+      <Spin tip="努力加载中..." size="large" />
     </div>
-   )
+  );
 }

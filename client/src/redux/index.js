@@ -1,9 +1,9 @@
-import {createStore,applyMiddleware} from 'redux'
-import ReduxThunk from 'redux-thunk'
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 // 生成环境配置
 // import { devToolsEnhancer } from 'redux-devtools-extension/logOnlyInProduction';
-import appReducer from './reducer'
+import appReducer from './reducer';
 
 /**
  * @description createStore(reducer,initState,applyMiddle)
@@ -14,8 +14,7 @@ import appReducer from './reducer'
 // export default  createStore(reducer, /* preloadedState, */ composeEnhancers(applyMiddleware(ReduxThunk)))
 
 
-
-/** 
+/**
  * @description 可以编写中间件增强dispatch的功能,例如redux-thunk等
  * @description 也可以编写 Store Enhancer 增强store的功能
  */
@@ -32,4 +31,4 @@ import appReducer from './reducer'
 //  }
 //  export default doNothingEnhancer(createStore)(reducer,{},composeWithDevTools(applyMiddleware(ReduxThunk)))
 
-export default createStore(appReducer,  process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(ReduxThunk)) : (applyMiddleware(ReduxThunk)))
+export default createStore(appReducer, process.env.NODE_ENV === 'development' ? composeWithDevTools(applyMiddleware(ReduxThunk)) : (applyMiddleware(ReduxThunk)));

@@ -1,6 +1,6 @@
-import {combineReducers} from  'redux' 
-import getHeadTitle from 'components/left-nav/reducer'
-import loginUserInfo from '../pages/login/reducer'
+import { combineReducers } from 'redux';
+import getHeadTitle from 'components/left-nav/reducer';
+import loginUserInfo from '../pages/login/reducer';
 
 /**
  * @description 接收多个reducer合并成一个reducer
@@ -8,7 +8,5 @@ import loginUserInfo from '../pages/login/reducer'
  */
 export default combineReducers({
   getHeadTitle,
-  loginUserInfo
-})
-
-
+  loginUserInfo,
+});

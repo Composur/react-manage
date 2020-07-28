@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import WrapperDrag from "./WrapperDrag.js";
+import React, { Component } from 'react';
+import WrapperDrag from './WrapperDrag.js';
 
 class SimpleFields extends Component {
   render() {
@@ -8,7 +8,7 @@ class SimpleFields extends Component {
       <div
         style={{
           opacity: isDragging ? 0.5 : 1,
-          cursor: "move"
+          cursor: 'move',
         }}
       >
         <div className="wf-widgetsitem">

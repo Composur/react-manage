@@ -1,16 +1,15 @@
-import moment from "moment";
-moment.locale("zh-cn");
+import moment from 'moment';
 
-export const getCurrentDate = date => {
-  return moment(date).format("HH:mm:ss a");
-};
+moment.locale('zh-cn');
 
-export const formatNumber = value => {
-  value += "";
-  const list = value.split(".");
-  const prefix = list[0].charAt(0) === "-" ? "-" : "";
+export const getCurrentDate = (date) => moment(date).format('HH:mm:ss a');
+
+export const formatNumber = (value) => {
+  value += '';
+  const list = value.split('.');
+  const prefix = list[0].charAt(0) === '-' ? '-' : '';
   let num = prefix ? list[0].slice(1) : list[0];
-  let result = "";
+  let result = '';
   while (num.length > 3) {
     result = `,${num.slice(-3)}${result}`;
     num = num.slice(0, num.length - 3);
@@ -18,7 +17,7 @@ export const formatNumber = value => {
   if (num) {
     result = num + result;
   }
-  return `${prefix}${result}${list[1] ? `.${list[1]}` : ""}`;
+  return `${prefix}${result}${list[1] ? `.${list[1]}` : ''}`;
 };
 
 /**
@@ -35,16 +34,16 @@ export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null;
   }
-  const format = cFormat || "{y}-{m}-{d} {h}:{i}:{s}";
+  const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}';
   let date;
-  if (typeof time === "object") {
+  if (typeof time === 'object') {
     date = time;
   } else {
-    if (typeof time === "string" && /^[0-9]+$/.test(time)) {
+    if (typeof time === 'string' && /^[0-9]+$/.test(time)) {
       time = parseInt(time);
     }
-    if (typeof time === "number" && time.toString().length === 10) {
-      time = time * 1000;
+    if (typeof time === 'number' && time.toString().length === 10) {
+      time *= 1000;
     }
     date = new Date(time);
   }
@@ -55,15 +54,15 @@ export function parseTime(time, cFormat) {
     h: date.getHours(),
     i: date.getMinutes(),
     s: date.getSeconds(),
-    a: date.getDay()
+    a: date.getDay(),
   };
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key];
     // Note: getDay() returns 0 on Sunday
-    if (key === "a") {
-      return ["日", "一", "二", "三", "四", "五", "六"][value];
+    if (key === 'a') {
+      return ['日', '一', '二', '三', '四', '五', '六'][value];
     }
-    return value.toString().padStart(2, "0");
+    return value.toString().padStart(2, '0');
   });
   return time_str;
 }
@@ -74,7 +73,7 @@ export function parseTime(time, cFormat) {
  * @returns {string}
  */
 export function formatTime(time, option) {
-  if (("" + time).length === 10) {
+  if ((`${time}`).length === 10) {
     time = parseInt(time) * 1000;
   } else {
     time = +time;
@@ -85,30 +84,29 @@ export function formatTime(time, option) {
   const diff = (now - d) / 1000;
 
   if (diff < 30) {
-    return "刚刚";
-  } else if (diff < 3600) {
+    return '刚刚';
+  } if (diff < 3600) {
     // less 1 hour
-    return Math.ceil(diff / 60) + "分钟前";
-  } else if (diff < 3600 * 24) {
-    return Math.ceil(diff / 3600) + "小时前";
-  } else if (diff < 3600 * 24 * 2) {
-    return "1天前";
+    return `${Math.ceil(diff / 60)}分钟前`;
+  } if (diff < 3600 * 24) {
+    return `${Math.ceil(diff / 3600)}小时前`;
+  } if (diff < 3600 * 24 * 2) {
+    return '1天前';
   }
   if (option) {
     return parseTime(time, option);
-  } else {
-    return (
-      d.getMonth() +
-      1 +
-      "月" +
-      d.getDate() +
-      "日" +
-      d.getHours() +
-      "时" +
-      d.getMinutes() +
-      "分"
-    );
   }
+  return (
+    `${d.getMonth()
+      + 1
+    }月${
+      d.getDate()
+    }日${
+      d.getHours()
+    }时${
+      d.getMinutes()
+    }分`
+  );
 }
 
 /**
@@ -117,7 +115,7 @@ export function formatTime(time, option) {
  */
 export function getQueryObject(url) {
   url = url == null ? window.location.href : url;
-  const search = url.substring(url.lastIndexOf("?") + 1);
+  const search = url.substring(url.lastIndexOf('?') + 1);
   const obj = {};
   const reg = /([^?&=]+)=([^?&=]*)/g;
   search.replace(reg, (rs, $1, $2) => {
@@ -137,7 +135,7 @@ export function getQueryObject(url) {
 export function byteLength(str) {
   // returns the byte length of an utf8 string
   let s = str.length;
-  for (var i = str.length - 1; i >= 0; i--) {
+  for (let i = str.length - 1; i >= 0; i--) {
     const code = str.charCodeAt(i);
     if (code > 0x7f && code <= 0x7ff) s++;
     else if (code > 0x7ff && code <= 0xffff) s += 2;
@@ -165,13 +163,13 @@ export function cleanArray(actual) {
  * @returns {Array}
  */
 export function param(json) {
-  if (!json) return "";
+  if (!json) return '';
   return cleanArray(
-    Object.keys(json).map(key => {
-      if (json[key] === undefined) return "";
-      return encodeURIComponent(key) + "=" + encodeURIComponent(json[key]);
-    })
-  ).join("&");
+    Object.keys(json).map((key) => {
+      if (json[key] === undefined) return '';
+      return `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`;
+    }),
+  ).join('&');
 }
 
 /**
@@ -179,18 +177,18 @@ export function param(json) {
  * @returns {Object}
  */
 export function param2Obj(url) {
-  const search = url.split("?")[1];
+  const search = url.split('?')[1];
   if (!search) {
     return {};
   }
   return JSON.parse(
-    '{"' +
+    `{"${
       decodeURIComponent(search)
         .replace(/"/g, '\\"')
         .replace(/&/g, '","')
         .replace(/=/g, '":"')
-        .replace(/\+/g, " ") +
-      '"}'
+        .replace(/\+/g, ' ')
+    }"}`,
   );
 }
 
@@ -199,7 +197,7 @@ export function param2Obj(url) {
  * @returns {string}
  */
 export function html2Text(val) {
-  const div = document.createElement("div");
+  const div = document.createElement('div');
   div.innerHTML = val;
   return div.textContent || div.innerText;
 }
@@ -211,15 +209,15 @@ export function html2Text(val) {
  * @returns {Object}
  */
 export function objectMerge(target, source) {
-  if (typeof target !== "object") {
+  if (typeof target !== 'object') {
     target = {};
   }
   if (Array.isArray(source)) {
     return source.slice();
   }
-  Object.keys(source).forEach(property => {
+  Object.keys(source).forEach((property) => {
     const sourceProperty = source[property];
-    if (typeof sourceProperty === "object") {
+    if (typeof sourceProperty === 'object') {
       target[property] = objectMerge(target[property], sourceProperty);
     } else {
       target[property] = sourceProperty;
@@ -239,11 +237,10 @@ export function toggleClass(element, className) {
   let classString = element.className;
   const nameIndex = classString.indexOf(className);
   if (nameIndex === -1) {
-    classString += "" + className;
+    classString += `${className}`;
   } else {
-    classString =
-      classString.substr(0, nameIndex) +
-      classString.substr(nameIndex + className.length);
+    classString = classString.substr(0, nameIndex)
+      + classString.substr(nameIndex + className.length);
   }
   element.className = classString;
 }
@@ -253,11 +250,10 @@ export function toggleClass(element, className) {
  * @returns {Date}
  */
 export function getTime(type) {
-  if (type === "start") {
+  if (type === 'start') {
     return new Date().getTime() - 3600 * 1000 * 24 * 90;
-  } else {
-    return new Date(new Date().toDateString());
   }
+  return new Date(new Date().toDateString());
 }
 
 /**
@@ -267,9 +263,10 @@ export function getTime(type) {
  * @return {*}
  */
 export function debounce(func, wait, immediate) {
-  let timeout, args, context, timestamp, result;
+  let timeout; let args; let context; let timestamp; let
+    result;
 
-  const later = function() {
+  const later = function () {
     // 据上一次触发时间间隔
     const last = +new Date() - timestamp;
 
@@ -286,7 +283,7 @@ export function debounce(func, wait, immediate) {
     }
   };
 
-  return function(...args) {
+  return function (...args) {
     context = this;
     timestamp = +new Date();
     const callNow = immediate && !timeout;
@@ -309,12 +306,12 @@ export function debounce(func, wait, immediate) {
  * @returns {Object}
  */
 export function deepClone(source) {
-  if (!source && typeof source !== "object") {
-    throw new Error("error arguments", "deepClone");
+  if (!source && typeof source !== 'object') {
+    throw new Error('error arguments', 'deepClone');
   }
   const targetObj = source.constructor === Array ? [] : {};
-  Object.keys(source).forEach(keys => {
-    if (source[keys] && typeof source[keys] === "object") {
+  Object.keys(source).forEach((keys) => {
+    if (source[keys] && typeof source[keys] === 'object') {
       targetObj[keys] = deepClone(source[keys]);
     } else {
       targetObj[keys] = source[keys];
@@ -335,8 +332,8 @@ export function uniqueArr(arr) {
  * @returns {string}
  */
 export function createUniqueString() {
-  const timestamp = +new Date() + "";
-  const randomNum = parseInt((1 + Math.random()) * 65536) + "";
+  const timestamp = `${+new Date()}`;
+  const randomNum = `${parseInt((1 + Math.random()) * 65536)}`;
   return (+(randomNum + timestamp)).toString(32);
 }
 /**
@@ -345,12 +342,11 @@ export function createUniqueString() {
  */
 export function createRandomStr() {
   Math.random()
-  .toString(36)
-  .substring(7)
-  .split('')
-  .join('.')
+    .toString(36)
+    .substring(7)
+    .split('')
+    .join('.');
 }
-
 
 
 /**
@@ -360,7 +356,7 @@ export function createRandomStr() {
  * @returns {boolean}
  */
 export function hasClass(ele, cls) {
-  return !!ele.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
+  return !!ele.className.match(new RegExp(`(\\s|^)${cls}(\\s|$)`));
 }
 
 /**
@@ -369,7 +365,7 @@ export function hasClass(ele, cls) {
  * @param {string} cls
  */
 export function addClass(ele, cls) {
-  if (!hasClass(ele, cls)) ele.className += " " + cls;
+  if (!hasClass(ele, cls)) ele.className += ` ${cls}`;
 }
 
 /**
@@ -379,8 +375,8 @@ export function addClass(ele, cls) {
  */
 export function removeClass(ele, cls) {
   if (hasClass(ele, cls)) {
-    const reg = new RegExp("(\\s|^)" + cls + "(\\s|$)");
-    ele.className = ele.className.replace(reg, " ");
+    const reg = new RegExp(`(\\s|^)${cls}(\\s|$)`);
+    ele.className = ele.className.replace(reg, ' ');
   }
 }
 
@@ -391,13 +387,13 @@ export function removeClass(ele, cls) {
  */
 export function bigNumPlus(a, b) {
   // 保存最终结果
-  var res = "";
+  let res = '';
 
   // 保存两位相加的结果 和 进位值
-  var c = 0;
+  let c = 0;
 
-  a = a.split("");
-  b = b.split("");
+  a = a.split('');
+  b = b.split('');
   while (a.length || b.length || c) {
     // ~~ 用来把 String 类型转为 Number类型
     c += ~~a.pop() + ~~b.pop();
@@ -412,10 +408,10 @@ export function bigNumPlus(a, b) {
   return res;
 }
 
-/** 
+/**
  * @description 千分位
  */
 export function numFormat(num) {
-  var c = (num.toString().indexOf ('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
+  const c = (num.toString().indexOf('.') !== -1) ? num.toLocaleString() : num.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,');
   return c;
 }

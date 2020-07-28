@@ -1,7 +1,8 @@
-import React, { Component } from "react";
-import { Route } from "react-router-dom";
-import PropTypes from 'prop-types'
-import Auth from "../Auth";
+import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Auth from '../Auth';
+
 export default class AuthRouter extends Component {
   constructor(props) {
     super();
@@ -9,14 +10,17 @@ export default class AuthRouter extends Component {
 
     };
   }
+
   render(h) {
-    const {path,noCheck} = this.props
-    return <Auth permissionPath={path} noCheck={noCheck}>
-      <Route {...this.props}/>
-    </Auth>;
+    const { path, noCheck } = this.props;
+    return (
+      <Auth permissionPath={path} noCheck={noCheck}>
+        <Route {...this.props} />
+      </Auth>
+    );
   }
 }
-AuthRouter.propTypes={
-  path:PropTypes.string,
-  noCheck:PropTypes.bool,
-}
+AuthRouter.propTypes = {
+  path: PropTypes.string,
+  noCheck: PropTypes.bool,
+};
