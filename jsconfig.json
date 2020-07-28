@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-        "@/*": ["client/src/*"]
-    }
-  },
-  "exclude": ["client/node_modules", "client/dist","server"]
-}

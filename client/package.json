@@ -82,6 +82,7 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "2.5.0",
+    "image-webpack-loader": "^6.0.0",
     "progress-bar-webpack-plugin": "^1.12.1",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-replace": "^2.2.0",
