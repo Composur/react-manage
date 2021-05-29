@@ -1,12 +1,12 @@
 import React, { PureComponent } from "react";
 import { findDOMNode } from "react-dom";
-import { Button, Input } from "antd";
+import { Button } from "antd";
 import { fromEvent } from "rxjs";
-function btn(){
-  return (
-    <Button>拖动的按钮</Button>
-  )
-}
+// function btn() {
+//   return (
+//     <Button>拖动的按钮</Button>
+//   )
+// }
 export default class RxjsDrag extends PureComponent {
   click = (e) => {
     console.log("one-btn", e);
@@ -16,9 +16,9 @@ export default class RxjsDrag extends PureComponent {
   };
   onMouseDown = (e) => {
     const div = fromEvent(findDOMNode(this.div), "mousemove");
-    console.log(div);
+    console.log(div)
   };
-  onDragStart = (event)=>{
+  onDragStart = (event) => {
     event.dataTransfer.setData('text/plain', 'drag info');
   }
   onDragEnter = (event) => {
@@ -35,15 +35,15 @@ export default class RxjsDrag extends PureComponent {
     const div = document.createElement("div");
     div.textContent = data;
     event.target.appendChild(div);
-    
+
   };
   render() {
     return (
       <>
-        <Button draggable={true} 
-           onDragStart={this.onDragStart}
+        <Button draggable={true}
+          onDragStart={this.onDragStart}
           // onDragEnd={this.onDragEnd}
-        onClick={(e) => this.click(e)} type="primary">
+          onClick={(e) => this.click(e)} type="primary">
           拖动到下面红框中
         </Button>
         <Button type="primary" ref={(el) => (this.btn = el)}>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import echarts from "echarts";
 // import world from 'echarts/map/js/world.js';
 // 有两种用法
-import world from "echarts/map/json/world.json";
+// import world from "echarts/map/json/world.json";
 import options from "../../mock/map.json";
 // import china from 'echarts/map/json/china.json';
 

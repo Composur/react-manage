@@ -1,6 +1,5 @@
 import React, { PureComponent } from "react";
 import { Button, Form, Tabs } from "antd";
-import {Link} from 'react-router-dom'
 import FormDesign from "./containers";
 import "./index.scss";
 const TabPane = Tabs.TabPane;
@@ -62,10 +61,10 @@ const WrappedFormShow = Form.create({
     return obj;
   }
 })(FormShow);
-export default class  extends PureComponent {
+export default class extends PureComponent {
   state = { fieldsData: [] };
   save = data => {
-    this.setState({ fieldsData: data },()=>{
+    this.setState({ fieldsData: data }, () => {
       console.log(this.state.fieldsData)
     });
   };
@@ -86,7 +85,7 @@ export default class  extends PureComponent {
     return (
       <Tabs type="card">
         <TabPane tab="form表单设计" key="1">
-          <FormDesign onSave={this.save} fieldsData={this.state.fieldsData}/>
+          <FormDesign onSave={this.save} fieldsData={this.state.fieldsData} />
         </TabPane>
         <TabPane tab="form表单展示" key="2">
           <div style={{ backgroundColor: "#fff", padding: "15px 0" }}>

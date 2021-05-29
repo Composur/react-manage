@@ -6,7 +6,7 @@ import "./index.scss";
 import { take } from "rxjs/operators";
 import DropContainer from "../../../components/DragAndDrop/DropContainer.js";
 import BaseFields from "../../../components/BaseFields";
-import { Collapse, Button } from "antd";
+import { Collapse } from "antd";
 import LayoutFields from "../../../components/LayoutFields";
 import FieldCorAttr from "../../../utils/field-cor-attr";
 import Util from "../../../utils/utils-form-design";
@@ -36,7 +36,7 @@ export default class FormDesign extends PureComponent {
   updateGridState = item => {
     this.setState(
       prevState => {
-        console.log('prevState',prevState)
+        console.log('prevState', prevState)
         const canvasItems = [...prevState.canvasItems];
         Util.resetArrayActive(canvasItems);
         Util.resetAllGridCellGridCellActice(canvasItems);
@@ -90,7 +90,7 @@ export default class FormDesign extends PureComponent {
     const cellIndex = item.cellIndex;
     const cellGridIndex = item.cellGridIndex;
     data$.subscribe(dragData => {
-      console.log('dragData',dragData)
+      console.log('dragData', dragData)
       // grid 布局组件
       if (this.state.dropTags.indexOf(dragData.tag) > -1) {
         if (cellIndex === undefined) {
@@ -127,9 +127,9 @@ export default class FormDesign extends PureComponent {
         // if(item.type!=='gird'&&srcItem === undefined){
         //   return 
         // }
-        if (cellIndex!==undefined&&cellGridIndex === undefined) {
+        if (cellIndex !== undefined && cellGridIndex === undefined) {
           this.updateBaseState(item);
-        } else if(cellGridIndex!==undefined) {
+        } else if (cellGridIndex !== undefined) {
           this.updateGridCellGridBase(item);
         }
       }
@@ -199,7 +199,7 @@ export default class FormDesign extends PureComponent {
           srcItem
         );
         // Util.resetcellGridCellsIndex(canvasItems, gridIndex, cellGridIndex);
-        Util.resetCellGridIndexandCellItemIndex(canvasItems,gridIndex)  
+        Util.resetCellGridIndexandCellItemIndex(canvasItems, gridIndex)
         return {
           currentDropIndex: -2,
           canvasItems
@@ -218,7 +218,7 @@ export default class FormDesign extends PureComponent {
         const gridIndex = item.gridIndex;
         Util.swapItem(canvasItems, gridIndex, item, srcItem);
         // Util.resetCellsIndex(canvasItems, gridIndex);
-        Util.resetCellGridIndexandCellItemIndex(canvasItems,gridIndex)
+        Util.resetCellGridIndexandCellItemIndex(canvasItems, gridIndex)
         return {
           currentDropIndex: -2,
           canvasItems
@@ -693,8 +693,8 @@ export default class FormDesign extends PureComponent {
     const fieldsData = canvasItems;
     this.props.onSave(fieldsData);
   };
-  saveLocal = ()=>{
-    LocalStore.set('from-design',{a:2})
+  saveLocal = () => {
+    LocalStore.set('from-design', { a: 2 })
     console.log('dd')
   }
   render() {
@@ -745,13 +745,13 @@ export default class FormDesign extends PureComponent {
         <div className="wf-right">
           {activeItem
             ? FieldCorAttr[activeItem.type].showAttr({
-                onSave: this.saveData,
-                activeItem
-              })
+              onSave: this.saveData,
+              activeItem
+            })
             : ""}
           {/* <Button type='primary' size='small' onClick={()=>this.saveLocal()}>保存</Button> */}
         </div>
-        
+
       </div>
     );
   }
